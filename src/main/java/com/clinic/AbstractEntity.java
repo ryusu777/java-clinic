@@ -6,5 +6,13 @@ package com.clinic;
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public abstract class AbstractEntity {
-    public abstract int getId();
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    };
+
+    public AbstractEntity(Integer id) {
+        this.id = id;
+    }
 }

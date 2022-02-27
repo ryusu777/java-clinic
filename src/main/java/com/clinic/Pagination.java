@@ -6,6 +6,6 @@ package com.clinic;
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public class Pagination {
-    public int recordsPerPage, pageNumber, totalRecords;
-    public String searchText, sortArg;
+    public Integer recordsPerPage, pageNumber, totalRecords;
+    public String sortBy, sortOrder;
 }

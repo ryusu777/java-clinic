@@ -2,8 +2,11 @@ package com.clinic;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +19,11 @@ import java.util.Map;
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public abstract class AbstractEntityRepository<T extends AbstractEntity> extends ClinicConnection {
+    private Class<T> entityClass;
+
+    protected AbstractEntityRepository(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
     /**
      * Get an entity by id
      * @param id the id of the entity
@@ -39,14 +47,34 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * Get list of entity records with pagination
      * @param pagination
      * @return <code>List<T></code> with T as the entity type
-     * @throws SQLException
      */
     public List<T> get(Pagination pagination) throws SQLException {
-        ResultSet queryResult = query("SELECT * FROM " + tableName() + ";");
+        ResultSet countResult = query("SELECT count(id) as number FROM "
+            + tableName() + ";");
+        countResult.next();
+        pagination.totalRecords = countResult.getInt(1);
+
+        String fetchQuery = "SELECT * FROM " + tableName();
+        if (pagination.sortBy != null
+                && pagination.sortOrder != null) {
+            fetchQuery += " ORDER BY " + normalizeFieldName(pagination.sortBy)
+                + " " + pagination.sortOrder;
+        }
+
+        int recordsPerPage = pagination.recordsPerPage != null 
+            ? pagination.recordsPerPage 
+            : 10;
+
+        int skip = (pagination.pageNumber != null ? pagination.pageNumber : 0) 
+            * recordsPerPage;
+        fetchQuery += " LIMIT " + skip + "," + recordsPerPage + ";";
+
+        ResultSet queryResult = query(fetchQuery);
         List<T> entities = new ArrayList<>();
         while (queryResult.next()) {
             entities.add(mapEntity(queryResult));
         }
+
         return entities;
     }
 
@@ -71,7 +99,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
             
             return excecute(query);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Exception found in AbstractEntityRepository.edit(): " + e.toString());
         }
         return false;
     }
@@ -80,7 +108,36 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * Maps a <code>ResultSet</code> into a single entity
      * @param queryResult the result of getting an entity
      */
-    protected abstract T mapEntity(ResultSet queryResult);
+    protected T mapEntity(ResultSet queryResult) {
+        try {
+            T resultEntity = entityClass.getConstructor(Integer.class).newInstance(
+                queryResult.getInt("id"));
+
+            for (Method method : entityClass.getDeclaredMethods()) {
+                int modifiers = method.getModifiers();
+                String fieldName = normalizeFieldName(method.getName().substring(3));
+                if (Modifier.isPublic(modifiers)
+                        && method.getName().matches("set\\D+")) {
+
+                    if (method.getParameterTypes()[0] == Integer.class)
+                        method.invoke(resultEntity, queryResult.getInt(normalizeFieldName(fieldName)));
+                    else if (method.getParameterTypes()[0] == String.class)
+                        method.invoke(resultEntity, queryResult.getString(normalizeFieldName(fieldName)));
+                    else if (method.getParameterTypes()[0] == BigDecimal.class)
+                        method.invoke(resultEntity, queryResult.getBigDecimal(normalizeFieldName(fieldName)));
+                    else if (method.getParameterTypes()[0] == Date.class)
+                        method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)));
+                    else if (method.getParameterTypes()[0] == Timestamp.class)
+                        method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)));
+                }
+            }
+            return resultEntity;
+        } catch (Exception e) {
+            System.out.println("Exception found in AbstractEntityRepository.mapEntity(): " + e.toString());
+        }
+
+        return null;
+    };
 
     /**
      * Gets a <code>Map</code> with snake cased database's field names as key 
@@ -94,19 +151,25 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         for (Method method : theClass.getDeclaredMethods()) {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers)
-                && method.getName().matches("get\\D+")
-                && !method.getName().matches(excludedGetters)) {
-            
+                    && method.getName().matches("get\\D+")
+                    && !method.getName().matches(excludedGetters)) {
                 result.put(
-                    method
-                        .getName()
-                        .substring(3)
-                        .replaceAll("([a-z])([A-Z])", "$1_$2")
-                        .toLowerCase(),
+                    normalizeFieldName(
+                        method.getName().substring(3)),
                     method);
             }
         }
         return result;
+    }
+
+    /**
+     * Normalize a database field name from camelCase to snake_case.
+     * Example: <code>dosageFormCategory</code> -> 
+     * <code>dosage_form_category</code>
+     * @param string the field
+     */
+    private String normalizeFieldName(String string) {
+        return string.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
     /**
