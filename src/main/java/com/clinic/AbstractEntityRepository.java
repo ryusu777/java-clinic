@@ -84,20 +84,43 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * @return <code>boolean</code> representing successfully edited or not
      * @throws SQLException
      */
-    protected boolean edit(T entity) throws SQLException {
+    public boolean edit(T entity) throws SQLException {
         String query = "UPDATE " + tableName() + " SET ";
         try {
-            for (Map.Entry<String, Method> field 
-                : getEntityAttributesInSnakeCase(entity.getClass()).entrySet()) {
-                query += (
-                    field.getKey() + "=" + field.getValue().invoke(entity)
-                    + ", "
-                );
+            for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
+                query += (field.getKey() + "=" + field.getValue().invoke(entity)
+                        + ", ");
             }
             query = query.replaceFirst(",\\s$", " WHERE id=" + entity.getId()
-                + ";");
-            
+                    + ";");
+
             return excecute(query);
+        } catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            System.out.println("Exception found in AbstractEntityRepository.edit(): " + e.toString());
+        }
+        return false;
+    }
+
+    public boolean create(T entity) throws SQLException {
+        String query = "INSERT INTO " + tableName();
+
+        try {
+            query += " (";
+            for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
+                query += "`" + (field.getKey() + "`, ");
+            }
+            query = query.replaceFirst(",\\s$", ") VALUES (");
+            for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
+                query += "'" + (field.getValue().invoke(entity) + "', ");
+            }
+            query = query.replaceFirst(",\\s$", ");");
+
+            System.out.println(query);
+            return excecute(query);
+        } catch (SQLException e) {
+            throw e;
         } catch (Exception e) {
             System.out.println("Exception found in AbstractEntityRepository.edit(): " + e.toString());
         }
@@ -145,10 +168,10 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * @param theClass
      * @return <code>Map<String, Method></code>
      */
-    private Map<String, Method> getEntityAttributesInSnakeCase(Class<?> theClass) {
+    private Map<String, Method> getEntityAttributesInSnakeCase() {
         Map<String, Method> result = new HashMap<String, Method>();
         String excludedGetters = "getId";
-        for (Method method : theClass.getDeclaredMethods()) {
+        for (Method method : entityClass.getDeclaredMethods()) {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers)
                     && method.getName().matches("get\\D+")
