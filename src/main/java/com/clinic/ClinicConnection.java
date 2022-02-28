@@ -2,6 +2,7 @@ package com.clinic;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,8 +39,18 @@ public class ClinicConnection {
      * @param sqlQuery
      * @return <code>boolean</code> representing successfully excecuted or not
      */
-    public static boolean excecute(String sqlQuery) throws SQLException {
+    public static Boolean execute(String sqlQuery) throws SQLException {
         Statement statement = conn.createStatement();
-        return statement.execute(sqlQuery);
+        statement.execute(sqlQuery);
+        return statement.getUpdateCount() > 0;
+    }
+
+    public static Integer executeInsert(String sqlQuery) throws SQLException {
+        PreparedStatement statement = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+        statement.execute();
+        ResultSet generatedKeys = statement.getGeneratedKeys();
+        if (generatedKeys.next())
+            return generatedKeys.getInt(1);
+        return 0;
     }
 }

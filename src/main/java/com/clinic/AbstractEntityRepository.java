@@ -28,9 +28,11 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * Get an entity by id
      * @param id the id of the entity
      */
-    public T get(int id) throws SQLException {
+    public T get(Integer id) throws SQLException {
         ResultSet queryResult = query("SELECT * FROM " + tableName()
             + " WHERE id=" + id + ";");
+
+        if (!queryResult.next()) return null;
         return mapEntity(queryResult);
     }
 
@@ -39,8 +41,8 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * @param id
      * @return
      */
-    public boolean delete(int id) throws SQLException {
-        return excecute("DELETE FROM " + tableName() + " WHERE id=" + id + ";");
+    public Boolean delete(Integer id) throws SQLException {
+        return execute("DELETE FROM " + tableName() + " WHERE id=" + id + ";");
     }
 
     /**
@@ -84,17 +86,17 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * @return <code>boolean</code> representing successfully edited or not
      * @throws SQLException
      */
-    public boolean edit(T entity) throws SQLException {
+    public Boolean edit(T entity) throws SQLException {
         String query = "UPDATE " + tableName() + " SET ";
         try {
             for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
-                query += (field.getKey() + "=" + field.getValue().invoke(entity)
-                        + ", ");
+                query += (field.getKey() + "='" + field.getValue().invoke(entity)
+                        + "', ");
             }
             query = query.replaceFirst(",\\s$", " WHERE id=" + entity.getId()
                     + ";");
 
-            return excecute(query);
+            return execute(query);
         } catch (SQLException e) {
             throw e;
         } catch (Exception e) {
@@ -103,7 +105,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         return false;
     }
 
-    public boolean create(T entity) throws SQLException {
+    public Integer create(T entity) throws SQLException {
         String query = "INSERT INTO " + tableName();
 
         try {
@@ -115,16 +117,16 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
             for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
                 query += "'" + (field.getValue().invoke(entity) + "', ");
             }
-            query = query.replaceFirst(",\\s$", ");");
+            query = query.replaceFirst(",\\s$", ");\n");
 
-            System.out.println(query);
-            return excecute(query);
+            Integer result = executeInsert(query);
+            return result;
         } catch (SQLException e) {
             throw e;
         } catch (Exception e) {
             System.out.println("Exception found in AbstractEntityRepository.edit(): " + e.toString());
         }
-        return false;
+        return 0;
     }
 
     /**
