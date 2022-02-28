@@ -67,7 +67,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
             ? pagination.recordsPerPage 
             : 10;
 
-        int skip = (pagination.pageNumber != null ? pagination.pageNumber : 0) 
+        int skip = (pagination.pageNumber != null ? pagination.pageNumber - 1 : 0) 
             * recordsPerPage;
         fetchQuery += " LIMIT " + skip + "," + recordsPerPage + ";";
 
