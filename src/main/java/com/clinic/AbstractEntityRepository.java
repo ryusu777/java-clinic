@@ -106,6 +106,12 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         return false;
     }
 
+    /**
+     * Inserts an entity record to the database
+     * @param entity
+     * @return <code>Integer</code> representing the generated key
+     * @throws SQLException
+     */
     public Integer create(T entity) throws SQLException {
         String query = "INSERT INTO " + tableName();
 
@@ -193,10 +199,10 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * Normalize a database field name from camelCase to snake_case.
      * Example: <code>dosageFormCategory</code> -> 
      * <code>dosage_form_category</code>
-     * @param string the field
+     * @param camelCaseField the field
      */
-    private String normalizeFieldName(String string) {
-        return string.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+    private String normalizeFieldName(String camelCaseField) {
+        return camelCaseField.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
     /**
