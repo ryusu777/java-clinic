@@ -90,8 +90,9 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         String query = "UPDATE " + tableName() + " SET ";
         try {
             for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
-                query += (field.getKey() + "='" + field.getValue().invoke(entity)
-                        + "', ");
+                if (entity.getTableFieldNames() == null || entity.getTableFieldNames().contains(field.getKey()))
+                    query += (field.getKey() + "='" + field.getValue().invoke(entity)
+                            + "', ");
             }
             query = query.replaceFirst(",\\s$", " WHERE id=" + entity.getId()
                     + ";");
@@ -111,16 +112,17 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         try {
             query += " (";
             for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
-                query += "`" + (field.getKey() + "`, ");
+                if (entity.getTableFieldNames() == null || entity.getTableFieldNames().contains(field.getKey()))
+                    query += "`" + (field.getKey() + "`, ");
             }
             query = query.replaceFirst(",\\s$", ") VALUES (");
             for (Map.Entry<String, Method> field : getEntityAttributesInSnakeCase().entrySet()) {
-                query += "'" + (field.getValue().invoke(entity) + "', ");
+                if (entity.getTableFieldNames() == null || entity.getTableFieldNames().contains(field.getKey()))
+                    query += "'" + (field.getValue().invoke(entity) + "', ");
             }
-            query = query.replaceFirst(",\\s$", ");\n");
+            query = query.replaceFirst(",\\s$", ");");
 
-            Integer result = executeInsert(query);
-            return result;
+            return executeInsert(query);
         } catch (SQLException e) {
             throw e;
         } catch (Exception e) {
@@ -172,7 +174,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      */
     private Map<String, Method> getEntityAttributesInSnakeCase() {
         Map<String, Method> result = new HashMap<String, Method>();
-        String excludedGetters = "getId";
+        String excludedGetters = "getId|getTableFieldNames";
         for (Method method : entityClass.getDeclaredMethods()) {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers)
