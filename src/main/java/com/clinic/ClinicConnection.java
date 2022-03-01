@@ -37,7 +37,7 @@ public class ClinicConnection {
     /**
      * Excecute <code>sqlQuery</code> to the clinic database
      * @param sqlQuery
-     * @return <code>boolean</code> representing successfully excecuted or not
+     * @return <code>Boolean</code> representing successfully excecuted or not
      */
     public static Boolean execute(String sqlQuery) throws SQLException {
         Statement statement = conn.createStatement();
@@ -45,6 +45,11 @@ public class ClinicConnection {
         return statement.getUpdateCount() > 0;
     }
 
+    /**
+     * Excecute <code>sqlQuery</code> to the clinic database
+     * @param sqlQuery
+     * @return <code>Integer</code> representing the created key
+     */
     public static Integer executeInsert(String sqlQuery) throws SQLException {
         PreparedStatement statement = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
         statement.execute();
