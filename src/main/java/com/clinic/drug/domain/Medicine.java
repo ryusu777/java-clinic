@@ -1,5 +1,8 @@
 package com.clinic.drug.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.AbstractEntity;
 
 public class Medicine extends AbstractEntity {
@@ -13,6 +16,15 @@ public class Medicine extends AbstractEntity {
 
     private Integer dosageFormId, qtyUnitId;
     private String brandName, genericName;
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+                "brand_name",
+                "generic_name",
+                "dosage_form_id",
+                "qty_unit_id");
+    }
 
     public String getBrandName() {
         return brandName;
