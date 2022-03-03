@@ -5,7 +5,7 @@ import com.clinic.receptionist.domain.Patient;
 
 public class PatientRepository extends AbstractEntityRepository<Patient>{
 
-    protected PatientRepository() {
+    public PatientRepository() {
         super(Patient.class);
     }
 
