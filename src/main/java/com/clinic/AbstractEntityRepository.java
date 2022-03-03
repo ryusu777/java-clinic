@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -156,6 +157,8 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
                         method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)));
                     else if (method.getParameterTypes()[0] == Timestamp.class)
                         method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)));
+                    else if (method.getParameterTypes()[0] == Time.class)
+                        method.invoke(resultEntity, queryResult.getTime(normalizeFieldName(fieldName)));
                 }
             }
             return resultEntity;
