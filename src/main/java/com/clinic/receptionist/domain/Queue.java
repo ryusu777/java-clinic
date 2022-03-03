@@ -2,12 +2,23 @@ package com.clinic.receptionist.domain;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.AbstractEntity;
 public class Queue extends AbstractEntity{
     private Integer doctorId, patientId;
     private Time queueTime;
     private Date queueDate;
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+                "doctor_id",
+                "patient_id",
+                "queue_time",
+                "queue_date");
+    }
 
     public Queue(Integer id) {
         super(id);
@@ -45,7 +56,7 @@ public class Queue extends AbstractEntity{
         return queueDate;
     }
 
-    public void setQueueTime(Date queueDate){
+    public void setQueueDate(Date queueDate){
         this.queueDate = queueDate;
     }
 }
