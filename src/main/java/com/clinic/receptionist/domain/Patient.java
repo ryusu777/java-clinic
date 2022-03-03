@@ -1,15 +1,12 @@
 package com.clinic.receptionist.domain;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.AbstractEntity;
 
 public class Patient extends AbstractEntity {
-    private Character gender;
-    private Date birthDate;
-    private Integer age;
-    private String patientName, noKtp, address, patientTelp, guardianName, guardianTelp;
-
     public Patient(Integer id){
         super(id);
     }
@@ -18,6 +15,22 @@ public class Patient extends AbstractEntity {
         super(null);
     }
 
+    private Date dob;
+    private String gender;
+    private String patientName, noKtp, address, patientTelp, guardianName, guardianTelp;
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+                "patient_name",
+                "no_ktp",
+                "dob",
+                "gender",
+                "address",
+                "patient_telp",
+                "guardian_name",
+                "guardian_telp");
+    }
     public String getPatientName(){
         return patientName;
     }
@@ -34,25 +47,20 @@ public class Patient extends AbstractEntity {
         this.noKtp = noKtp;
     }
 
-    public Date getBirthDate(){
-        return birthDate;
+    public Date getDob(){
+        return dob;
+    }    
+
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 
-    public void setBirthDate(Date birthDate){
-        this.birthDate = birthDate;
-    }
-
-    public Integer getAge(){
-        // TODO: logic for age
-        return age;
-    }
-
-    public Character getGender(){
-        return gender;
-    }
-
-    public void setGender(Character gender){
+    public void setGender(String gender){
         this.gender = gender;
+    }
+
+    public String getGender(){
+        return gender;
     }
 
     public String getAddress(){
