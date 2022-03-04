@@ -1,0 +1,16 @@
+package com.clinic.drug.repository;
+
+import com.clinic.AbstractEntityRepository;
+import com.clinic.drug.domain.PrescriptionHeader;
+
+public class PrescriptionHeaderRepository extends AbstractEntityRepository<PrescriptionHeader> {
+    protected PrescriptionHeaderRepository() {
+        super(PrescriptionHeader.class);
+    }
+
+    @Override
+    protected String tableName() {
+        return "prescription_header";
+    }
+    
+}
