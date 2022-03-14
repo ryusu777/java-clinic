@@ -8,10 +8,7 @@ import java.util.List;
 import com.clinic.AbstractEntity;
 public class Appointment extends AbstractEntity{
     private Integer doctorId, patientId, category, status;
-    private Time appointmentTime;
-    private Date appointmentDate;
-    private Time appointmentTime;
-    private Date appointmentDate;
+    private Timestamp appointmentTimeDate;
 
     @Override
     public List<String> getTableFieldNames() {
@@ -20,7 +17,7 @@ public class Appointment extends AbstractEntity{
                 "patient_id",
                 "category",
                 "status",
-                "appointment_date_times");
+                "appointment_date_time");
     }
 
     public Appointment(Integer id) {
@@ -47,20 +44,12 @@ public class Appointment extends AbstractEntity{
         this.patientId = patientId;
     }
 
-    public Time getAppointmentTime(){
-        return appointmentTime;
+    public Timestamp getAppointmentTime_Date(){
+        return appointmentTimeDate;
     }
 
-    public void setAppointmentTime(Time appointmentTime){
-        this.appointmentTime = appointmentTime;
-    }
-
-    public Date getAppointmentDate(){
-        return appointmentDate;
-    }
-
-    public void setAppointmentDate(Date appointmentDate){
-        this.appointmentDate = appointmentDate;
+    public void setAppointmentTime(Timestamp appointmentTimeDate){
+        this.appointmentTimeDate = appointmentTimeDate;
     }
 
     public Integer getCategory(){
