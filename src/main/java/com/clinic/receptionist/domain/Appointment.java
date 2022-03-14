@@ -45,11 +45,11 @@ public class Appointment extends AbstractEntity{
     }
 
     public Timestamp getAppointmentTime_Date(){
-        return appointmentTime_Date;
+        return appointmentTimeDate;
     }
 
     public void setAppointmentTime(Timestamp appointmentTimeDate){
-        this.appointmentTime_Date = appointmentTimeDate;
+        this.appointmentTimeDate = appointmentTimeDate;
     }
 
     public Integer getCategory(){
