@@ -1,14 +1,13 @@
 package com.clinic.receptionist.domain;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.AbstractEntity;
 public class Appointment extends AbstractEntity{
     private Integer doctorId, patientId, category, status;
-    private Timestamp appointmentTimeDate;
+    private Timestamp appointmentDateTime;
 
     @Override
     public List<String> getTableFieldNames() {
@@ -44,12 +43,12 @@ public class Appointment extends AbstractEntity{
         this.patientId = patientId;
     }
 
-    public Timestamp getAppointmentTime_Date(){
-        return appointmentTimeDate;
+    public Timestamp getAppointmentTimeDate(){
+        return appointmentDateTime;
     }
 
-    public void setAppointmentTime(Timestamp appointmentTimeDate){
-        this.appointmentTimeDate = appointmentTimeDate;
+    public void setAppointmentTime(Timestamp appointmentDateTime){
+        this.appointmentDateTime = appointmentDateTime;
     }
 
     public Integer getCategory(){
@@ -57,7 +56,7 @@ public class Appointment extends AbstractEntity{
     }
 
     public void setCategory(Integer category){
-        this.doctorId = doctorId;
+        this.category = category;
     }
 
     public Integer getStatus(){

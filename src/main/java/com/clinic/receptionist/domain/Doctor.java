@@ -95,11 +95,11 @@ public class Doctor extends AbstractEntity{
     public void setNoKTP(String NoKTP){
         this.NoKTP = NoKTP;
     }
-    public String getNoNPAIDI(){
+    public String getNoNpaIdi(){
         return NoNPAIDI;
     }
 
-    public void setNoNPAIDI(String NoNPAIDI){
+    public void setNoNpaIdi(String NoNPAIDI){
         this.NoNPAIDI = NoNPAIDI;
     }
     public String getNoSIP(){
