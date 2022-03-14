@@ -7,7 +7,9 @@ import java.util.List;
 
 import com.clinic.AbstractEntity;
 public class Appointment extends AbstractEntity{
-    private Integer doctorId, patientId;
+    private Integer doctorId, patientId, category, status;
+    private Time appointmentTime;
+    private Date appointmentDate;
     private Time appointmentTime;
     private Date appointmentDate;
 
@@ -16,8 +18,9 @@ public class Appointment extends AbstractEntity{
         return Arrays.asList(
                 "doctor_id",
                 "patient_id",
-                "appointment_time",
-                "appointment_date");
+                "category",
+                "status",
+                "appointment_date_times");
     }
 
     public Appointment(Integer id) {
@@ -58,5 +61,21 @@ public class Appointment extends AbstractEntity{
 
     public void setAppointmentDate(Date appointmentDate){
         this.appointmentDate = appointmentDate;
+    }
+
+    public Integer getCategory(){
+        return category;
+    }
+
+    public void setCategory(Integer category){
+        this.doctorId = doctorId;
+    }
+
+    public Integer getStatus(){
+        return status;
+    }
+
+    public void setStatus(Integer status){
+        this.status = status;
     }
 }
