@@ -18,7 +18,7 @@ public class MedicalRecord extends AbstractEntity {
     }
     
     private Integer patientId, doctorId;
-    private String symptom, treatment;
+    private String symptom, treatment, prescriptionHeaderId;
     private Date checkUpDate;
 
     @Override
@@ -28,6 +28,7 @@ public class MedicalRecord extends AbstractEntity {
             "check_up_date",
             "symptom",
             "treatment",
+            "prescription_header_id",
             "doctor_id");
     }
 
@@ -45,6 +46,10 @@ public class MedicalRecord extends AbstractEntity {
 
     public void setTreatment(String treatment) {
         this.treatment = treatment;
+    }
+
+    public void setPrescriptionHeaderId(String prescriptionHeaderId) {
+        this.prescriptionHeaderId = prescriptionHeaderId;
     }
 
     public void setDoctorId(Integer doctorId) {
@@ -65,6 +70,10 @@ public class MedicalRecord extends AbstractEntity {
 
     public String getTreatment() {
         return treatment;
+    }
+
+    public String getPrescriptionHeaderId() {
+        return prescriptionHeaderId;
     }
 
     public Integer getDoctorId() {
