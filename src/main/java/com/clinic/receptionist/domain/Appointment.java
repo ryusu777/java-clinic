@@ -8,10 +8,9 @@ import java.util.List;
 import com.clinic.AbstractEntity;
 public class Appointment extends AbstractEntity{
     private Integer doctorId, patientId, category, status;
-    private Time appointmentTime;
-    private Date appointmentDate;
-    private Time appointmentTime;
-    private Date appointmentDate;
+    private Time appointmentTime_Date;
+    private Date appointmentTime_Date;
+
 
     @Override
     public List<String> getTableFieldNames() {
@@ -20,7 +19,7 @@ public class Appointment extends AbstractEntity{
                 "patient_id",
                 "category",
                 "status",
-                "appointment_date_times");
+                "appointment_date_time");
     }
 
     public Appointment(Integer id) {
