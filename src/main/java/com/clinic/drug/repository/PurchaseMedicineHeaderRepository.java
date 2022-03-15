@@ -4,7 +4,7 @@ import com.clinic.AbstractEntityRepository;
 import com.clinic.drug.domain.PurchaseMedicineHeader;
 
 public class PurchaseMedicineHeaderRepository extends AbstractEntityRepository<PurchaseMedicineHeader> {
-    protected PurchaseMedicineHeaderRepository() {
+    public PurchaseMedicineHeaderRepository() {
         super(PurchaseMedicineHeader.class);
     }
 

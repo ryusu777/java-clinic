@@ -4,7 +4,7 @@ import com.clinic.AbstractEntityRepository;
 import com.clinic.drug.domain.PrescriptionRecipe;
 
 public class PrescriptionRecipeRepository extends AbstractEntityRepository<PrescriptionRecipe> {
-    protected PrescriptionRecipeRepository() {
+    public PrescriptionRecipeRepository() {
         super(PrescriptionRecipe.class);
     }
 

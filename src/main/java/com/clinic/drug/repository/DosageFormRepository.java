@@ -4,7 +4,7 @@ import com.clinic.AbstractEntityRepository;
 import com.clinic.drug.domain.DosageForm;
 
 public class DosageFormRepository extends AbstractEntityRepository<DosageForm> {
-    protected DosageFormRepository() {
+    public DosageFormRepository() {
         super(DosageForm.class);
     }
 

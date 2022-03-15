@@ -4,7 +4,7 @@ import com.clinic.AbstractEntityRepository;
 import com.clinic.drug.domain.PrescriptionQueue;
 
 public class PrescriptionQueueRepository extends AbstractEntityRepository<PrescriptionQueue> {
-    protected PrescriptionQueueRepository() {
+    public PrescriptionQueueRepository() {
         super(PrescriptionQueue.class);
     }
 
