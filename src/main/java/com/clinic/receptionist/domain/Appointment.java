@@ -43,11 +43,11 @@ public class Appointment extends AbstractEntity{
         this.patientId = patientId;
     }
 
-    public Timestamp getAppointmentTimeDate(){
+    public Timestamp getAppointmentDateTime(){
         return appointmentDateTime;
     }
 
-    public void setAppointmentTime(Timestamp appointmentDateTime){
+    public void setAppointmentDateTime(Timestamp appointmentDateTime){
         this.appointmentDateTime = appointmentDateTime;
     }
 
