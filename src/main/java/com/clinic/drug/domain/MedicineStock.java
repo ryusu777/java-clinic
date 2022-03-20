@@ -24,31 +24,35 @@ public class MedicineStock extends AbstractEntity {
         return receivedDate;
     }
 
-    public void setReceivedDate(Timestamp receivedDate) {
+    public MedicineStock setReceivedDate(Timestamp receivedDate) {
         this.receivedDate = receivedDate;
+        return this;
     }
 
     public Date getExpDate() {
         return expDate;
     }
 
-    public void setExpDate(Date expDate) {
+    public MedicineStock setExpDate(Date expDate) {
         this.expDate = expDate;
+        return this;
     }
 
     public BigDecimal getQtyAvailable() {
         return qtyAvailable;
     }
 
-    public void setQtyAvailable(BigDecimal qtyAvailable) {
+    public MedicineStock setQtyAvailable(BigDecimal qtyAvailable) {
         this.qtyAvailable = qtyAvailable;
+        return this;
     }
 
     public Integer getMedicineId() {
         return medicineId;
     }
 
-    public void setMedicineId(Integer medicineId) {
+    public MedicineStock setMedicineId(Integer medicineId) {
         this.medicineId = medicineId;
+        return this;
     }
 }

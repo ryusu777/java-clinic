@@ -20,31 +20,35 @@ public class PrescriptionHeader extends AbstractEntity {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public PrescriptionHeader setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+        return this;
     }
 
     public Integer getDoctorId() {
         return doctorId;
     }
 
-    public void setDoctorId(Integer doctorId) {
+    public PrescriptionHeader setDoctorId(Integer doctorId) {
         this.doctorId = doctorId;
+        return this;
     }
 
     public Integer getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Integer patientId) {
+    public PrescriptionHeader setPatientId(Integer patientId) {
         this.patientId = patientId;
+        return this;
     }
 
     public Integer getMedicalRecordId() {
         return medicalRecordId;
     }
 
-    public void setMedicalRecordId(Integer medicalRecordId) {
+    public PrescriptionHeader setMedicalRecordId(Integer medicalRecordId) {
         this.medicalRecordId = medicalRecordId;
+        return this;
     }
 }

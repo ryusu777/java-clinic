@@ -18,15 +18,17 @@ public class DosageForm extends AbstractEntity {
         return name;
     }
 
-    public void setName(String name) {
+    public DosageForm setName(String name) {
         this.name = name;
+        return this;
     }
 
     public Integer getDosageFormCategoryId() {
         return dosageFormCategoryId;
     }
 
-    public void setDosageFormCategoryId(Integer dosageFormCategoryId) {
+    public DosageForm setDosageFormCategoryId(Integer dosageFormCategoryId) {
         this.dosageFormCategoryId = dosageFormCategoryId;
+        return this;
     }
 }

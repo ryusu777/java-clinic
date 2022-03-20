@@ -17,24 +17,27 @@ public class PrescriptionIngredient extends AbstractEntity {
         return qty;
     }
 
-    public void setQty(Integer qty) {
+    public PrescriptionIngredient setQty(Integer qty) {
         this.qty = qty;
+        return this;
     }
 
     public Integer getPrescriptionRecipeId() {
         return prescriptionRecipeId;
     }
 
-    public void setPrescriptionRecipeId(Integer prescriptionRecipeId) {
+    public PrescriptionIngredient setPrescriptionRecipeId(Integer prescriptionRecipeId) {
         this.prescriptionRecipeId = prescriptionRecipeId;
+        return this;
     }
 
     public Integer getMedicineStockId() {
         return medicineStockId;
     }
 
-    public void setMedicineStockId(Integer medicineStockId) {
+    public PrescriptionIngredient setMedicineStockId(Integer medicineStockId) {
         this.medicineStockId = medicineStockId;
+        return this;
     }
     
 }

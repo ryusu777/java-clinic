@@ -17,24 +17,27 @@ public class SellMedicineDetail extends AbstractEntity {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public SellMedicineDetail setPrice(Integer price) {
         this.price = price;
+        return this;
     }
 
     public Integer getSellMedicineHeaderId() {
         return sellMedicineHeaderId;
     }
 
-    public void setSellMedicineHeaderId(Integer sellMedicineHeaderId) {
+    public SellMedicineDetail setSellMedicineHeaderId(Integer sellMedicineHeaderId) {
         this.sellMedicineHeaderId = sellMedicineHeaderId;
+        return this;
     }
 
     public Integer getPrescriptionRecipeId() {
         return prescriptionRecipeId;
     }
 
-    public void setPrescriptionRecipeId(Integer prescriptionRecipeId) {
+    public SellMedicineDetail setPrescriptionRecipeId(Integer prescriptionRecipeId) {
         this.prescriptionRecipeId = prescriptionRecipeId;
+        return this;
     }
     
 }

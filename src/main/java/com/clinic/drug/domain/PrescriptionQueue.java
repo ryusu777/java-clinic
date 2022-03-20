@@ -22,16 +22,17 @@ public class PrescriptionQueue extends AbstractEntity {
         return prescriptionHeaderId;
     }
 
-    public void setPrescriptionHeaderId(Integer prescriptionHeaderId) {
+    public PrescriptionQueue setPrescriptionHeaderId(Integer prescriptionHeaderId) {
         this.prescriptionHeaderId = prescriptionHeaderId;
+        return this;
     }
 
     public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public PrescriptionQueue setStatus(Integer status) {
         this.status = status;
+        return this;
     }
-
 }

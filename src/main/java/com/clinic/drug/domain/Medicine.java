@@ -30,31 +30,35 @@ public class Medicine extends AbstractEntity {
         return brandName;
     }
 
-    public void setBrandName(String brandName) {
+    public Medicine setBrandName(String brandName) {
         this.brandName = brandName;
+        return this;
     }
 
     public Integer getDosageFormId() {
         return dosageFormId;
     }
 
-    public void setDosageFormId(Integer dosageFormId) {
+    public Medicine setDosageFormId(Integer dosageFormId) {
         this.dosageFormId = dosageFormId;
+        return this;
     }
 
     public String getGenericName() {
         return genericName;
     }
 
-    public void setGenericName(String genericName) {
+    public Medicine setGenericName(String genericName) {
         this.genericName = genericName;
+        return this;
     }
 
     public Integer getQtyUnitId() {
         return qtyUnitId;
     }
 
-    public void setQtyUnitId(Integer qtyUnitId) {
+    public Medicine setQtyUnitId(Integer qtyUnitId) {
         this.qtyUnitId = qtyUnitId;
+        return this;
     }
 }

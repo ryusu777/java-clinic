@@ -17,23 +17,26 @@ public class PurchaseMedicineDetail extends AbstractEntity {
         return pricePerUnit;
     }
 
-    public void setPricePerUnit(Integer pricePerUnit) {
+    public PurchaseMedicineDetail setPricePerUnit(Integer pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
+        return this;
     }
 
     public Integer getQty() {
         return qty;
     }
 
-    public void setQty(Integer qty) {
+    public PurchaseMedicineDetail setQty(Integer qty) {
         this.qty = qty;
+        return this;
     }
 
     public Integer getPurchaseMedicineHeaderId() {
         return purchaseMedicineHeaderId;
     }
 
-    public void setPurchaseMedicineHeaderId(Integer purchaseMedicineHeaderId) {
+    public PurchaseMedicineDetail setPurchaseMedicineHeaderId(Integer purchaseMedicineHeaderId) {
         this.purchaseMedicineHeaderId = purchaseMedicineHeaderId;
+        return this;
     }
 }

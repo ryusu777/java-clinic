@@ -20,15 +20,17 @@ public class SellMedicineHeader extends AbstractEntity {
         return prescriptionHeaderId;
     }
 
-    public void setPrescriptionHeaderId(Integer prescriptionHeaderId) {
+    public SellMedicineHeader setPrescriptionHeaderId(Integer prescriptionHeaderId) {
         this.prescriptionHeaderId = prescriptionHeaderId;
+        return this;
     }
 
     public Date getPurchaseDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(Date purchaseDate) {
+    public SellMedicineHeader setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
+        return this;
     }
 }

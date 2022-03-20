@@ -21,56 +21,62 @@ public class PrescriptionRecipe extends AbstractEntity {
         return usageInstruction;
     }
 
-    public void setUsageInstruction(String usageInstruction) {
+    public PrescriptionRecipe setUsageInstruction(String usageInstruction) {
         this.usageInstruction = usageInstruction;
+        return this;
     }
 
     public String getLatinUsageInstruction() {
         return latinUsageInstruction;
     }
 
-    public void setLatinUsageInstruction(String latinUsageInstruction) {
+    public PrescriptionRecipe setLatinUsageInstruction(String latinUsageInstruction) {
         this.latinUsageInstruction = latinUsageInstruction;
+        return this;
     }
 
     public String getLatinMakingInstruction() {
         return latinMakingInstruction;
     }
 
-    public void setLatinMakingInstruction(String latinMakingInstruction) {
+    public PrescriptionRecipe setLatinMakingInstruction(String latinMakingInstruction) {
         this.latinMakingInstruction = latinMakingInstruction;
+        return this;
     }
 
     public Date getExpDate() {
         return expDate;
     }
 
-    public void setExpDate(Date expDate) {
+    public PrescriptionRecipe setExpDate(Date expDate) {
         this.expDate = expDate;
+        return this;
     }
 
     public Integer getQty() {
         return qty;
     }
 
-    public void setQty(Integer qty) {
+    public PrescriptionRecipe setQty(Integer qty) {
         this.qty = qty;
+        return this;
     }
 
     public Integer getDosageFormId() {
         return dosageFormId;
     }
 
-    public void setDosageFormId(Integer dosageFormId) {
+    public PrescriptionRecipe setDosageFormId(Integer dosageFormId) {
         this.dosageFormId = dosageFormId;
+        return this;
     }
 
     public Integer getPrescriptionHeaderId() {
         return prescriptionHeaderId;
     }
 
-    public void setPrescriptionHeaderId(Integer prescriptionHeaderId) {
+    public PrescriptionRecipe setPrescriptionHeaderId(Integer prescriptionHeaderId) {
         this.prescriptionHeaderId = prescriptionHeaderId;
+        return this;
     }
-    
 }

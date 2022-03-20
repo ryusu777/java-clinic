@@ -19,7 +19,8 @@ public class PurchaseMedicineHeader extends AbstractEntity {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(Date purchaseDate) {
+    public PurchaseMedicineHeader setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
+        return this;
     }
 }
