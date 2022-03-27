@@ -18,7 +18,10 @@ public class MedicineStock extends AbstractEntity {
     private Timestamp receivedDate;
     private Date expDate;
     private BigDecimal qtyAvailable;
+    private BigDecimal qtyToDosageFormMultiplier;
     private Integer medicineId;
+    private Integer dosageFormId;
+    private Integer qtyUnitId;
 
     public Timestamp getReceivedDate() {
         return receivedDate;
@@ -38,6 +41,14 @@ public class MedicineStock extends AbstractEntity {
         return this;
     }
 
+    public BigDecimal getQtyToDosageFormMultiplier() {
+        return qtyToDosageFormMultiplier;
+    }
+
+    public void setQtyToDosageFormMultiplier(BigDecimal qtyToDosageFormMultiplier) {
+        this.qtyToDosageFormMultiplier = qtyToDosageFormMultiplier;
+    }
+
     public BigDecimal getQtyAvailable() {
         return qtyAvailable;
     }
@@ -54,5 +65,21 @@ public class MedicineStock extends AbstractEntity {
     public MedicineStock setMedicineId(Integer medicineId) {
         this.medicineId = medicineId;
         return this;
+    }
+
+    public Integer getQtyUnitId() {
+        return qtyUnitId;
+    }
+
+    public void setQtyUnitId(Integer qtyUnitId) {
+        this.qtyUnitId = qtyUnitId;
+    }
+
+    public Integer getDosageFormId() {
+        return dosageFormId;
+    }
+
+    public void setDosageFormId(Integer dosageFormId) {
+        this.dosageFormId = dosageFormId;
     }
 }
