@@ -47,22 +47,25 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     }
 
     /**
-     * Get list of entity records with pagination
+     * Get list of entity records with pagination along with the where clause
+     * query example: "WHERE tableName().foreign_id=1"
      * @param pagination
      * @return <code>List<T></code> with T as the entity type
      */
-    public List<T> get(Pagination pagination) throws SQLException {
+    protected List<T> get(Pagination pagination, String whereClause) throws SQLException {
         ResultSet countResult = query("SELECT count(id) as number FROM "
             + tableName() + ";");
         countResult.next();
         pagination.totalRecords = countResult.getInt(1);
 
         String fetchQuery = "SELECT * FROM " + tableName();
+        fetchQuery += " " + whereClause + " ";
         if (pagination.sortBy != null
                 && pagination.sortOrder != null) {
             fetchQuery += " ORDER BY " + normalizeFieldName(pagination.sortBy)
-                + " " + pagination.sortOrder;
+                    + " " + pagination.sortOrder;
         }
+
 
         int recordsPerPage = pagination.recordsPerPage != null 
             ? pagination.recordsPerPage 
@@ -79,6 +82,13 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         }
 
         return entities;
+    }
+
+    /**
+     * Get list of entity with pagination
+     */
+    public List<T> get(Pagination pagination) throws SQLException {
+        return get(pagination, "");
     }
 
     /**
@@ -107,6 +117,12 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         return false;
     }
 
+    /**
+     * Inserts an entity record to the database
+     * @param entity
+     * @return <code>Integer</code> representing the generated key
+     * @throws SQLException
+     */
     public Integer create(T entity) throws SQLException {
         String query = "INSERT INTO " + tableName();
 
@@ -196,10 +212,10 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * Normalize a database field name from camelCase to snake_case.
      * Example: <code>dosageFormCategory</code> -> 
      * <code>dosage_form_category</code>
-     * @param string the field
+     * @param camelCaseField the field
      */
-    private String normalizeFieldName(String string) {
-        return string.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+    private String normalizeFieldName(String camelCaseField) {
+        return camelCaseField.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
     /**

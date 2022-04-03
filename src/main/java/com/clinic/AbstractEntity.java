@@ -2,6 +2,9 @@ package com.clinic;
 
 import java.util.List;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 /**
  * Abstract class for creating entity class. <br>
  * This class is used for <code>AbstractRepository</code> to build queries. Here
@@ -20,10 +23,10 @@ import java.util.List;
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public abstract class AbstractEntity {
-    private Integer id;
+    private IntegerProperty id;
 
     public Integer getId() {
-        return id;
+        return id.get();
     };
 
     /**
@@ -40,6 +43,8 @@ public abstract class AbstractEntity {
     }
 
     public AbstractEntity(Integer id) {
-        this.id = id;
+        this.id = new SimpleIntegerProperty();
+        if (id != null)
+            this.id.setValue(id);
     }
 }
