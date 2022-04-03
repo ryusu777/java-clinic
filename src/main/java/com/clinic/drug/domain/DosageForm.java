@@ -1,8 +1,5 @@
 package com.clinic.drug.domain;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.clinic.AbstractEntity;
 
 import javafx.beans.property.IntegerProperty;
