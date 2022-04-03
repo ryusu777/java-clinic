@@ -6,80 +6,119 @@ import java.sql.Timestamp;
 
 import com.clinic.AbstractEntity;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 public class MedicineStock extends AbstractEntity {
     public MedicineStock() {
-        super(null);
+        this(null);
     }
 
     public MedicineStock(Integer id) {
         super(id);
+        receivedDate = new SimpleObjectProperty<>();
+        expDate = new SimpleObjectProperty<>();
+        qtyAvailable = new SimpleObjectProperty<>();
+        qtyToDosageFormMultiplier = new SimpleObjectProperty<>();
+        medicineId = new SimpleIntegerProperty();
+        dosageFormId = new SimpleIntegerProperty();
+        qtyUnitId = new SimpleIntegerProperty();
     }
     
-    private Timestamp receivedDate;
-    private Date expDate;
-    private BigDecimal qtyAvailable;
-    private BigDecimal qtyToDosageFormMultiplier;
-    private Integer medicineId;
-    private Integer dosageFormId;
-    private Integer qtyUnitId;
+    private ObjectProperty<Timestamp> receivedDate;
+    private ObjectProperty<Date> expDate;
+    private ObjectProperty<BigDecimal> qtyAvailable, qtyToDosageFormMultiplier;
+    private IntegerProperty medicineId, dosageFormId, qtyUnitId;
+
+    public ObjectProperty<Timestamp> receivedDateProperty() {
+        return this.receivedDate;
+    }
+
+    public ObjectProperty<Date> expDateProperty() {
+        return this.expDate;
+    }
+
+    public ObjectProperty<BigDecimal> qtyAvailableProperty() {
+        return this.qtyAvailable;
+    }
+
+    public ObjectProperty<BigDecimal> qtyToDosageFormMultiplierProperty() {
+        return this.qtyToDosageFormMultiplier;
+    }
+
+    public IntegerProperty medicineIdProperty() {
+        return this.medicineId;
+    }
+
+    public IntegerProperty dosageFormIdProperty() {
+        return this.dosageFormId;
+    }
+
+    public IntegerProperty qtyUnitIdProperty() {
+        return this.qtyUnitId;
+    }
 
     public Timestamp getReceivedDate() {
-        return receivedDate;
+        return receivedDate.get();
     }
 
     public MedicineStock setReceivedDate(Timestamp receivedDate) {
-        this.receivedDate = receivedDate;
+        this.receivedDate.setValue(receivedDate);
         return this;
     }
 
     public Date getExpDate() {
-        return expDate;
+        return expDate.get();
     }
 
     public MedicineStock setExpDate(Date expDate) {
-        this.expDate = expDate;
+        this.expDate.setValue(expDate);
         return this;
     }
 
     public BigDecimal getQtyToDosageFormMultiplier() {
-        return qtyToDosageFormMultiplier;
+        return qtyToDosageFormMultiplier.get();
     }
 
     public void setQtyToDosageFormMultiplier(BigDecimal qtyToDosageFormMultiplier) {
-        this.qtyToDosageFormMultiplier = qtyToDosageFormMultiplier;
+        this.qtyToDosageFormMultiplier.setValue(qtyToDosageFormMultiplier);
     }
 
     public BigDecimal getQtyAvailable() {
-        return qtyAvailable;
+        return qtyAvailable.get();
     }
 
     public MedicineStock setQtyAvailable(BigDecimal qtyAvailable) {
-        this.qtyAvailable = qtyAvailable;
+        this.qtyAvailable.setValue(qtyAvailable);
         return this;
     }
 
     public Integer getMedicineId() {
-        return medicineId;
+        return medicineId.get();
     }
 
     public MedicineStock setMedicineId(Integer medicineId) {
-        this.medicineId = medicineId;
+        this.medicineId.setValue(medicineId);
         return this;
     }
 
     public Integer getQtyUnitId() {
-        return qtyUnitId;
+        return qtyUnitId.get();
     }
 
-    public void setQtyUnitId(Integer qtyUnitId) {
-        this.qtyUnitId = qtyUnitId;
+    public MedicineStock setQtyUnitId(Integer qtyUnitId) {
+        this.qtyUnitId.setValue(qtyUnitId);
+        return this;
     }
 
     public Integer getDosageFormId() {
-        return dosageFormId;
+        return dosageFormId.get();
     }
 
-    public void setDosageFormId(Integer dosageFormId) {
-        this.dosageFormId = dosageFormId;
+    public MedicineStock setDosageFormId(Integer dosageFormId) {
+        this.dosageFormId.setValue(dosageFormId);
+        return this;
     }
 }

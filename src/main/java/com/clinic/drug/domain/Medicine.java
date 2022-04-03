@@ -5,41 +5,45 @@ import java.util.List;
 
 import com.clinic.AbstractEntity;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Medicine extends AbstractEntity {
     public Medicine(Integer id) {
         super(id);
+        brandName = new SimpleStringProperty();
+        genericName = new SimpleStringProperty();
     }
 
     public Medicine() {
-        super(null);
+        this(null);
     }
 
-    private String brandName, genericName;
-
-    @Override
-    public List<String> getTableFieldNames() {
-        return Arrays.asList(
-                "brand_name",
-                "generic_name",
-                "dosage_form_id",
-                "qty_unit_id");
-    }
-
-    public String getBrandName() {
+    private StringProperty brandName, genericName;
+    
+    public StringProperty brandNameProperty() {
         return brandName;
     }
 
+    public StringProperty genericNameProperty() {
+        return genericName;
+    }
+
+    public String getBrandName() {
+        return brandName.get();
+    }
+
     public Medicine setBrandName(String brandName) {
-        this.brandName = brandName;
+        this.brandName.setValue(brandName);
         return this;
     }
 
     public String getGenericName() {
-        return genericName;
+        return genericName.get();
     }
 
     public Medicine setGenericName(String genericName) {
-        this.genericName = genericName;
+        this.genericName.setValue(genericName);
         return this;
     }
 }

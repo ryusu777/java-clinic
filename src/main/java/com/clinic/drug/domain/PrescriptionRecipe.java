@@ -4,79 +4,121 @@ import java.sql.Date;
 
 import com.clinic.AbstractEntity;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class PrescriptionRecipe extends AbstractEntity {
     public PrescriptionRecipe() {
-        super(null);
+        this(null);
     }
 
     public PrescriptionRecipe(Integer id) {
         super(id);
+        usageInstruction = new SimpleStringProperty();
+        latinUsageInstruction = new SimpleStringProperty();
+        latinMakingInstruction = new SimpleStringProperty();
+        expDate = new SimpleObjectProperty<>();
+        qty = new SimpleIntegerProperty();
+        dosageFormId = new SimpleIntegerProperty();
+        prescriptionHeaderId = new SimpleIntegerProperty();
     }
     
-    private String usageInstruction, latinUsageInstruction, latinMakingInstruction;
-    private Date expDate;
-    private Integer qty, dosageFormId, prescriptionHeaderId;
+    private StringProperty usageInstruction, latinUsageInstruction, latinMakingInstruction;
+    private ObjectProperty<Date> expDate;
+    private IntegerProperty qty, dosageFormId, prescriptionHeaderId;
+
+    public StringProperty usageInstructionProperty() { 
+        return this.usageInstruction;
+    }
+
+    public StringProperty latinUsageInstructionProperty() { 
+        return this.latinUsageInstruction;
+    }
+
+    public StringProperty latinMakingInstructionProperty() {
+        return this.latinMakingInstruction;
+    }
+
+    public ObjectProperty<Date> expDateProperty() {
+        return this.expDate;
+    }
+
+    public IntegerProperty qtyProperty() {
+        return this.qty;
+    }
+
+    public IntegerProperty dosageFormIdProperty() {
+        return this.dosageFormId;
+    }
+
+    public IntegerProperty prescriptionHeaderIdProperty() {
+        return this.prescriptionHeaderId;
+    }
 
     public String getUsageInstruction() {
-        return usageInstruction;
+        return usageInstruction.get();
     }
 
     public PrescriptionRecipe setUsageInstruction(String usageInstruction) {
-        this.usageInstruction = usageInstruction;
+        this.usageInstruction.setValue(usageInstruction);
         return this;
     }
 
     public String getLatinUsageInstruction() {
-        return latinUsageInstruction;
+        return latinUsageInstruction.get();
     }
 
     public PrescriptionRecipe setLatinUsageInstruction(String latinUsageInstruction) {
-        this.latinUsageInstruction = latinUsageInstruction;
+        this.latinUsageInstruction.setValue(latinUsageInstruction);
         return this;
     }
 
     public String getLatinMakingInstruction() {
-        return latinMakingInstruction;
+        return latinMakingInstruction.get();
     }
 
     public PrescriptionRecipe setLatinMakingInstruction(String latinMakingInstruction) {
-        this.latinMakingInstruction = latinMakingInstruction;
+        this.latinMakingInstruction.setValue(latinMakingInstruction);
         return this;
     }
 
     public Date getExpDate() {
-        return expDate;
+        return expDate.get();
     }
 
     public PrescriptionRecipe setExpDate(Date expDate) {
-        this.expDate = expDate;
+        this.expDate.setValue(expDate);
         return this;
     }
 
     public Integer getQty() {
-        return qty;
+        return qty.get();
     }
 
     public PrescriptionRecipe setQty(Integer qty) {
-        this.qty = qty;
+        this.qty.setValue(qty);
         return this;
     }
 
     public Integer getDosageFormId() {
-        return dosageFormId;
+        return dosageFormId.get();
     }
 
     public PrescriptionRecipe setDosageFormId(Integer dosageFormId) {
-        this.dosageFormId = dosageFormId;
+        this.dosageFormId.setValue(dosageFormId);
         return this;
     }
 
     public Integer getPrescriptionHeaderId() {
-        return prescriptionHeaderId;
+        return prescriptionHeaderId.get();
     }
 
     public PrescriptionRecipe setPrescriptionHeaderId(Integer prescriptionHeaderId) {
-        this.prescriptionHeaderId = prescriptionHeaderId;
+        this.prescriptionHeaderId.setValue(prescriptionHeaderId);
         return this;
     }
 }

@@ -2,23 +2,31 @@ package com.clinic.drug.domain;
 
 import com.clinic.AbstractEntity;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class DosageFormCategory extends AbstractEntity {
     public DosageFormCategory() {
-        super(null);
+        this(null);
     }
 
     public DosageFormCategory(Integer id) {
         super(id);
+        name = new SimpleStringProperty();
     }
 
-    private String name;
+    private StringProperty name;
+
+    public StringProperty nameProperty() {
+        return this.name;
+    }
 
     public DosageFormCategory setName(String name) {
-        this.name = name;
+        this.name.setValue(name);
         return this;
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 }

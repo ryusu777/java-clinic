@@ -4,23 +4,27 @@ import java.sql.Date;
 
 import com.clinic.AbstractEntity;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 public class PurchaseMedicineHeader extends AbstractEntity {
     public PurchaseMedicineHeader() {
-        super(null);
+        this(null);
     }
 
     public PurchaseMedicineHeader(Integer id) {
         super(id);
+        purchaseDate = new SimpleObjectProperty<>();
     }
     
-    private Date purchaseDate;
+    private ObjectProperty<Date> purchaseDate;
 
     public Date getPurchaseDate() {
-        return purchaseDate;
+        return purchaseDate.get();
     }
 
     public PurchaseMedicineHeader setPurchaseDate(Date purchaseDate) {
-        this.purchaseDate = purchaseDate;
+        this.purchaseDate.setValue(purchaseDate);
         return this;
     }
 }

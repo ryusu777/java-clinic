@@ -2,41 +2,59 @@ package com.clinic.drug.domain;
 
 import com.clinic.AbstractEntity;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class SellMedicineDetail extends AbstractEntity {
     public SellMedicineDetail() {
-        super(null);
+        this(null);
     }
 
     public SellMedicineDetail(Integer id) {
         super(id);
+        price = new SimpleIntegerProperty();
+        sellMedicineHeaderId = new SimpleIntegerProperty();
+        prescriptionRecipeId = new SimpleIntegerProperty();
     }
     
-    private Integer price, sellMedicineHeaderId, prescriptionRecipeId;
+    private IntegerProperty price, sellMedicineHeaderId, prescriptionRecipeId;
 
-    public Integer getPrice() {
+    public IntegerProperty pricePropery() {
         return price;
     }
 
+    public IntegerProperty sellMedicineHeaderIdPropery() {
+        return sellMedicineHeaderId;
+    }
+
+    public IntegerProperty prescriptionRecipeIdPropery() {
+        return prescriptionRecipeId;
+    }
+
+    public Integer getPrice() {
+        return price.get();
+    }
+
     public SellMedicineDetail setPrice(Integer price) {
-        this.price = price;
+        this.price.setValue(price);
         return this;
     }
 
     public Integer getSellMedicineHeaderId() {
-        return sellMedicineHeaderId;
+        return sellMedicineHeaderId.get();
     }
 
     public SellMedicineDetail setSellMedicineHeaderId(Integer sellMedicineHeaderId) {
-        this.sellMedicineHeaderId = sellMedicineHeaderId;
+        this.sellMedicineHeaderId.setValue(sellMedicineHeaderId);
         return this;
     }
 
     public Integer getPrescriptionRecipeId() {
-        return prescriptionRecipeId;
+        return prescriptionRecipeId.get();
     }
 
     public SellMedicineDetail setPrescriptionRecipeId(Integer prescriptionRecipeId) {
-        this.prescriptionRecipeId = prescriptionRecipeId;
+        this.prescriptionRecipeId.setValue(prescriptionRecipeId);
         return this;
     }
     
