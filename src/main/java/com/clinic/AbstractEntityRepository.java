@@ -159,6 +159,9 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
             for (Method method : entityClass.getDeclaredMethods()) {
                 int modifiers = method.getModifiers();
                 String fieldName = normalizeFieldName(method.getName().substring(3));
+                if (resultEntity.getTableFieldNames() != null && !resultEntity.getTableFieldNames().contains(fieldName))
+                    continue;
+
                 if (Modifier.isPublic(modifiers)
                         && method.getName().matches("set\\D+")) {
 
@@ -191,15 +194,30 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     private Map<String, Method> getEntityAttributesInSnakeCase() {
         Map<String, Method> result = new HashMap<String, Method>();
         String excludedGetters = "getId|getTableFieldNames";
+        for (Method method : getEntityAttributeGetters()) {
+            if (!method.getName().matches(excludedGetters)) {
+                result.put(
+                    normalizeFieldName(method.getName().substring(3)),
+                    method
+                );
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets a list of getter method that publicly declared in the 
+     * <code>entityClass</code> (id getter not included)
+     * @return <code>List</code> of <code>Method</code>
+     */
+    public List<Method> getEntityAttributeGetters() {
+        List<Method> result = new ArrayList<>();
         for (Method method : entityClass.getDeclaredMethods()) {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers)
-                    && method.getName().matches("get\\D+")
-                    && !method.getName().matches(excludedGetters)) {
-                result.put(
-                    normalizeFieldName(
-                        method.getName().substring(3)),
-                    method);
+                && method.getName().matches("get\\D+")
+            ) {
+                result.add(method);
             }
         }
         return result;
@@ -211,7 +229,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * <code>dosage_form_category</code>
      * @param camelCaseField the field
      */
-    private String normalizeFieldName(String camelCaseField) {
+    public String normalizeFieldName(String camelCaseField) {
         return camelCaseField.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
