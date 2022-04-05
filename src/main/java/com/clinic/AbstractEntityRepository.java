@@ -46,22 +46,25 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     }
 
     /**
-     * Get list of entity records with pagination
+     * Get list of entity records with pagination along with the where clause
+     * query example: "WHERE tableName().foreign_id=1"
      * @param pagination
      * @return <code>List<T></code> with T as the entity type
      */
-    public List<T> get(Pagination pagination) throws SQLException {
+    protected List<T> get(Pagination pagination, String whereClause) throws SQLException {
         ResultSet countResult = query("SELECT count(id) as number FROM "
             + tableName() + ";");
         countResult.next();
         pagination.totalRecords = countResult.getInt(1);
 
         String fetchQuery = "SELECT * FROM " + tableName();
+        fetchQuery += " " + whereClause + " ";
         if (pagination.sortBy != null
                 && pagination.sortOrder != null) {
             fetchQuery += " ORDER BY " + normalizeFieldName(pagination.sortBy)
-                + " " + pagination.sortOrder;
+                    + " " + pagination.sortOrder;
         }
+
 
         int recordsPerPage = pagination.recordsPerPage != null 
             ? pagination.recordsPerPage 
@@ -78,6 +81,13 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         }
 
         return entities;
+    }
+
+    /**
+     * Get list of entity with pagination
+     */
+    public List<T> get(Pagination pagination) throws SQLException {
+        return get(pagination, "");
     }
 
     /**
@@ -149,6 +159,9 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
             for (Method method : entityClass.getDeclaredMethods()) {
                 int modifiers = method.getModifiers();
                 String fieldName = normalizeFieldName(method.getName().substring(3));
+                if (resultEntity.getTableFieldNames() != null && !resultEntity.getTableFieldNames().contains(fieldName))
+                    continue;
+
                 if (Modifier.isPublic(modifiers)
                         && method.getName().matches("set\\D+")) {
 
@@ -181,15 +194,30 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     private Map<String, Method> getEntityAttributesInSnakeCase() {
         Map<String, Method> result = new HashMap<String, Method>();
         String excludedGetters = "getId|getTableFieldNames";
+        for (Method method : getEntityAttributeGetters()) {
+            if (!method.getName().matches(excludedGetters)) {
+                result.put(
+                    normalizeFieldName(method.getName().substring(3)),
+                    method
+                );
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets a list of getter method that publicly declared in the 
+     * <code>entityClass</code> (id getter not included)
+     * @return <code>List</code> of <code>Method</code>
+     */
+    public List<Method> getEntityAttributeGetters() {
+        List<Method> result = new ArrayList<>();
         for (Method method : entityClass.getDeclaredMethods()) {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers)
-                    && method.getName().matches("get\\D+")
-                    && !method.getName().matches(excludedGetters)) {
-                result.put(
-                    normalizeFieldName(
-                        method.getName().substring(3)),
-                    method);
+                && method.getName().matches("get\\D+")
+            ) {
+                result.add(method);
             }
         }
         return result;
@@ -201,7 +229,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * <code>dosage_form_category</code>
      * @param camelCaseField the field
      */
-    private String normalizeFieldName(String camelCaseField) {
+    public String normalizeFieldName(String camelCaseField) {
         return camelCaseField.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
