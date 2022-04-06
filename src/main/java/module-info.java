@@ -6,4 +6,6 @@ module com.clinic {
 
     opens com.clinic to javafx.fxml;
     exports com.clinic;
+    exports com.clinic.drug.controller;
+    exports com.clinic.drug.domain;
 }
