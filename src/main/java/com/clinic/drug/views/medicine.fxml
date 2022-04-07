@@ -11,6 +11,9 @@
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clinic.drug.controller.MedicineController">
    <children>
       <Label text="Table" />
+      <Button onAction="#showCreateForm" text="Create" />
+      <Button onAction="#showUpdateForm" text="Update" fx:id="updateButton" />
+      <Button onAction="#showDeleteForm" text="Delete" fx:id="deleteButton" />
       <TableView fx:id="entityTable" />
    </children>
    <padding>
