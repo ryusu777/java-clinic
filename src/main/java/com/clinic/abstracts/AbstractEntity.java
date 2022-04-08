@@ -1,4 +1,4 @@
-package com.clinic;
+package com.clinic.abstracts;
 
 import java.util.List;
 
