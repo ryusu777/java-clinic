@@ -1,11 +1,12 @@
 package com.clinic.drug.domain;
 
 import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Medicine extends AbstractEntity {
+public class Medicine extends AbstractEntity implements Copyable<Medicine> {
     public Medicine(Integer id) {
         super(id);
         brandName = new SimpleStringProperty();
@@ -42,5 +43,12 @@ public class Medicine extends AbstractEntity {
     public Medicine setGenericName(String genericName) {
         this.genericName.setValue(genericName);
         return this;
+    }
+
+    @Override
+    public Medicine copy(Medicine entity) {
+        return this
+            .setBrandName(entity.getBrandName())
+            .setGenericName(entity.getGenericName());
     }
 }
