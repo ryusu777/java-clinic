@@ -1,9 +1,11 @@
-package com.clinic;
+package com.clinic.abstracts;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
+import com.clinic.Pagination;
+import com.clinic.factories.EntityRepositoryFactory;
 import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.BooleanProperty;
@@ -165,7 +167,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         formStage.setScene(formScene);
         formStage.setTitle(action == CREATE_ACTION ? "Create "
                 : "Update " +
-                        entityClass.getName());
+                        entityClass.getSimpleName());
         formStage.show();
     }
 
@@ -173,13 +175,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * Generates a button that handle form submission
      * @param text text to be displayed on the button
      * @param entity the entity that should be created or updated
-     * @param action <code>CREATE_ACTION</code> or <code>UPDATE_ACTION</code>
      * @return <code>Button</code> that has handler that handles form submission
      */
-    protected Button generateSubmitButton(String text, T entity, int action) {
+    protected Button generateSubmitButton(String text, T entity) {
         Button submitButton = new Button();
         submitButton.setText(text);
         submitButton.setOnAction((event) -> {
+            int action = entity.getId() != null ? UPDATE_ACTION : CREATE_ACTION;
             actEntity(entity, action);
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();

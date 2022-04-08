@@ -1,6 +1,6 @@
 package com.clinic.drug.domain;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
