@@ -3,7 +3,7 @@ package com.clinic.drug.domain;
 import java.util.Arrays;
 import java.util.List;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
 
 public class Medicine extends AbstractEntity {
     public Medicine(Integer id) {
