@@ -1,7 +1,9 @@
-package com.clinic;
+package com.clinic.factories;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.clinic.abstracts.AbstractEntityRepository;
 
 public class EntityRepositoryFactory {
     private static Map<Class<?>, AbstractEntityRepository<?>> repositories = new HashMap<>();
