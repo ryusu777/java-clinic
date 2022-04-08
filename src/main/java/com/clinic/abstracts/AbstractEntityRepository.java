@@ -1,4 +1,4 @@
-package com.clinic;
+package com.clinic.abstracts;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.clinic.ClinicConnection;
+import com.clinic.Pagination;
 
 /**
  * Abstract class for creating an entity repository. Provides basic CRUD
