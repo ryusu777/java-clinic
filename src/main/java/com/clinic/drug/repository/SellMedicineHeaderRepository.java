@@ -1,6 +1,6 @@
 package com.clinic.drug.repository;
 
-import com.clinic.AbstractEntityRepository;
+import com.clinic.abstracts.AbstractEntityRepository;
 import com.clinic.drug.domain.SellMedicineHeader;
 
 public class SellMedicineHeaderRepository extends AbstractEntityRepository<SellMedicineHeader> {
