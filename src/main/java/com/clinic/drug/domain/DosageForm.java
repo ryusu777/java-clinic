@@ -1,13 +1,14 @@
 package com.clinic.drug.domain;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class DosageForm extends AbstractEntity {
+public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
     public DosageForm() {
         this(null);
     }
@@ -45,5 +46,12 @@ public class DosageForm extends AbstractEntity {
     public DosageForm setDosageFormCategoryId(Integer dosageFormCategoryId) {
         this.dosageFormCategoryId.setValue(dosageFormCategoryId);
         return this;
+    }
+
+    @Override
+    public DosageForm copy(DosageForm entity) {
+        return this
+            .setName(entity.getName())
+            .setDosageFormCategoryId(entity.getDosageFormCategoryId());
     }
 }

@@ -1,11 +1,12 @@
 package com.clinic.drug.domain;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class DosageFormCategory extends AbstractEntity {
+public class DosageFormCategory extends AbstractEntity implements Copyable<DosageFormCategory> {
     public DosageFormCategory() {
         this(null);
     }
@@ -28,5 +29,11 @@ public class DosageFormCategory extends AbstractEntity {
 
     public String getName() {
         return name.get();
+    }
+
+    @Override
+    public DosageFormCategory copy(DosageFormCategory entity) {
+        return this
+            .setName(entity.getName());
     }
 }

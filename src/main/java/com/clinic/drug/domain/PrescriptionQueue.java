@@ -1,11 +1,12 @@
 package com.clinic.drug.domain;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class PrescriptionQueue extends AbstractEntity {
+public class PrescriptionQueue extends AbstractEntity implements Copyable<PrescriptionQueue> {
     public PrescriptionQueue() {
         this(null);
     }
@@ -47,5 +48,12 @@ public class PrescriptionQueue extends AbstractEntity {
     public PrescriptionQueue setStatus(Integer status) {
         this.status.setValue(status);
         return this;
+    }
+
+    @Override
+    public PrescriptionQueue copy(PrescriptionQueue entity) {
+        return this
+            .setPrescriptionHeaderId(entity.getPrescriptionHeaderId())
+            .setStatus(entity.getStatus());
     }
 }

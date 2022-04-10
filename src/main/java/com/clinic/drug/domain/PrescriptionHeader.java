@@ -1,15 +1,16 @@
 package com.clinic.drug.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class PrescriptionHeader extends AbstractEntity {
+public class PrescriptionHeader extends AbstractEntity implements Copyable<PrescriptionHeader> {
     public PrescriptionHeader() {
         this(null);
     }
@@ -22,10 +23,10 @@ public class PrescriptionHeader extends AbstractEntity {
         medicalRecordId = new SimpleIntegerProperty();
     }
     
-    private ObjectProperty<Date> createdDate;
+    private ObjectProperty<LocalDate> createdDate;
     private IntegerProperty doctorId, patientId, medicalRecordId;
 
-    public ObjectProperty<Date> createdDateProperty() {
+    public ObjectProperty<LocalDate> createdDateProperty() {
         return this.createdDate;
     }
 
@@ -41,11 +42,11 @@ public class PrescriptionHeader extends AbstractEntity {
         return this.medicalRecordId;
     }
 
-    public Date getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate.get();
     }
 
-    public PrescriptionHeader setCreatedDate(Date createdDate) {
+    public PrescriptionHeader setCreatedDate(LocalDate createdDate) {
         this.createdDate.setValue(createdDate);
         return this;
     }
@@ -75,5 +76,14 @@ public class PrescriptionHeader extends AbstractEntity {
     public PrescriptionHeader setMedicalRecordId(Integer medicalRecordId) {
         this.medicalRecordId.setValue(medicalRecordId);
         return this;
+    }
+
+    @Override
+    public PrescriptionHeader copy(PrescriptionHeader entity) {
+        return this
+            .setCreatedDate(entity.getCreatedDate())
+            .setDoctorId(entity.getDoctorId())
+            .setMedicalRecordId(entity.getMedicalRecordId())
+            .setPatientId(entity.getPatientId());
     }
 }

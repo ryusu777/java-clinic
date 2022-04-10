@@ -1,15 +1,16 @@
 package com.clinic.drug.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class SellMedicineHeader extends AbstractEntity {
+public class SellMedicineHeader extends AbstractEntity implements Copyable<SellMedicineHeader> {
     public SellMedicineHeader() {
         this(null);
     }
@@ -20,10 +21,10 @@ public class SellMedicineHeader extends AbstractEntity {
         prescriptionHeaderId = new SimpleIntegerProperty();
     }
     
-    private ObjectProperty<Date> purchaseDate;
+    private ObjectProperty<LocalDate> purchaseDate;
     private IntegerProperty prescriptionHeaderId;
 
-    public ObjectProperty<Date> purchaseDateProperty() {
+    public ObjectProperty<LocalDate> purchaseDateProperty() {
         return purchaseDate;
     }
 
@@ -40,12 +41,19 @@ public class SellMedicineHeader extends AbstractEntity {
         return this;
     }
 
-    public Date getPurchaseDate() {
+    public LocalDate getPurchaseDate() {
         return purchaseDate.get();
     }
 
-    public SellMedicineHeader setPurchaseDate(Date purchaseDate) {
+    public SellMedicineHeader setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate.setValue(purchaseDate);
         return this;
+    }
+
+    @Override
+    public SellMedicineHeader copy(SellMedicineHeader entity) {
+        return this
+            .setPrescriptionHeaderId(entity.getPrescriptionHeaderId())
+            .setPurchaseDate(entity.getPurchaseDate());
     }
 }

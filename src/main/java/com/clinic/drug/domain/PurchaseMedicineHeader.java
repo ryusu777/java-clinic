@@ -1,13 +1,14 @@
 package com.clinic.drug.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class PurchaseMedicineHeader extends AbstractEntity {
+public class PurchaseMedicineHeader extends AbstractEntity implements Copyable<PurchaseMedicineHeader> {
     public PurchaseMedicineHeader() {
         this(null);
     }
@@ -17,14 +18,20 @@ public class PurchaseMedicineHeader extends AbstractEntity {
         purchaseDate = new SimpleObjectProperty<>();
     }
     
-    private ObjectProperty<Date> purchaseDate;
+    private ObjectProperty<LocalDate> purchaseDate;
 
-    public Date getPurchaseDate() {
+    public LocalDate getPurchaseDate() {
         return purchaseDate.get();
     }
 
-    public PurchaseMedicineHeader setPurchaseDate(Date purchaseDate) {
+    public PurchaseMedicineHeader setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate.setValue(purchaseDate);
         return this;
+    }
+
+    @Override
+    public PurchaseMedicineHeader copy(PurchaseMedicineHeader entity) {
+        return this
+            .setPurchaseDate(entity.getPurchaseDate());
     }
 }

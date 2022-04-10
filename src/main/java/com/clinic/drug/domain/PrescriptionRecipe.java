@@ -1,8 +1,10 @@
 package com.clinic.drug.domain;
 
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,7 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class PrescriptionRecipe extends AbstractEntity {
+public class PrescriptionRecipe extends AbstractEntity implements Copyable<PrescriptionRecipe> {
     public PrescriptionRecipe() {
         this(null);
     }
@@ -22,14 +24,15 @@ public class PrescriptionRecipe extends AbstractEntity {
         latinUsageInstruction = new SimpleStringProperty();
         latinMakingInstruction = new SimpleStringProperty();
         expDate = new SimpleObjectProperty<>();
-        qty = new SimpleIntegerProperty();
+        qty = new SimpleObjectProperty<>();
         dosageFormId = new SimpleIntegerProperty();
         prescriptionHeaderId = new SimpleIntegerProperty();
     }
     
     private StringProperty usageInstruction, latinUsageInstruction, latinMakingInstruction;
-    private ObjectProperty<Date> expDate;
-    private IntegerProperty qty, dosageFormId, prescriptionHeaderId;
+    private ObjectProperty<LocalDate> expDate;
+    private IntegerProperty dosageFormId, prescriptionHeaderId;
+    private ObjectProperty<BigDecimal> qty;
 
     public StringProperty usageInstructionProperty() { 
         return this.usageInstruction;
@@ -43,11 +46,11 @@ public class PrescriptionRecipe extends AbstractEntity {
         return this.latinMakingInstruction;
     }
 
-    public ObjectProperty<Date> expDateProperty() {
+    public ObjectProperty<LocalDate> expDateProperty() {
         return this.expDate;
     }
 
-    public IntegerProperty qtyProperty() {
+    public ObjectProperty<BigDecimal> qtyProperty() {
         return this.qty;
     }
 
@@ -86,20 +89,20 @@ public class PrescriptionRecipe extends AbstractEntity {
         return this;
     }
 
-    public Date getExpDate() {
+    public LocalDate getExpDate() {
         return expDate.get();
     }
 
-    public PrescriptionRecipe setExpDate(Date expDate) {
+    public PrescriptionRecipe setExpDate(LocalDate expDate) {
         this.expDate.setValue(expDate);
         return this;
     }
 
-    public Integer getQty() {
+    public BigDecimal getQty() {
         return qty.get();
     }
 
-    public PrescriptionRecipe setQty(Integer qty) {
+    public PrescriptionRecipe setQty(BigDecimal qty) {
         this.qty.setValue(qty);
         return this;
     }
@@ -120,5 +123,16 @@ public class PrescriptionRecipe extends AbstractEntity {
     public PrescriptionRecipe setPrescriptionHeaderId(Integer prescriptionHeaderId) {
         this.prescriptionHeaderId.setValue(prescriptionHeaderId);
         return this;
+    }
+
+    @Override
+    public PrescriptionRecipe copy(PrescriptionRecipe entity) {
+        return this
+            .setDosageFormId(entity.getDosageFormId())
+            .setExpDate(entity.getExpDate())
+            .setLatinMakingInstruction(entity.getLatinMakingInstruction())
+            .setLatinUsageInstruction(entity.getLatinUsageInstruction())
+            .setPrescriptionHeaderId(entity.getPrescriptionHeaderId())
+            .setQty(entity.getQty());
     }
 }

@@ -1,25 +1,31 @@
 package com.clinic.drug.domain;
 
-import com.clinic.AbstractEntity;
+import java.math.BigDecimal;
+
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
-public class PrescriptionIngredient extends AbstractEntity {
+public class PrescriptionIngredient extends AbstractEntity implements Copyable<PrescriptionIngredient> {
     public PrescriptionIngredient() {
         this(null);
     }
 
     public PrescriptionIngredient(Integer id) {
         super(id);
-        qty = new SimpleIntegerProperty();
+        qty = new SimpleObjectProperty<>();
         prescriptionRecipeId = new SimpleIntegerProperty();
         medicineStockId = new SimpleIntegerProperty();
     }
     
-    private IntegerProperty qty, prescriptionRecipeId, medicineStockId;
+    private IntegerProperty prescriptionRecipeId, medicineStockId;
+    private ObjectProperty<BigDecimal> qty;
 
-    public IntegerProperty qtyProperty() {
+    public ObjectProperty<BigDecimal> qtyProperty() {
         return this.qty;
     }
 
@@ -31,11 +37,11 @@ public class PrescriptionIngredient extends AbstractEntity {
         return this.medicineStockId;
     }
 
-    public Integer getQty() {
+    public BigDecimal getQty() {
         return qty.get();
     }
 
-    public PrescriptionIngredient setQty(Integer qty) {
+    public PrescriptionIngredient setQty(BigDecimal qty) {
         this.qty.setValue(qty);
         return this;
     }
@@ -56,6 +62,14 @@ public class PrescriptionIngredient extends AbstractEntity {
     public PrescriptionIngredient setMedicineStockId(Integer medicineStockId) {
         this.medicineStockId.setValue(medicineStockId);
         return this;
+    }
+
+    @Override
+    public PrescriptionIngredient copy(PrescriptionIngredient entity) {
+        return this
+            .setMedicineStockId(entity.getMedicineStockId())
+            .setPrescriptionRecipeId(entity.getPrescriptionRecipeId())
+            .setQty(entity.getQty());
     }
     
 }

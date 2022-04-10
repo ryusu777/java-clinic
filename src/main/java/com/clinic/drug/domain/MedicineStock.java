@@ -1,17 +1,18 @@
 package com.clinic.drug.domain;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class MedicineStock extends AbstractEntity {
+public class MedicineStock extends AbstractEntity implements Copyable<MedicineStock> {
     public MedicineStock() {
         this(null);
     }
@@ -27,16 +28,16 @@ public class MedicineStock extends AbstractEntity {
         qtyUnitId = new SimpleIntegerProperty();
     }
     
-    private ObjectProperty<Timestamp> receivedDate;
-    private ObjectProperty<Date> expDate;
+    private ObjectProperty<LocalDateTime> receivedDate;
+    private ObjectProperty<LocalDate> expDate;
     private ObjectProperty<BigDecimal> qtyAvailable, qtyToDosageFormMultiplier;
     private IntegerProperty medicineId, dosageFormId, qtyUnitId;
 
-    public ObjectProperty<Timestamp> receivedDateProperty() {
+    public ObjectProperty<LocalDateTime> receivedDateProperty() {
         return this.receivedDate;
     }
 
-    public ObjectProperty<Date> expDateProperty() {
+    public ObjectProperty<LocalDate> expDateProperty() {
         return this.expDate;
     }
 
@@ -60,20 +61,20 @@ public class MedicineStock extends AbstractEntity {
         return this.qtyUnitId;
     }
 
-    public Timestamp getReceivedDate() {
+    public LocalDateTime getReceivedDate() {
         return receivedDate.get();
     }
 
-    public MedicineStock setReceivedDate(Timestamp receivedDate) {
+    public MedicineStock setReceivedDate(LocalDateTime receivedDate) {
         this.receivedDate.setValue(receivedDate);
         return this;
     }
 
-    public Date getExpDate() {
+    public LocalDate getExpDate() {
         return expDate.get();
     }
 
-    public MedicineStock setExpDate(Date expDate) {
+    public MedicineStock setExpDate(LocalDate expDate) {
         this.expDate.setValue(expDate);
         return this;
     }
@@ -82,8 +83,9 @@ public class MedicineStock extends AbstractEntity {
         return qtyToDosageFormMultiplier.get();
     }
 
-    public void setQtyToDosageFormMultiplier(BigDecimal qtyToDosageFormMultiplier) {
+    public MedicineStock setQtyToDosageFormMultiplier(BigDecimal qtyToDosageFormMultiplier) {
         this.qtyToDosageFormMultiplier.setValue(qtyToDosageFormMultiplier);
+        return this;
     }
 
     public BigDecimal getQtyAvailable() {
@@ -120,5 +122,17 @@ public class MedicineStock extends AbstractEntity {
     public MedicineStock setDosageFormId(Integer dosageFormId) {
         this.dosageFormId.setValue(dosageFormId);
         return this;
+    }
+
+    @Override
+    public MedicineStock copy(MedicineStock entity) {
+        return this
+            .setDosageFormId(entity.getDosageFormId())
+            .setExpDate(entity.getExpDate())
+            .setMedicineId(entity.getMedicineId())
+            .setQtyAvailable(entity.getQtyAvailable())
+            .setQtyUnitId(entity.getQtyUnitId())
+            .setReceivedDate(entity.getReceivedDate())
+            .setQtyToDosageFormMultiplier(entity.getQtyToDosageFormMultiplier());
     }
 }
