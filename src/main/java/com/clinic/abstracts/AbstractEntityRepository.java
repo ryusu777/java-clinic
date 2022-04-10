@@ -1,4 +1,3 @@
-
 package com.clinic.abstracts;
 
 import java.lang.reflect.Method;
