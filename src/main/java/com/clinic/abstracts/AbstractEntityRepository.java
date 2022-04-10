@@ -7,6 +7,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -178,6 +180,10 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
                         method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)));
                     else if (method.getParameterTypes()[0] == Timestamp.class)
                         method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)));
+                    else if (method.getParameterTypes()[0] == LocalDate.class)
+                        method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)).toLocalDate());
+                    else if (method.getParameterTypes()[0] == LocalDateTime.class)
+                        method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)).toLocalDateTime());
                 }
             }
             return resultEntity;

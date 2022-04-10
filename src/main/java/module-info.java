@@ -1,11 +1,11 @@
 module com.clinic {
-    requires javafx.controls;
+    requires transitive javafx.controls;
     requires javafx.fxml;
     requires transitive javafx.graphics;
     requires transitive java.sql;
 
     opens com.clinic to javafx.fxml;
     exports com.clinic;
-    exports com.clinic.drug.controller;
-    exports com.clinic.drug.domain;
+    exports com.clinic.abstracts;
+    exports com.clinic.factories;
 }
