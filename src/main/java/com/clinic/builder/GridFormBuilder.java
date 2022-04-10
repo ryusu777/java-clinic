@@ -17,6 +17,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 
+/**
+ * A class to help generating form fields with corresponding property to bind
+ * the fields.
+ * 
+ * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
+ */
 public class GridFormBuilder {
     private int currentRow = 1;
     private GridPane formGrid;
