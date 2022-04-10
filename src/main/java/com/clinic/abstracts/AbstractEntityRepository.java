@@ -1,10 +1,10 @@
+
 package com.clinic.abstracts;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
