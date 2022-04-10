@@ -29,6 +29,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * A GUI controller to do CRUD operation for an entity.<br>
+ * The entity should extend <code>AbstractEntity</code> and implements 
+ * <code>Copyable</code> interface. The <code>copy()<code> method will be used
+ * when creating entity's form.
+ * The entity should have corresponding repository for this controller to do
+ * CRUD operation into database
+ * 
+ * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
+ */
 public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
     public final static int CREATE_ACTION = 1, UPDATE_ACTION = 2, DELETE_ACTION = 3;
     public TableView<T> entityTable;
@@ -93,7 +103,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      */
     public T pickEntity() {
         VBox pickLayout = new VBox();
-        pickLayout.setAlignment(Pos.CENTER);
+        pickLayout.setAlignment(Pos.TOP_LEFT);
         pickLayout.setSpacing(10.0);
         pickLayout.setPadding(new Insets(20));
         Button pickButton = new Button("Pick");
@@ -299,7 +309,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      */
     private void initFormGrid() {
         formGrid = new GridPane();
-        formGrid.setAlignment(Pos.CENTER);
+        formGrid.setAlignment(Pos.TOP_LEFT);
         formGrid.setHgap(10);
         formGrid.setVgap(10);
         formGrid.setPadding(new Insets(25));

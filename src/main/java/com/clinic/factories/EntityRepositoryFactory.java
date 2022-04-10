@@ -5,6 +5,12 @@ import java.util.Map;
 
 import com.clinic.abstracts.AbstractEntityRepository;
 
+/**
+ * A factory for getting entity repositories. This class was made to make sure
+ * that there is only one entity's repository instance in the whole application
+ * 
+ * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
+ */
 public class EntityRepositoryFactory {
     private static Map<Class<?>, AbstractEntityRepository<?>> repositories = new HashMap<>();
 
