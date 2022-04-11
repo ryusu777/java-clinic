@@ -314,4 +314,18 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         formGrid.setVgap(10);
         formGrid.setPadding(new Insets(25));
     }
+
+    /**
+     * Get class of the entity for picking entity purpose
+     */
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
+
+    /**
+     * Get repository of the entity
+     */
+    public S getRepo() {
+        return repo;
+    }
 }
