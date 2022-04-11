@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
 public class Appointment extends AbstractEntity{
     private Integer doctorId, patientId, category, status;
     private Timestamp appointmentDateTime;
