@@ -4,7 +4,8 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+
 public class Doctor extends AbstractEntity{
     public Doctor(Integer id){
         super(id);
@@ -14,20 +15,21 @@ public class Doctor extends AbstractEntity{
         super(null);
     }
 
-    private String DoctorName, BirthPlace, Nationality, Address, EmailAddress, DoctorTelp, NoKTP, NoNPAIDI, NoSIP, Specialism, FirstDegree, LastDegree;
-    private Date BirthDate;
+    private Date Dob;
+    private String Name, BirthPlace, Gender, Nationality, Address, EmailAddress, Telp, NoKtp, NoNPAIDI, NoSIP, Specialism, FirstDegree, LastDegree;
 
 
     @Override
     public List<String> getTableFieldNames() {
         return Arrays.asList(
-                "doctor_name",
+                "name",
                 "birth_place",
-                "birth_date",
+                "dob",
+                "gender",
                 "nationality",
                 "address",
                 "email_address",
-                "doctor_telp",
+                "telp",
                 "no_ktp",
                 "no_npa_idi",
                 "no_sip",
@@ -36,12 +38,12 @@ public class Doctor extends AbstractEntity{
                 "last_degree");
     }
 
-    public String getDoctorName(){
-        return DoctorName;
+    public String getName(){
+        return Name;
     }
 
-    public void setDoctorName(String DoctorName){
-        this.DoctorName = DoctorName;
+    public void setName(String name){
+        this.Name = name;
     }
     public String getBirthPlace(){
         return BirthPlace;
@@ -50,13 +52,21 @@ public class Doctor extends AbstractEntity{
     public void setBirthPlace(String BirthPlace){
         this.BirthPlace = BirthPlace;
     }
-
-    public Date getBirthDate(){
-        return BirthDate;
+    
+    public void setGender(String Gender){
+        this.Gender = Gender;
     }
 
-    public void setBirthDate(Date BirthDate){
-        this.BirthDate = BirthDate;
+    public String getGender(){
+        return Gender;
+    }
+
+    public Date getDob(){
+        return Dob;
+    }
+
+    public void setDob(Date Dob){
+        this.Dob = Dob;
     }
 
     public String getNationality(){
@@ -81,19 +91,19 @@ public class Doctor extends AbstractEntity{
     public void setEmailAddress(String EmailAddress){
         this.EmailAddress = EmailAddress;
     }
-    public String getDoctorTelp(){
-        return DoctorTelp;
+    public String getTelp(){
+        return Telp;
     }
 
-    public void setDoctorTelp(String DoctorTelp){
-        this.DoctorTelp = DoctorTelp;
+    public void setTelp(String Telp){
+        this.Telp = Telp;
     }
     public String getNoKTP(){
-        return NoKTP;
+        return NoKtp;
     }
 
-    public void setNoKTP(String NoKTP){
-        this.NoKTP = NoKTP;
+    public void setNoKTP(String NoKtp){
+        this.NoKtp = NoKtp;
     }
     public String getNoNpaIdi(){
         return NoNPAIDI;
