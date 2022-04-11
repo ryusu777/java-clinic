@@ -1,51 +1,77 @@
 package com.clinic.receptionist.domain;
 
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
 
-import com.clinic.AbstractEntity;
-public class DoctorSchedule extends AbstractEntity{
-    private Integer doctorId;
-    private Timestamp worksStart, worksEnd;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
-    @Override
-    public List<String> getTableFieldNames() {
-        return Arrays.asList(
-                "doctor_id",
-                "works_start",
-                "works_end");
-    }
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSchedule>{
 
     public DoctorSchedule(Integer id) {
         super(id);
+        doctorId = new SimpleIntegerProperty();
+        worksStart = new SimpleObjectProperty<>();
+        worksEnd = new SimpleObjectProperty<>();
     }
 
     public DoctorSchedule(){
         super(null);
     }
+    
+    private IntegerProperty doctorId;
+    private ObjectProperty<LocalDateTime> worksStart, worksEnd;
 
-    public Integer getDoctorId(){
+    
+    public IntegerProperty doctorIdProperty(){
         return doctorId;
     }
 
-    public void setDoctorId(Integer doctorId){
-        this.doctorId = doctorId;
-    }
-
-    public Timestamp getWorksStart(){
+    public ObjectProperty<LocalDateTime> worksStartProperty(){
         return worksStart;
     }
 
-    public void setWorksStart(Timestamp worksStart){
-        this.worksStart = worksStart;
-    }
-
-    public Timestamp getWorksEnd(){
+    public ObjectProperty<LocalDateTime> worksEndProperty(){
         return worksEnd;
     }
 
-    public void setWorksEnd(Timestamp worksEnd){
-        this.worksEnd = worksEnd;
+    public Integer getDoctorId(){
+        return doctorId.get();
     }
+
+    public DoctorSchedule setDoctorId(Integer doctorId){
+        this.doctorId.setValue(doctorId);
+        return this;
+    }
+
+    public LocalDateTime getWorksStart(){
+        return worksStart.get();
+    }
+
+    public DoctorSchedule setWorksStart(LocalDateTime worksStart){
+        this.worksStart.setValue(worksStart);
+        return this;
+    }
+
+    public LocalDateTime getWorksEnd(){
+        return worksEnd.get();
+    }
+
+    public DoctorSchedule setWorksEnd(LocalDateTime worksEnd){
+        this.worksEnd.setValue(worksEnd);
+        return this;
+    }
+
+    @Override
+    public DoctorSchedule copy(DoctorSchedule entity) {
+        return this
+        .setDoctorId(entity.getDoctorId())
+        .setWorksStart(entity.getWorksStart())
+        .setWorksEnd(entity.getWorksEnd());
+    }
+
 }
