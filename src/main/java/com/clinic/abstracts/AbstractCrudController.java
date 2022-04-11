@@ -191,7 +191,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         Button submitButton = new Button();
         submitButton.setText(text);
         submitButton.setOnAction((event) -> {
-            int action = entity.getId() != null ? UPDATE_ACTION : CREATE_ACTION;
+            int action = entity.getId() != 0 ? UPDATE_ACTION : CREATE_ACTION;
             actEntity(entity, action);
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
