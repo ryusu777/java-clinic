@@ -1,11 +1,11 @@
 package com.clinic;
 
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import com.clinic.receptionist.controller.PatientController;
 
 /**
  * JavaFX App
@@ -13,10 +13,10 @@ import java.io.IOException;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Group root = new Group();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Demo program");
+        PatientController controller = new PatientController();
+        stage.setTitle("Sample Controller");
+        stage.setScene(controller.getMainScene());
+        controller.fetchEntitiesToTable();
         stage.show();
     }
 
