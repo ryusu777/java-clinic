@@ -1,10 +1,14 @@
 package com.clinic.drug.domain;
 
+import java.math.BigDecimal;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<PurchaseMedicineDetail> {
     public PurchaseMedicineDetail() {
@@ -14,17 +18,18 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
     public PurchaseMedicineDetail(Integer id) {
         super(id);
         pricePerUnit = new SimpleIntegerProperty();
-        qty = new SimpleIntegerProperty();
+        qty = new SimpleObjectProperty<>();
         purchaseMedicineHeaderId = new SimpleIntegerProperty();
     }
     
-    private IntegerProperty pricePerUnit, qty, purchaseMedicineHeaderId;
+    private IntegerProperty pricePerUnit, purchaseMedicineHeaderId;
+    private ObjectProperty<BigDecimal> qty;
 
     public IntegerProperty pricePerUnitProperty() {
         return this.pricePerUnit;
     }
 
-    public IntegerProperty qtyProperty() {
+    public ObjectProperty<BigDecimal> qtyProperty() {
         return this.qty;
     }
 
@@ -41,11 +46,11 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
         return this;
     }
 
-    public Integer getQty() {
+    public BigDecimal getQty() {
         return qty.get();
     }
 
-    public PurchaseMedicineDetail setQty(Integer qty) {
+    public PurchaseMedicineDetail setQty(BigDecimal qty) {
         this.qty.setValue(qty);
         return this;
     }

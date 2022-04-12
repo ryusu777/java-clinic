@@ -11,6 +11,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class MedicineStock extends AbstractEntity implements Copyable<MedicineStock> {
     public MedicineStock() {
@@ -26,12 +28,14 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
         medicineId = new SimpleIntegerProperty();
         dosageFormId = new SimpleIntegerProperty();
         qtyUnitId = new SimpleIntegerProperty();
+        batchNumber = new SimpleStringProperty();
     }
     
     private ObjectProperty<LocalDateTime> receivedDate;
     private ObjectProperty<LocalDate> expDate;
     private ObjectProperty<BigDecimal> qtyAvailable, qtyToDosageFormMultiplier;
     private IntegerProperty medicineId, dosageFormId, qtyUnitId;
+    private StringProperty batchNumber;
 
     public ObjectProperty<LocalDateTime> receivedDateProperty() {
         return this.receivedDate;
@@ -51,6 +55,10 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
 
     public IntegerProperty medicineIdProperty() {
         return this.medicineId;
+    }
+
+    public StringProperty batchNumberProperty() {
+        return batchNumber;
     }
 
     public IntegerProperty dosageFormIdProperty() {
@@ -124,6 +132,15 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
         return this;
     }
 
+    public String getBatchNumber() {
+        return batchNumber.get();
+    }
+
+    public MedicineStock setBatchNumber(String batchNumber) {
+        this.batchNumber.setValue(batchNumber);
+        return this;
+    }
+
     @Override
     public MedicineStock copy(MedicineStock entity) {
         return this
@@ -133,6 +150,7 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
             .setQtyAvailable(entity.getQtyAvailable())
             .setQtyUnitId(entity.getQtyUnitId())
             .setReceivedDate(entity.getReceivedDate())
+            .setBatchNumber(entity.getBatchNumber())
             .setQtyToDosageFormMultiplier(entity.getQtyToDosageFormMultiplier());
     }
 }

@@ -20,6 +20,10 @@ public class PurchaseMedicineHeader extends AbstractEntity implements Copyable<P
     
     private ObjectProperty<LocalDate> purchaseDate;
 
+    public ObjectProperty<LocalDate> purchaseDateProperty() {
+        return purchaseDate;
+    };
+
     public LocalDate getPurchaseDate() {
         return purchaseDate.get();
     }

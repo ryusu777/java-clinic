@@ -4,7 +4,7 @@ import com.clinic.abstracts.AbstractEntityRepository;
 import com.clinic.drug.domain.QtyUnit;
 
 public class QtyUnitRepository extends AbstractEntityRepository<QtyUnit> {
-    protected QtyUnitRepository() {
+    public QtyUnitRepository() {
         super(QtyUnit.class);
     }
 
