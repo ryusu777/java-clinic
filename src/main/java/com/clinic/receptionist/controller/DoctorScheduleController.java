@@ -16,7 +16,7 @@ public class DoctorScheduleController extends AbstractCrudController<DoctorSched
     @Override
     protected void setFormGrid(GridPane formGrid, DoctorSchedule entity) {
         new GridFormBuilder(formGrid)
-            .addIntegerField("Id Doctor", entity.doctorIdProperty(), CrudControllerFactory.getController(DoctorController.class), "getName")
+            .addPickField("Doctor", entity.doctorIdProperty(), CrudControllerFactory.getController(DoctorController.class), "getName")
             .addLocalDateTimeField("Works Start", entity.worksStartProperty())
             .addLocalDateTimeField("Works End", entity.worksEndProperty());
         
