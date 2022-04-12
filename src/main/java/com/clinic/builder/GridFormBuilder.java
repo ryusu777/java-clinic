@@ -1,15 +1,21 @@
 package com.clinic.builder;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.clinic.abstracts.AbstractCrudController;
+import com.clinic.abstracts.AbstractEntity;
 import com.clinic.extension.DateTimePicker;
+import com.clinic.interfaces.Copyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -145,6 +151,54 @@ public class GridFormBuilder {
         DateTimePicker field = new DateTimePicker();
         formGrid.addRow(currentRow, new Label(fieldPrompt), field);
         field.dateTimeValueProperty().bindBidirectional(property);
+        currentRow++;
+        return this;
+    }
+
+    /**
+     * Add a field to pick an entity from other table using their corresponding
+     * controller
+     * @param <T> the entity type
+     * @param fieldPrompt label to display on the left of field
+     * @param property property which the field should bidirect bind
+     * @param controller the corresponding controller of <code>T</code>
+     * @param propertyGetterMethodName the name of getter method of the picked 
+     * entity to display in textfield
+     */
+    public <T extends AbstractEntity & Copyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
+        AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
+        TextField field = new TextField();
+        field.setDisable(true);
+        Button pickButton = new Button("Pick");
+        try {
+            Method propertyGetterMethod = controller.getEntityClass().getMethod(propertyGetterMethodName, (Class[])null);
+            T entity;
+            if (property.get() == 0)
+                entity = null;
+            else {
+                entity = controller.getRepo().get(property.get());
+                field.setText(propertyGetterMethod.invoke(entity).toString());
+            }
+            pickButton.setOnAction(new EventHandler<ActionEvent>() {
+                T localEntity = entity;
+                @Override
+                public void handle(ActionEvent arg0) {
+                    controller.fetchEntitiesToTable();
+                    localEntity = controller.pickEntity();
+                    property.set(localEntity.getId());
+                    try {
+                        if (propertyGetterMethod != null) {
+                            field.textProperty().set(propertyGetterMethod.invoke(localEntity).toString());
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Exception caught in GridFormBuilder.addPickField(): " + e.toString());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            System.out.println("Exception caught in GridFormBuilder.addPickField(): " + e.toString());
+        }
+        formGrid.addRow(currentRow, new Label(fieldPrompt), field, pickButton);
         currentRow++;
         return this;
     }
