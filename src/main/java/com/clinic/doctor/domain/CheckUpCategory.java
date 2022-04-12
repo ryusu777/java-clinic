@@ -5,7 +5,7 @@ import java.util.List;
 import java.sql.Date;
 import java.time.LocalDate;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
 
 public class CheckUpCategory extends AbstractEntity {
     public CheckUpCategory(Integer id) {
@@ -16,8 +16,8 @@ public class CheckUpCategory extends AbstractEntity {
         super(null);
     }
     
-    private Integer Id;
-    private String category_name;
+    private Integer id;
+    private String categoryName;
 
 
     @Override
@@ -26,22 +26,22 @@ public class CheckUpCategory extends AbstractEntity {
             "id",
             "category_name");
     }
-    public void setId(Integer Id) {
-        this.Id = Id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 
-    public void category_name(String category_name) {
-        this.category_name = category_name;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
-    public String category_name() {
-        return category_name;
+    public String getCategoryName() {
+        return categoryName;
     }
 
 

@@ -1,6 +1,6 @@
 package com.clinic.doctor.repository;
 
-import com.clinic.AbstractEntityRepository;
+import com.clinic.abstracts.AbstractEntityRepository;
 import com.clinic.doctor.domain.MedicalRecord;
 
 public class MedicalRecordRepository extends AbstractEntityRepository<MedicalRecord> {

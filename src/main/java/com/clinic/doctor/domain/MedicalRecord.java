@@ -1,82 +1,123 @@
 package com.clinic.doctor.domain;
 
-import java.util.Arrays;
-import java.util.List;
-import java.sql.Date;
 import java.time.LocalDate;
 
-import com.clinic.AbstractEntity;
+import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
-public class MedicalRecord extends AbstractEntity {
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRecord> {
+    public MedicalRecord() {
+        this(null);
+    }
 
     public MedicalRecord(Integer id) {
         super(id);
-    }
-
-    public MedicalRecord() {
-        super(null);
+        patientId = new SimpleIntegerProperty();
+        doctorId = new SimpleIntegerProperty();
+        prescriptionHeaderId = new SimpleIntegerProperty();
+        symptom = new SimpleStringProperty();
+        treatment = new SimpleStringProperty();
+        checkUpDate = new SimpleObjectProperty<>();
     }
     
-    private Integer patientId, doctorId;
-    private String symptom, treatment, prescriptionHeaderId;
-    private Date checkUpDate;
+    private IntegerProperty patientId, doctorId, prescriptionHeaderId;
+    private StringProperty symptom, treatment;
+    private ObjectProperty<LocalDate> checkUpDate;
 
-    @Override
-    public List<String> getTableFieldNames() {
-        return Arrays.asList(
-            "patient_id",
-            "check_up_date",
-            "symptom",
-            "treatment",
-            "prescription_header_id",
-            "doctor_id");
+    public IntegerProperty patientIdProperty() {
+        return this.patientId;
     }
 
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
+    public IntegerProperty doctorIdProperty() {
+        return this.doctorId;
     }
 
-    public void setCheckUpDate(Date checkUpDate) {
-        this.checkUpDate = checkUpDate; 
+    public IntegerProperty prescriptionHeaderIdProperty() {
+        return this.prescriptionHeaderId;
+    }
+    public StringProperty symptomProperty() {
+        return this.symptom;
     }
 
-    public void setSymptom(String symptom) {
-        this.symptom = symptom;
+    public StringProperty treatmentProperty() {
+        return this.treatment;
     }
 
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
+    public ObjectProperty<LocalDate> checkUpDateProperty() {
+        return this.checkUpDate;
     }
 
-    public void setPrescriptionHeaderId(String prescriptionHeaderId) {
-        this.prescriptionHeaderId = prescriptionHeaderId;
+
+
+
+    public MedicalRecord setPatientId(Integer patientId) {
+        this.patientId.setValue(patientId);
+        return this;
     }
 
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
+    public MedicalRecord setCheckUpDate(LocalDate checkUpDate) {
+        this.checkUpDate.setValue(checkUpDate); 
+        return this;
+    }
+
+    public MedicalRecord setSymptom(String string) {
+        this.symptom.setValue(string);
+        return this;
+    }
+
+    public MedicalRecord setTreatment(String treatment) {
+        this.treatment.setValue(treatment);
+        return this;
+    }
+
+    public MedicalRecord setPrescriptionHeaderId(Integer prescriptionHeaderId) {
+        this.prescriptionHeaderId.setValue(prescriptionHeaderId);
+        return this;
+    }
+
+    public MedicalRecord setDoctorId(Integer doctorId) {
+        this.doctorId.setValue(doctorId);
+        return this;
     }
 
     public Integer getPatientId() {
-        return patientId;
+        return patientId.get();
     }
 
-    public Date getCheckUpDate() {
-        return checkUpDate;
+    public LocalDate getCheckUpDate() {
+        return checkUpDate.get();
     }
 
     public String getSymptom() {
-        return symptom;
+        return symptom.get();
     }
 
     public String getTreatment() {
-        return treatment;
+        return treatment.get();
     }
 
-    public String getPrescriptionHeaderId() {
-        return prescriptionHeaderId;
+    public Integer getPrescriptionHeaderId() {
+        return prescriptionHeaderId.get();
     }
 
     public Integer getDoctorId() {
-        return doctorId;
+        return doctorId.get();
+    }
+
+    @Override
+    public MedicalRecord copy(MedicalRecord entity) {
+        return this
+            .setSymptom(entity.getSymptom())
+            .setTreatment(entity.getTreatment())
+            .setPrescriptionHeaderId(entity.getPrescriptionHeaderId())
+            .setCheckUpDate(entity.getCheckUpDate())
+            .setPatientId(entity.getPatientId())
+            .setDoctorId(entity.getDoctorId());
     }
 }
