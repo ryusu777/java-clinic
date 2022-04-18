@@ -1,69 +1,77 @@
 package com.clinic.receptionist.domain;
 
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import com.clinic.abstracts.AbstractEntity;
-public class Appointment extends AbstractEntity{
-    private Integer doctorId, patientId, category, status;
-    private Timestamp appointmentDateTime;
+import com.clinic.interfaces.Copyable;
 
-    @Override
-    public List<String> getTableFieldNames() {
-        return Arrays.asList(
-                "doctor_id",
-                "patient_id",
-                "category",
-                "status",
-                "appointment_date_time");
-    }
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+public class Appointment extends AbstractEntity implements Copyable<Appointment>{
 
     public Appointment(Integer id) {
         super(id);
+        doctorId = new SimpleIntegerProperty();
+        patientId =new  SimpleIntegerProperty();
+        appointmentDateTime = new SimpleObjectProperty<>();
     }
 
     public Appointment(){
         super(null);
     }
+    
+    private IntegerProperty doctorId, patientId;
+    private ObjectProperty<LocalDateTime>appointmentDateTime;
 
-    public Integer getDoctorId(){
+    
+    public IntegerProperty doctorIdProperty(){
         return doctorId;
     }
 
-    public void setDoctorId(Integer doctorId){
-        this.doctorId = doctorId;
-    }
-
-    public Integer getPatientId(){
+    public IntegerProperty patientIdIdProperty(){
         return patientId;
     }
 
-    public void setPatientId(Integer patientId){
-        this.patientId = patientId;
-    }
-
-    public Timestamp getAppointmentDateTime(){
+    public ObjectProperty<LocalDateTime> worksEndProperty(){
         return appointmentDateTime;
     }
 
-    public void setAppointmentDateTime(Timestamp appointmentDateTime){
-        this.appointmentDateTime = appointmentDateTime;
+    public Integer getDoctorId(){
+        return doctorId.get();
     }
 
-    public Integer getCategory(){
-        return category;
+    public Appointment setDoctorId(Integer doctorId){
+        this.doctorId.setValue(doctorId);
+        return this;
     }
 
-    public void setCategory(Integer category){
-        this.category = category;
+    public LocalDateTime getpatientId(){
+        return patientId.get();
     }
 
-    public Integer getStatus(){
-        return status;
+    public Appointment setPatientId(LocalDateTime patientId){
+        this.patientId.setValue(patientId);
+        return this;
     }
 
-    public void setStatus(Integer status){
-        this.status = status;
+    public LocalDateTime getappointmentDateTime(){
+        return appointmentDateTime.get();
     }
+
+    public Appointment setAppointmentDateTime(LocalDateTime appointmentDateTime){
+        this.appointmentDateTime.setValue(appointmentDateTime);
+        return this;
+    }
+
+    @Override
+    public Appointment copy(Appointment entity) {
+        return this
+        .setDoctorId(entity.getDoctorId())
+        .setPatientId(entity.getpatientId())
+        .setAppointmentDateTime(entity.getappointmentDateTime());
+    }
+
 }
