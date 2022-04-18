@@ -3,7 +3,6 @@ package com.clinic.receptionist.controller;
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.builder.GridFormBuilder;
 import com.clinic.factories.CrudControllerFactory;
-import com.clinic.receptionist.domain.Doctor;
 import com.clinic.receptionist.domain.DoctorSchedule;
 import com.clinic.receptionist.repository.DoctorScheduleRepository;
 import javafx.scene.layout.GridPane;
