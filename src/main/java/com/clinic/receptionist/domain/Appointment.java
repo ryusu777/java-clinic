@@ -17,13 +17,15 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         doctorId = new SimpleIntegerProperty();
         patientId =new  SimpleIntegerProperty();
         appointmentDateTime = new SimpleObjectProperty<>();
+        category = new SimpleIntegerProperty();
+        status = new SimpleIntegerProperty();
     }
 
     public Appointment(){
         super(null);
     }
     
-    private IntegerProperty doctorId, patientId;
+    private IntegerProperty doctorId, patientId, category, status;
     private ObjectProperty<LocalDateTime>appointmentDateTime;
 
     
@@ -31,12 +33,20 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return doctorId;
     }
 
-    public IntegerProperty patientIdIdProperty(){
+    public IntegerProperty patientIdProperty(){
         return patientId;
     }
 
-    public ObjectProperty<LocalDateTime> worksEndProperty(){
+    public ObjectProperty<LocalDateTime> appointmentDateTimeProperty(){
         return appointmentDateTime;
+    }
+
+    public IntegerProperty categoryProperty(){
+        return category;
+    }
+
+    public IntegerProperty statusProperty(){
+        return status;
     }
 
     public Integer getDoctorId(){
@@ -48,11 +58,11 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return this;
     }
 
-    public LocalDateTime getpatientId(){
+    public Integer getpatientId(){
         return patientId.get();
     }
 
-    public Appointment setPatientId(LocalDateTime patientId){
+    public Appointment setPatientId(Integer patientId){
         this.patientId.setValue(patientId);
         return this;
     }
@@ -66,12 +76,32 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return this;
     }
 
+    public Integer getCategory(){
+        return category.get();
+    }
+
+    public Appointment setCategory(Integer category){
+        this.category.setValue(category);
+        return this;
+    }
+
+    public Integer getStatus(){
+        return status.get();
+    }
+
+    public Appointment setStatus(Integer status){
+        this.status.setValue(status);
+        return this;
+    }
+
     @Override
     public Appointment copy(Appointment entity) {
         return this
         .setDoctorId(entity.getDoctorId())
         .setPatientId(entity.getpatientId())
-        .setAppointmentDateTime(entity.getappointmentDateTime());
+        .setAppointmentDateTime(entity.getappointmentDateTime())
+        .setCategory(entity.getCategory())
+        .setStatus(entity.getStatus());
     }
 
 }
