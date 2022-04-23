@@ -28,13 +28,14 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
         medicineId = new SimpleIntegerProperty();
         dosageFormId = new SimpleIntegerProperty();
         qtyUnitId = new SimpleIntegerProperty();
+        purchaseMedicineDetailId = new SimpleIntegerProperty();
         batchNumber = new SimpleStringProperty();
     }
     
     private ObjectProperty<LocalDateTime> receivedDate;
     private ObjectProperty<LocalDate> expDate;
     private ObjectProperty<BigDecimal> qtyAvailable, qtyToDosageFormMultiplier;
-    private IntegerProperty medicineId, dosageFormId, qtyUnitId;
+    private IntegerProperty medicineId, dosageFormId, qtyUnitId, purchaseMedicineDetailId;
     private StringProperty batchNumber;
 
     public ObjectProperty<LocalDateTime> receivedDateProperty() {
@@ -67,6 +68,10 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
 
     public IntegerProperty qtyUnitIdProperty() {
         return this.qtyUnitId;
+    }
+
+    public IntegerProperty purchaseMedicineDetailIdProperty() {
+        return this.purchaseMedicineDetailId;
     }
 
     public LocalDateTime getReceivedDate() {
@@ -138,6 +143,15 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
 
     public MedicineStock setBatchNumber(String batchNumber) {
         this.batchNumber.setValue(batchNumber);
+        return this;
+    }
+
+    public Integer getPurchaseMedicineDetailId() {
+        return purchaseMedicineDetailId.get();
+    }
+
+    public MedicineStock setPurchaseMedicineDetailId(Integer purchaseMedicineDetailId) {
+        this.purchaseMedicineDetailId.setValue(purchaseMedicineDetailId);
         return this;
     }
 
