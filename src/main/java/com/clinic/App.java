@@ -7,16 +7,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.clinic.doctor.controller.MedicalRecordController;
+import com.clinic.doctor.controller.CheckUpCategoryController;
+
 /**
  * JavaFX App
  */
 public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Group root = new Group();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Demo program");
+        // MedicalRecordController controller = new MedicalRecordController();
+        CheckUpCategoryController controller = new CheckUpCategoryController();
+        controller.fetchEntitiesToTable();
+        stage.setScene(controller.getMainScene());
+        stage.setTitle("Medical Record");
+        stage.setTitle("Check Up Category");
         stage.show();
     }
 
