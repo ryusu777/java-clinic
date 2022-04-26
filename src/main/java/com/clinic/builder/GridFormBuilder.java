@@ -185,6 +185,10 @@ public class GridFormBuilder {
                 public void handle(ActionEvent arg0) {
                     controller.fetchEntitiesToTable();
                     localEntity = controller.pickEntity();
+
+                    if (localEntity == null)
+                        return;
+
                     property.set(localEntity.getId());
                     try {
                         if (propertyGetterMethod != null) {
