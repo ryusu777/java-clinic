@@ -81,8 +81,6 @@ public class DateTimePicker extends DatePicker {
 						.compareTo(dateTimeValue.get().toString().substring(0, 16))
 					!= 0
 				) {
-					System.out.println(getEditor().getText().replaceAll("\\s", "T"));
-					System.out.println(dateTimeValue.get().toString().substring(0, 16));
 					Point2D nodePoint = getEditor().localToScreen(
 						getEditor().getWidth() / 2,
 						getEditor().getHeight()
