@@ -56,7 +56,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * @param pagination
      * @return <code>List<T></code> with T as the entity type
      */
-    protected List<T> get(Pagination pagination, String whereClause) throws SQLException {
+    public List<T> get(Pagination pagination, String whereClause) throws SQLException {
         ResultSet countResult = query("SELECT count(id) as number FROM "
             + tableName() + ";");
         countResult.next();
@@ -159,32 +159,28 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     protected T mapEntity(ResultSet queryResult) {
         try {
             T resultEntity = entityClass.getConstructor(Integer.class).newInstance(
-                queryResult.getInt("id"));
+                    queryResult.getInt("id"));
 
-            for (Method method : entityClass.getDeclaredMethods()) {
+            for (Method method : getEntityAttributeSetters()) {
                 int modifiers = method.getModifiers();
                 String fieldName = normalizeFieldName(method.getName().substring(3));
                 if (resultEntity.getTableFieldNames() != null && !resultEntity.getTableFieldNames().contains(fieldName))
                     continue;
 
-                if (Modifier.isPublic(modifiers)
-                        && method.getName().matches("set\\D+")) {
-
-                    if (method.getParameterTypes()[0] == Integer.class)
-                        method.invoke(resultEntity, queryResult.getInt(normalizeFieldName(fieldName)));
-                    else if (method.getParameterTypes()[0] == String.class)
-                        method.invoke(resultEntity, queryResult.getString(normalizeFieldName(fieldName)));
-                    else if (method.getParameterTypes()[0] == BigDecimal.class)
-                        method.invoke(resultEntity, queryResult.getBigDecimal(normalizeFieldName(fieldName)));
-                    else if (method.getParameterTypes()[0] == Date.class)
-                        method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)));
-                    else if (method.getParameterTypes()[0] == Timestamp.class)
-                        method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)));
-                    else if (method.getParameterTypes()[0] == LocalDate.class)
-                        method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)).toLocalDate());
-                    else if (method.getParameterTypes()[0] == LocalDateTime.class)
-                        method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)).toLocalDateTime());
-                }
+                if (method.getParameterTypes()[0] == Integer.class)
+                    method.invoke(resultEntity, queryResult.getInt(normalizeFieldName(fieldName)));
+                else if (method.getParameterTypes()[0] == String.class)
+                    method.invoke(resultEntity, queryResult.getString(normalizeFieldName(fieldName)));
+                else if (method.getParameterTypes()[0] == BigDecimal.class)
+                    method.invoke(resultEntity, queryResult.getBigDecimal(normalizeFieldName(fieldName)));
+                else if (method.getParameterTypes()[0] == Date.class)
+                    method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)));
+                else if (method.getParameterTypes()[0] == Timestamp.class)
+                    method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)));
+                else if (method.getParameterTypes()[0] == LocalDate.class)
+                    method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)).toLocalDate());
+                else if (method.getParameterTypes()[0] == LocalDateTime.class)
+                    method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)).toLocalDateTime());
             }
             return resultEntity;
         } catch (Exception e) {
@@ -202,14 +198,11 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      */
     private Map<String, Method> getEntityAttributesInSnakeCase() {
         Map<String, Method> result = new HashMap<String, Method>();
-        String excludedGetters = "getId|getTableFieldNames";
         for (Method method : getEntityAttributeGetters()) {
-            if (!method.getName().matches(excludedGetters)) {
-                result.put(
-                    normalizeFieldName(method.getName().substring(3)),
-                    method
-                );
-            }
+            result.put(
+                normalizeFieldName(method.getName().substring(3)),
+                method
+            );
         }
         return result;
     }
@@ -221,10 +214,30 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      */
     public List<Method> getEntityAttributeGetters() {
         List<Method> result = new ArrayList<>();
-        for (Method method : entityClass.getDeclaredMethods()) {
+        String excludedGetters = "getId|getTableFieldNames|getClass";
+        for (Method method : entityClass.getMethods()) {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers)
                 && method.getName().matches("get\\D+")
+                && !method.getName().matches(excludedGetters)
+            ) {
+                result.add(method);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets a list of setter method that publicly declared in the 
+     * <code>entityClass</code> (id getter not included)
+     * @return <code>List</code> of <code>Method</code>
+     */
+    public List<Method> getEntityAttributeSetters() {
+        List<Method> result = new ArrayList<>();
+        for (Method method : entityClass.getMethods()) {
+            int modifiers = method.getModifiers();
+            if (Modifier.isPublic(modifiers)
+                && method.getName().matches("set\\D+")
             ) {
                 result.add(method);
             }

@@ -178,7 +178,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         formStage.setTitle(action == CREATE_ACTION ? "Create "
                 : "Update " +
                         entityClass.getSimpleName());
-        formStage.show();
+        formStage.showAndWait();
     }
 
     /**
@@ -259,13 +259,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         entityTable.getColumns().add(idColumn);
         for (Method method : repo.getEntityAttributeGetters()) {
-            if (method.getName() == "getId"
-                    || entityInstance.getTableFieldNames() == null
-                    || entityInstance
-                            .getTableFieldNames()
-                            .contains(repo.normalizeFieldName(method.getName().substring(3)))) {
+            if (entityInstance.getTableFieldNames() == null
+                || entityInstance
+                    .getTableFieldNames()
+                    .contains(repo.normalizeFieldName(method.getName().substring(3)))) {
                 TableColumn<T, Serializable> tableColumn = new TableColumn<>(
                         method.getName().substring(3).replaceAll("([a-z])([A-Z])", "$1 $2"));
+                tableColumn.setPrefWidth(method.getName().length() * 8);
                 tableColumn.setCellValueFactory(new PropertyValueFactory<>(
                         method.getName().substring(3, 4).toLowerCase() +
                                 method.getName().substring(4)));
