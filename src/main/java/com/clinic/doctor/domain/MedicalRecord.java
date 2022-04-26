@@ -66,8 +66,8 @@ public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRe
         return this;
     }
 
-    public MedicalRecord setSymptom(String string) {
-        this.symptom.setValue(string);
+    public MedicalRecord setSymptom(String symptom) {
+        this.symptom.setValue(symptom);
         return this;
     }
 

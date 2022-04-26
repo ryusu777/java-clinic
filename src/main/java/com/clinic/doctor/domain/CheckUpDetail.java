@@ -1,63 +1,78 @@
 package com.clinic.doctor.domain;
 
-import java.util.Arrays;
-import java.util.List;
-import java.sql.Date;
 import java.time.LocalDate;
 
 import com.clinic.abstracts.AbstractEntity;
+import com.clinic.interfaces.Copyable;
 
-public class CheckUpDetail extends AbstractEntity {
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+public class CheckUpDetail extends AbstractEntity implements Copyable <CheckUpDetail> {
+
+    public CheckUpDetail(){
+        this(null);
+    }
 
     public CheckUpDetail(Integer id) {
         super(id);
+        checkUpCategoryId = new SimpleIntegerProperty();
+        medicalRecordId = new SimpleIntegerProperty();
+        checkUpResult = new SimpleStringProperty();
     }
 
-    public CheckUpDetail() {
-        super(null);
-    }
-    
-    private Integer id, checkUpCategoryId, medicalRecordId;
-    private String checkUpResult;
+    private IntegerProperty checkUpCategoryId, medicalRecordId;
+    private StringProperty checkUpResult;
 
-    @Override
-    public List<String> getTableFieldNames() {
-        return Arrays.asList(
-            "id",
-            "check_up_category_id",
-            "medical_record_id",
-            "check_up_result");
+    public IntegerProperty checkUpCategoryIdProperty() {
+        return this.checkUpCategoryId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public IntegerProperty medicalRecordIdProperty() {
+        return this.medicalRecordId;
     }
 
-    public void setCheckUpCategoryId(Integer checkUpCategoryId) {
-        this.checkUpCategoryId = checkUpCategoryId; 
+    public StringProperty checkUpResultProperty() {
+        return this.checkUpResult;
+    }
+        
+    public CheckUpDetail setCheckUpCategoryId(Integer checkUpCategoryId) {
+        this.checkUpCategoryId.setValue(checkUpCategoryId);
+        return this;
+    } 
+
+    public CheckUpDetail setMedicalRecordId(Integer medicalRecordId) {
+        this.medicalRecordId.setValue(medicalRecordId);
+        return this;
     }
 
-    public void setMedicalRecordId(Integer medicalRecordId) {
-        this.medicalRecordId = medicalRecordId;
-    }
-
-    public void setCheckUpResult(String checkUpResult) {
-        this.checkUpResult = checkUpResult;
-    }
-
-    public Integer getId() {
-        return id;
+    public CheckUpDetail setCheckUpResult(String checkUpResult) {
+        this.checkUpResult.setValue(checkUpResult);
+        return this;
     }
 
     public Integer getCheckUpCategoryId() {
-        return checkUpCategoryId;
+        return checkUpCategoryId.get();
     }
 
     public Integer getMedicalRecordId() {
-        return medicalRecordId;
+        return medicalRecordId.get();
     }
 
     public String getCheckUpResult() {
-        return checkUpResult;
+        return checkUpResult.get();
     }
+
+
+    @Override
+    public CheckUpDetail copy(CheckUpDetail entity) {
+        return this
+            .setCheckUpCategoryId(entity.getCheckUpCategoryId())
+            .setMedicalRecordId(entity.getMedicalRecordId())
+            .setCheckUpResult(entity.getCheckUpResult());
+    } 
 }
