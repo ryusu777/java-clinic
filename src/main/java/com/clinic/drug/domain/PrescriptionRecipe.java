@@ -20,46 +20,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
 
     public PrescriptionRecipe(Integer id) {
         super(id);
-        usageInstruction = new SimpleStringProperty();
-        latinUsageInstruction = new SimpleStringProperty();
-        latinMakingInstruction = new SimpleStringProperty();
-        expDate = new SimpleObjectProperty<>();
-        qty = new SimpleObjectProperty<>();
-        dosageFormId = new SimpleIntegerProperty();
-        prescriptionHeaderId = new SimpleIntegerProperty();
     }
     
-    private StringProperty usageInstruction, latinUsageInstruction, latinMakingInstruction;
-    private ObjectProperty<LocalDate> expDate;
-    private IntegerProperty dosageFormId, prescriptionHeaderId;
-    private ObjectProperty<BigDecimal> qty;
-
+    private StringProperty usageInstruction = new SimpleStringProperty();
     public StringProperty usageInstructionProperty() { 
         return this.usageInstruction;
-    }
-
-    public StringProperty latinUsageInstructionProperty() { 
-        return this.latinUsageInstruction;
-    }
-
-    public StringProperty latinMakingInstructionProperty() {
-        return this.latinMakingInstruction;
-    }
-
-    public ObjectProperty<LocalDate> expDateProperty() {
-        return this.expDate;
-    }
-
-    public ObjectProperty<BigDecimal> qtyProperty() {
-        return this.qty;
-    }
-
-    public IntegerProperty dosageFormIdProperty() {
-        return this.dosageFormId;
-    }
-
-    public IntegerProperty prescriptionHeaderIdProperty() {
-        return this.prescriptionHeaderId;
     }
 
     public String getUsageInstruction() {
@@ -71,6 +36,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
         return this;
     }
 
+    private StringProperty latinUsageInstruction = new SimpleStringProperty();
+    public StringProperty latinUsageInstructionProperty() { 
+        return this.latinUsageInstruction;
+    }
+
     public String getLatinUsageInstruction() {
         return latinUsageInstruction.get();
     }
@@ -78,6 +48,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
     public PrescriptionRecipe setLatinUsageInstruction(String latinUsageInstruction) {
         this.latinUsageInstruction.setValue(latinUsageInstruction);
         return this;
+    }
+
+    private StringProperty latinMakingInstruction = new SimpleStringProperty();
+    public StringProperty latinMakingInstructionProperty() {
+        return this.latinMakingInstruction;
     }
 
     public String getLatinMakingInstruction() {
@@ -89,6 +64,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
         return this;
     }
 
+    private ObjectProperty<LocalDate> expDate = new SimpleObjectProperty<>();
+    public ObjectProperty<LocalDate> expDateProperty() {
+        return this.expDate;
+    }
+
     public LocalDate getExpDate() {
         return expDate.get();
     }
@@ -96,6 +76,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
     public PrescriptionRecipe setExpDate(LocalDate expDate) {
         this.expDate.setValue(expDate);
         return this;
+    }
+
+    private ObjectProperty<BigDecimal> qty = new SimpleObjectProperty<>();
+    public ObjectProperty<BigDecimal> qtyProperty() {
+        return this.qty;
     }
 
     public BigDecimal getQty() {
@@ -107,6 +92,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
         return this;
     }
 
+    private IntegerProperty dosageFormId = new SimpleIntegerProperty();
+    public IntegerProperty dosageFormIdProperty() {
+        return this.dosageFormId;
+    }
+
     public Integer getDosageFormId() {
         return dosageFormId.get();
     }
@@ -114,6 +104,11 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
     public PrescriptionRecipe setDosageFormId(Integer dosageFormId) {
         this.dosageFormId.setValue(dosageFormId);
         return this;
+    }
+
+    private IntegerProperty prescriptionHeaderId = new SimpleIntegerProperty();
+    public IntegerProperty prescriptionHeaderIdProperty() {
+        return this.prescriptionHeaderId;
     }
 
     public Integer getPrescriptionHeaderId() {
@@ -133,6 +128,7 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
             .setLatinMakingInstruction(entity.getLatinMakingInstruction())
             .setLatinUsageInstruction(entity.getLatinUsageInstruction())
             .setPrescriptionHeaderId(entity.getPrescriptionHeaderId())
-            .setQty(entity.getQty());
+            .setQty(entity.getQty())
+            .setUsageInstruction(entity.getUsageInstruction());
     }
 }

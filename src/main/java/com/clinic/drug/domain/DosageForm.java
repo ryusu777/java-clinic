@@ -1,5 +1,8 @@
 package com.clinic.drug.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -15,19 +18,19 @@ public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
 
     public DosageForm(Integer id) {
         super(id);
-        name = new SimpleStringProperty();
-        dosageFormCategoryId = new SimpleIntegerProperty();
     }
-    
-    private StringProperty name;
-    private IntegerProperty dosageFormCategoryId;
 
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "name",
+            "dosage_form_category_id"
+        );
+    }
+
+    private StringProperty name = new SimpleStringProperty();
     public StringProperty nameProperty() {
         return this.name;
-    }
-
-    public IntegerProperty dosageFormCategoryIdProperty() {
-        return this.dosageFormCategoryId;
     }
 
     public String getName() {
@@ -37,6 +40,11 @@ public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
     public DosageForm setName(String name) {
         this.name.setValue(name);
         return this;
+    }
+
+    private IntegerProperty dosageFormCategoryId = new SimpleIntegerProperty();
+    public IntegerProperty dosageFormCategoryIdProperty() {
+        return this.dosageFormCategoryId;
     }
 
     public Integer getDosageFormCategoryId() {
@@ -51,7 +59,17 @@ public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
     @Override
     public DosageForm copy(DosageForm entity) {
         return this
-            .setName(entity.getName())
-            .setDosageFormCategoryId(entity.getDosageFormCategoryId());
+                .setName(entity.getName())
+                .setDosageFormCategoryId(entity.getDosageFormCategoryId());
+    }
+
+    private DosageFormCategory dosageFormCategory = new DosageFormCategory();
+    public DosageFormCategory getDosageFormCategory() {
+        return dosageFormCategory;
+    }
+
+    public DosageForm setDosageFormCategory(DosageFormCategory dosageFormCategory) {
+        this.dosageFormCategory = dosageFormCategory;
+        return this;
     }
 }

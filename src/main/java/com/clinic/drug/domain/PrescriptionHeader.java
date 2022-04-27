@@ -17,29 +17,11 @@ public class PrescriptionHeader extends AbstractEntity implements Copyable<Presc
 
     public PrescriptionHeader(Integer id) {
         super(id);
-        createdDate = new SimpleObjectProperty<>();
-        doctorId = new SimpleIntegerProperty();
-        patientId = new SimpleIntegerProperty();
-        medicalRecordId = new SimpleIntegerProperty();
     }
-    
-    private ObjectProperty<LocalDate> createdDate;
-    private IntegerProperty doctorId, patientId, medicalRecordId;
 
+    private ObjectProperty<LocalDate> createdDate = new SimpleObjectProperty<>();
     public ObjectProperty<LocalDate> createdDateProperty() {
         return this.createdDate;
-    }
-
-    public IntegerProperty doctorIdProperty() {
-        return this.doctorId;
-    }
-
-    public IntegerProperty patientIdProperty() {
-        return this.patientId;
-    }
-
-    public IntegerProperty medicalRecordIdProperty() {
-        return this.medicalRecordId;
     }
 
     public LocalDate getCreatedDate() {
@@ -51,6 +33,11 @@ public class PrescriptionHeader extends AbstractEntity implements Copyable<Presc
         return this;
     }
 
+    private IntegerProperty doctorId = new SimpleIntegerProperty();
+    public IntegerProperty doctorIdProperty() {
+        return this.doctorId;
+    }
+
     public Integer getDoctorId() {
         return doctorId.get();
     }
@@ -60,6 +47,11 @@ public class PrescriptionHeader extends AbstractEntity implements Copyable<Presc
         return this;
     }
 
+    private IntegerProperty patientId = new SimpleIntegerProperty();
+    public IntegerProperty patientIdProperty() {
+        return this.patientId;
+    }
+
     public Integer getPatientId() {
         return patientId.get();
     }
@@ -67,6 +59,11 @@ public class PrescriptionHeader extends AbstractEntity implements Copyable<Presc
     public PrescriptionHeader setPatientId(Integer patientId) {
         this.patientId.setValue(patientId);
         return this;
+    }
+
+    private IntegerProperty medicalRecordId = new SimpleIntegerProperty();
+    public IntegerProperty medicalRecordIdProperty() {
+        return this.medicalRecordId;
     }
 
     public Integer getMedicalRecordId() {

@@ -17,24 +17,11 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
 
     public PurchaseMedicineDetail(Integer id) {
         super(id);
-        pricePerUnit = new SimpleIntegerProperty();
-        qty = new SimpleObjectProperty<>();
-        purchaseMedicineHeaderId = new SimpleIntegerProperty();
     }
-    
-    private IntegerProperty pricePerUnit, purchaseMedicineHeaderId;
-    private ObjectProperty<BigDecimal> qty;
 
+    private IntegerProperty pricePerUnit = new SimpleIntegerProperty();
     public IntegerProperty pricePerUnitProperty() {
         return this.pricePerUnit;
-    }
-
-    public ObjectProperty<BigDecimal> qtyProperty() {
-        return this.qty;
-    }
-
-    public IntegerProperty purchaseMedicineHeaderIdProperty() {
-        return this.purchaseMedicineHeaderId;
     }
 
     public Integer getPricePerUnit() {
@@ -46,6 +33,11 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
         return this;
     }
 
+    private ObjectProperty<BigDecimal> qty = new SimpleObjectProperty<>();
+    public ObjectProperty<BigDecimal> qtyProperty() {
+        return this.qty;
+    }
+
     public BigDecimal getQty() {
         return qty.get();
     }
@@ -53,6 +45,11 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
     public PurchaseMedicineDetail setQty(BigDecimal qty) {
         this.qty.setValue(qty);
         return this;
+    }
+
+    private IntegerProperty purchaseMedicineHeaderId = new SimpleIntegerProperty();
+    public IntegerProperty purchaseMedicineHeaderIdProperty() {
+        return this.purchaseMedicineHeaderId;
     }
 
     public Integer getPurchaseMedicineHeaderId() {

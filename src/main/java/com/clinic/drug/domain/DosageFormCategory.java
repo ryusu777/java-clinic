@@ -1,5 +1,9 @@
 package com.clinic.drug.domain;
 
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -13,11 +17,16 @@ public class DosageFormCategory extends AbstractEntity implements Copyable<Dosag
 
     public DosageFormCategory(Integer id) {
         super(id);
-        name = new SimpleStringProperty();
     }
 
-    private StringProperty name;
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "name"
+        );
+    }
 
+    private StringProperty name = new SimpleStringProperty();
     public StringProperty nameProperty() {
         return this.name;
     }

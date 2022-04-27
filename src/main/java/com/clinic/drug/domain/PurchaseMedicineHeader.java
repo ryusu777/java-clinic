@@ -15,11 +15,9 @@ public class PurchaseMedicineHeader extends AbstractEntity implements Copyable<P
 
     public PurchaseMedicineHeader(Integer id) {
         super(id);
-        purchaseDate = new SimpleObjectProperty<>();
     }
     
-    private ObjectProperty<LocalDate> purchaseDate;
-
+    private ObjectProperty<LocalDate> purchaseDate = new SimpleObjectProperty<>();
     public ObjectProperty<LocalDate> purchaseDateProperty() {
         return purchaseDate;
     };

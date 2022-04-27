@@ -13,8 +13,6 @@ public class PrescriptionQueue extends AbstractEntity implements Copyable<Prescr
 
     public PrescriptionQueue(Integer id) {
         super(id);
-        status = new SimpleIntegerProperty();
-        prescriptionHeaderId = new SimpleIntegerProperty();
     }
     
     public static final int WAITING_TO_MAKE = 1,
@@ -22,12 +20,21 @@ public class PrescriptionQueue extends AbstractEntity implements Copyable<Prescr
         WAITING_TO_PATIENT = 3,
         DONE = 4;
 
-    private IntegerProperty status, prescriptionHeaderId;
-
+    private IntegerProperty status = new SimpleIntegerProperty();
     public IntegerProperty statusProperty() {
         return this.status;
     }
 
+    public Integer getStatus() {
+        return status.get();
+    }
+
+    public PrescriptionQueue setStatus(Integer status) {
+        this.status.setValue(status);
+        return this;
+    }
+
+    private IntegerProperty prescriptionHeaderId = new SimpleIntegerProperty();
     public IntegerProperty prescriptionHeaderIdProperty() {
         return this.prescriptionHeaderId;
     }
@@ -38,15 +45,6 @@ public class PrescriptionQueue extends AbstractEntity implements Copyable<Prescr
 
     public PrescriptionQueue setPrescriptionHeaderId(Integer prescriptionHeaderId) {
         this.prescriptionHeaderId.setValue(prescriptionHeaderId);
-        return this;
-    }
-
-    public Integer getStatus() {
-        return status.get();
-    }
-
-    public PrescriptionQueue setStatus(Integer status) {
-        this.status.setValue(status);
         return this;
     }
 

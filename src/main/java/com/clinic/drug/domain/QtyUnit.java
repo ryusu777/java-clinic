@@ -13,16 +13,23 @@ public class QtyUnit extends AbstractEntity implements Copyable<QtyUnit> {
 
     public QtyUnit(Integer id) {
         super(id);
-        name = new SimpleStringProperty();
-        shortName = new SimpleStringProperty();
     }
     
-    private StringProperty name, shortName;
-
+    private StringProperty name = new SimpleStringProperty();
     public StringProperty nameProperty() {
         return name;
     }
 
+    public String getName() {
+        return name.get();
+    }
+
+    public QtyUnit setName(String name) {
+        this.name.setValue(name);
+        return this;
+    }
+
+    private StringProperty shortName = new SimpleStringProperty();
     public StringProperty shortNameProperty() {
         return shortName;
     }
@@ -33,15 +40,6 @@ public class QtyUnit extends AbstractEntity implements Copyable<QtyUnit> {
 
     public QtyUnit setShortName(String shortName) {
         this.shortName.setValue(shortName);
-        return this;
-    }
-
-    public String getName() {
-        return name.get();
-    }
-
-    public QtyUnit setName(String name) {
-        this.name.setValue(name);
         return this;
     }
 

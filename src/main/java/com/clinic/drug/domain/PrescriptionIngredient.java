@@ -17,24 +17,11 @@ public class PrescriptionIngredient extends AbstractEntity implements Copyable<P
 
     public PrescriptionIngredient(Integer id) {
         super(id);
-        qty = new SimpleObjectProperty<>();
-        prescriptionRecipeId = new SimpleIntegerProperty();
-        medicineStockId = new SimpleIntegerProperty();
     }
-    
-    private IntegerProperty prescriptionRecipeId, medicineStockId;
-    private ObjectProperty<BigDecimal> qty;
 
+    private ObjectProperty<BigDecimal> qty = new SimpleObjectProperty<>();
     public ObjectProperty<BigDecimal> qtyProperty() {
         return this.qty;
-    }
-
-    public IntegerProperty prescriptionRecipeIdProperty() {
-        return this.prescriptionRecipeId;
-    }
-
-    public IntegerProperty medicineStockIdProperty() {
-        return this.medicineStockId;
     }
 
     public BigDecimal getQty() {
@@ -46,6 +33,11 @@ public class PrescriptionIngredient extends AbstractEntity implements Copyable<P
         return this;
     }
 
+    private IntegerProperty prescriptionRecipeId = new SimpleIntegerProperty();
+    public IntegerProperty prescriptionRecipeIdProperty() {
+        return this.prescriptionRecipeId;
+    }
+
     public Integer getPrescriptionRecipeId() {
         return prescriptionRecipeId.get();
     }
@@ -53,6 +45,11 @@ public class PrescriptionIngredient extends AbstractEntity implements Copyable<P
     public PrescriptionIngredient setPrescriptionRecipeId(Integer prescriptionRecipeId) {
         this.prescriptionRecipeId.setValue(prescriptionRecipeId);
         return this;
+    }
+
+    private IntegerProperty medicineStockId = new SimpleIntegerProperty();
+    public IntegerProperty medicineStockIdProperty() {
+        return this.medicineStockId;
     }
 
     public Integer getMedicineStockId() {
@@ -71,5 +68,4 @@ public class PrescriptionIngredient extends AbstractEntity implements Copyable<P
             .setPrescriptionRecipeId(entity.getPrescriptionRecipeId())
             .setQty(entity.getQty());
     }
-    
 }

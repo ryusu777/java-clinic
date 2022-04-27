@@ -13,28 +13,11 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
 
     public SellMedicineDetail(Integer id) {
         super(id);
-        price = new SimpleIntegerProperty();
-        sellMedicineHeaderId = new SimpleIntegerProperty();
-        prescriptionRecipeId = new SimpleIntegerProperty();
-        medicineStockId = new SimpleIntegerProperty();
     }
     
-    private IntegerProperty price, sellMedicineHeaderId, prescriptionRecipeId, medicineStockId;
-
+    private IntegerProperty price = new SimpleIntegerProperty();
     public IntegerProperty pricePropery() {
         return price;
-    }
-
-    public IntegerProperty sellMedicineHeaderIdPropery() {
-        return sellMedicineHeaderId;
-    }
-
-    public IntegerProperty prescriptionRecipeIdPropery() {
-        return prescriptionRecipeId;
-    }
-
-    public IntegerProperty medicineStockIdPropery() {
-        return prescriptionRecipeId;
     }
 
     public Integer getPrice() {
@@ -46,6 +29,11 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
         return this;
     }
 
+    private IntegerProperty sellMedicineHeaderId = new SimpleIntegerProperty();
+    public IntegerProperty sellMedicineHeaderIdPropery() {
+        return sellMedicineHeaderId;
+    }
+
     public Integer getSellMedicineHeaderId() {
         return sellMedicineHeaderId.get();
     }
@@ -55,6 +43,11 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
         return this;
     }
 
+    private IntegerProperty prescriptionRecipeId = new SimpleIntegerProperty();
+    public IntegerProperty prescriptionRecipeIdPropery() {
+        return prescriptionRecipeId;
+    }
+
     public Integer getPrescriptionRecipeId() {
         return prescriptionRecipeId.get();
     }
@@ -62,6 +55,11 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
     public SellMedicineDetail setPrescriptionRecipeId(Integer medicineStockId) {
         this.prescriptionRecipeId.setValue(medicineStockId);
         return this;
+    }
+
+    public IntegerProperty medicineStockId = new SimpleIntegerProperty();
+    public IntegerProperty medicineStockIdPropery() {
+        return medicineStockId;
     }
 
     public Integer getMedicineStockId() {
@@ -78,6 +76,7 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
         return this
             .setPrescriptionRecipeId(entity.getPrescriptionRecipeId())
             .setPrice(entity.getPrice())
-            .setSellMedicineHeaderId(entity.getSellMedicineHeaderId());
+            .setSellMedicineHeaderId(entity.getSellMedicineHeaderId())
+            .setMedicineStockId(entity.getMedicineStockId());
     }
 }

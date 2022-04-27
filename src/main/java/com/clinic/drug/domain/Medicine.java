@@ -9,22 +9,16 @@ import javafx.beans.property.StringProperty;
 public class Medicine extends AbstractEntity implements Copyable<Medicine> {
     public Medicine(Integer id) {
         super(id);
-        brandName = new SimpleStringProperty();
-        genericName = new SimpleStringProperty();
     }
 
     public Medicine() {
         this(null);
     }
 
-    private StringProperty brandName, genericName;
+    private StringProperty brandName = new SimpleStringProperty();
     
     public StringProperty brandNameProperty() {
         return brandName;
-    }
-
-    public StringProperty genericNameProperty() {
-        return genericName;
     }
 
     public String getBrandName() {
@@ -36,6 +30,11 @@ public class Medicine extends AbstractEntity implements Copyable<Medicine> {
         return this;
     }
 
+    private StringProperty genericName = new SimpleStringProperty();
+    public StringProperty genericNameProperty() {
+        return genericName;
+    }
+
     public String getGenericName() {
         return genericName.get();
     }
@@ -45,10 +44,26 @@ public class Medicine extends AbstractEntity implements Copyable<Medicine> {
         return this;
     }
 
+    private StringProperty medicineType = new SimpleStringProperty();
+
+    public StringProperty medicineTypeProperty() {
+        return this.medicineType;
+    }
+
+    public String getMedicineType() {
+        return medicineType.get();
+    }
+
+    public Medicine setMedicineType(String medicineType) {
+        this.medicineType.setValue(medicineType);
+        return this;
+    }
+
     @Override
     public Medicine copy(Medicine entity) {
         return this
             .setBrandName(entity.getBrandName())
-            .setGenericName(entity.getGenericName());
+            .setGenericName(entity.getGenericName())
+            .setMedicineType(entity.getMedicineType());
     }
 }

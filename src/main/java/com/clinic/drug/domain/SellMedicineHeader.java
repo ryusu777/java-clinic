@@ -17,17 +17,23 @@ public class SellMedicineHeader extends AbstractEntity implements Copyable<SellM
 
     public SellMedicineHeader(Integer id) {
         super(id);
-        purchaseDate = new SimpleObjectProperty<>();
-        prescriptionHeaderId = new SimpleIntegerProperty();
     }
     
-    private ObjectProperty<LocalDate> purchaseDate;
-    private IntegerProperty prescriptionHeaderId;
-
+    private ObjectProperty<LocalDate> purchaseDate = new SimpleObjectProperty<>();
     public ObjectProperty<LocalDate> purchaseDateProperty() {
         return purchaseDate;
     }
 
+    public LocalDate getPurchaseDate() {
+        return purchaseDate.get();
+    }
+
+    public SellMedicineHeader setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate.setValue(purchaseDate);
+        return this;
+    }
+
+    private IntegerProperty prescriptionHeaderId = new SimpleIntegerProperty();
     public IntegerProperty prescriptionHeaderIdProperty() {
         return prescriptionHeaderId;
     }
@@ -38,15 +44,6 @@ public class SellMedicineHeader extends AbstractEntity implements Copyable<SellM
 
     public SellMedicineHeader setPrescriptionHeaderId(Integer prescriptionHeaderId) {
         this.prescriptionHeaderId.setValue(prescriptionHeaderId);
-        return this;
-    }
-
-    public LocalDate getPurchaseDate() {
-        return purchaseDate.get();
-    }
-
-    public SellMedicineHeader setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate.setValue(purchaseDate);
         return this;
     }
 
