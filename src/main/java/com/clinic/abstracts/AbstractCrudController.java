@@ -23,11 +23,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * A GUI controller to do CRUD operation for an entity.<br>
@@ -253,16 +255,16 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     /**
      * Initialize the column that the table should display
      */
-    private void initTableViewSchema() {
+    protected void initTableViewSchema() {
         T entityInstance = getNewEntityInstance(null);
         TableColumn<T, Integer> idColumn = new TableColumn<>("Id");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         entityTable.getColumns().add(idColumn);
         for (Method method : repo.getEntityAttributeGetters()) {
             if (entityInstance.getTableFieldNames() == null
-                || entityInstance
-                    .getTableFieldNames()
-                    .contains(repo.normalizeFieldName(method.getName().substring(3)))) {
+                    || entityInstance
+                            .getTableFieldNames()
+                            .contains(repo.normalizeFieldName(method.getName().substring(3)))) {
                 TableColumn<T, Serializable> tableColumn = new TableColumn<>(
                         method.getName().substring(3).replaceAll("([a-z])([A-Z])", "$1 $2"));
                 tableColumn.setPrefWidth(method.getName().length() * 8);
@@ -272,6 +274,37 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
                 entityTable.getColumns().add(tableColumn);
             }
         }
+    }
+
+    /**
+     * Add a column to the current table using property of entity
+     * @param columnLabel the label to display in the table heading
+     * @param tableColumnKey the column key for the <code>PropertyValueFactory</code>
+     * @param prefWidth the prefWidth of the table column
+     */    
+    protected void addTableColumn(String columnLabel, String tableColumnKey, Double prefWidth) {
+        TableColumn<T, Serializable> tableColumn = new TableColumn<>(columnLabel);
+        tableColumn.setPrefWidth(prefWidth);
+        tableColumn.setCellValueFactory(new PropertyValueFactory<>(tableColumnKey));
+        entityTable.getColumns().add(tableColumn);
+    }
+    protected void addTableColumn(String columnLabel, String tableColumnKey) {
+        addTableColumn(columnLabel, tableColumnKey, (double)columnLabel.length() * 8);
+    }
+
+    /**
+     * Add a column to the current table using callback
+     * @param tableColumn the tableColumn object to be added to the table
+     * @param callBack the callback to get the value of <code>T</code> to display in the cell
+     * @param prefWidth the prefWidth of the table column
+     */
+    protected <M> void addTableColumn(TableColumn<T, M> tableColumn, Callback<CellDataFeatures<T, M>, ObservableValue<M>> callback, Double prefWidth) {
+        tableColumn.setPrefWidth(prefWidth);
+        tableColumn.setCellValueFactory(callback);
+        entityTable.getColumns().add(tableColumn);
+    }
+    protected <M> void addTableColumn(TableColumn<T, M> tableColumn, Callback<CellDataFeatures<T, M>, ObservableValue<M>> callback) {
+        addTableColumn(tableColumn, callback, (double)tableColumn.getText().length() * 8);
     }
 
     /**
