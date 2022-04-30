@@ -251,7 +251,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * <code>dosage_form_category</code>
      * @param camelCaseField the field
      */
-    public String normalizeFieldName(String camelCaseField) {
+    public static String normalizeFieldName(String camelCaseField) {
         return camelCaseField.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
