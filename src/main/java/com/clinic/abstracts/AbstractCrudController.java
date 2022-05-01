@@ -3,6 +3,8 @@ package com.clinic.abstracts;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.clinic.Pagination;
 import com.clinic.factories.EntityRepositoryFactory;
@@ -39,6 +41,7 @@ import javafx.util.Callback;
  * The entity should have corresponding repository for this controller to do
  * CRUD operation into database
  * 
+ * TODO: Child Crud automatic parent field value
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
@@ -54,13 +57,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     private Scene mainScene;
     private BooleanProperty selectedItemProperty;
     private T pickResult;
+    private String currentFetchWhereClause;
 
     protected S repo;
+    protected List<AbstractCrudController<?, ?>> childControllers;
 
     protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass) {
         this.entityClass = entityClass;
         this.repo = EntityRepositoryFactory.getRepository(repoClass);
         this.selectedItemProperty = new SimpleBooleanProperty(true);
+        this.childControllers = new ArrayList<>();
+        this.currentFetchWhereClause = "";
         entityTable = new TableView<>();
         initTableViewSchema();
         entityTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<T>() {
@@ -86,17 +93,33 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     protected abstract void setFormGrid(GridPane formGrid, T entity);
 
     /**
-     * Fetch entity data and set it into the table view.
+     * Set the current fetching where clause for controller to query
+     * @param whereClause
      */
-    public void fetchEntitiesToTable() {
+    public void setCurrentFetchWhereClause(String whereClause) {
+        this.currentFetchWhereClause = whereClause;
+    }
+
+    /**
+     * Fetch entity data and set it into the table view.
+     * @param whereClause the where clause on the query to perform example WHERE foreign_id=1
+     */
+    public void fetchEntitiesToTable(String whereClause) {
         ObservableList<T> entities;
         Pagination page = new Pagination();
         try {
-            entities = FXCollections.observableArrayList(repo.get(page));
+            entities = FXCollections.observableArrayList(repo.get(page, whereClause));
             entityTable.setItems(entities);
         } catch (SQLException e) {
             System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
         }
+    }
+
+    /**
+     * Fetch entity data and set it into the table view.
+     */
+    public void fetchEntitiesToTable() {
+        fetchEntitiesToTable(currentFetchWhereClause);
     }
 
     /**
@@ -171,9 +194,18 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     private void showForm(int action) {
         initFormGrid();
         T entity = action == CREATE_ACTION
-        ? getNewEntityInstance(null)
-        : getCopyOfSelectedItem();
+                ? getNewEntityInstance(null)
+                : getCopyOfSelectedItem();
         setFormGrid(formGrid, entity);
+        if (!childControllers.isEmpty())
+            for (AbstractCrudController<?, ?> controller : childControllers) {
+                if (entity.getId() != null)
+                    controller.setCurrentFetchWhereClause("WHERE " +
+                            AbstractEntityRepository
+                                    .normalizeFieldName(entityClass.getSimpleName())
+                            + "_id=" + entity.getId());
+                    controller.fetchEntitiesToTable();
+            }
         formScene.setRoot(formGrid);
         Stage formStage = new Stage();
         formStage.setScene(formScene);
@@ -288,6 +320,12 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         tableColumn.setCellValueFactory(new PropertyValueFactory<>(tableColumnKey));
         entityTable.getColumns().add(tableColumn);
     }
+
+    /**
+     * Add a column to the current table using property of entity
+     * @param columnLabel the label to display in the table heading
+     * @param tableColumnKey the column key for the <code>PropertyValueFactory</code>
+     */    
     protected void addTableColumn(String columnLabel, String tableColumnKey) {
         addTableColumn(columnLabel, tableColumnKey, (double)columnLabel.length() * 8);
     }
@@ -303,6 +341,12 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         tableColumn.setCellValueFactory(callback);
         entityTable.getColumns().add(tableColumn);
     }
+
+    /**
+     * Add a column to the current table using callback
+     * @param tableColumn the tableColumn object to be added to the table
+     * @param callBack the callback to get the value of <code>T</code> to display in the cell
+     */
     protected <M> void addTableColumn(TableColumn<T, M> tableColumn, Callback<CellDataFeatures<T, M>, ObservableValue<M>> callback) {
         addTableColumn(tableColumn, callback, (double)tableColumn.getText().length() * 8);
     }

@@ -20,9 +20,10 @@ public class CrudControllerFactory {
                 controllers.put(theClass, theClass.getConstructor().newInstance());
             } catch (Exception e) {
                 System.out.println(
-                    "Exception in CrudControllerFactory.getRepository(Class<T> theClass): " + e.toString());
+                    "Exception in CrudControllerFactory.getController(Class<T> theClass): " + e.toString());
             }
         
+        controllers.get(theClass).setCurrentFetchWhereClause("");
         return (T) controllers.get(theClass);
     }
 }

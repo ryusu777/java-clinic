@@ -166,12 +166,13 @@ public class GridFormBuilder {
      * entity to display in textfield
      */
     public <T extends AbstractEntity & Copyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
-        AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
+            AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
         TextField field = new TextField();
         field.setDisable(true);
         Button pickButton = new Button("Pick");
         try {
-            Method propertyGetterMethod = controller.getEntityClass().getMethod(propertyGetterMethodName, (Class[])null);
+            Method propertyGetterMethod = controller.getEntityClass().getMethod(propertyGetterMethodName,
+                    (Class[]) null);
             T entity;
             if (property.get() == 0)
                 entity = null;
@@ -181,6 +182,7 @@ public class GridFormBuilder {
             }
             pickButton.setOnAction(new EventHandler<ActionEvent>() {
                 T localEntity = entity;
+
                 @Override
                 public void handle(ActionEvent arg0) {
                     controller.fetchEntitiesToTable();
@@ -203,6 +205,12 @@ public class GridFormBuilder {
             System.out.println("Exception caught in GridFormBuilder.addPickField(): " + e.toString());
         }
         formGrid.addRow(currentRow, new Label(fieldPrompt), field, pickButton);
+        currentRow++;
+        return this;
+    }
+
+    public GridFormBuilder addEntityGrid(AbstractCrudController<?, ?> controller) {
+        formGrid.add(controller.getMainScene().getRoot(), 0, currentRow, 3, 1);
         currentRow++;
         return this;
     }
