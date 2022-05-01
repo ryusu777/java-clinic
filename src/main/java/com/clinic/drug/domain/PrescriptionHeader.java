@@ -1,6 +1,8 @@
 package com.clinic.drug.domain;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -17,6 +19,16 @@ public class PrescriptionHeader extends AbstractEntity implements Copyable<Presc
 
     public PrescriptionHeader(Integer id) {
         super(id);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "created_date",
+            "doctor_id",
+            "patient_id",
+            "medical_record_id"
+        );
     }
 
     private ObjectProperty<LocalDate> createdDate = new SimpleObjectProperty<>();

@@ -3,6 +3,8 @@ package com.clinic.drug.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -21,6 +23,22 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
 
     public MedicineStock(Integer id) {
         super(id);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "received_date",
+            "exp_date",
+            "qty_available",
+            "qty_to_dosage_form_multiplier",
+            "medicine_id",
+            "batch_number",
+            "dosage_form_id",
+            "qty_unit_id",
+            "purchase_medicine_detail_id",
+            "highest_retail_price"
+        );
     }
     
     private ObjectProperty<LocalDateTime> receivedDate = new SimpleObjectProperty<>();
@@ -93,7 +111,7 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
         return this;
     }
 
-    private StringProperty batchNumber= new SimpleStringProperty();
+    private StringProperty batchNumber = new SimpleStringProperty();
     public StringProperty batchNumberProperty() {
         return batchNumber;
     }

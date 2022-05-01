@@ -2,6 +2,8 @@ package com.clinic.drug.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -20,6 +22,19 @@ public class PrescriptionRecipe extends AbstractEntity implements Copyable<Presc
 
     public PrescriptionRecipe(Integer id) {
         super(id);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "usage_instruction",
+            "latin_usage_instruction",
+            "latin_making_instruction",
+            "exp_date",
+            "qty",
+            "dosage_form_id",
+            "prescription_header_id"
+        );
     }
     
     private StringProperty usageInstruction = new SimpleStringProperty();

@@ -1,5 +1,8 @@
 package com.clinic.drug.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -13,6 +16,14 @@ public class QtyUnit extends AbstractEntity implements Copyable<QtyUnit> {
 
     public QtyUnit(Integer id) {
         super(id);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "name",
+            "short_name"
+        );
     }
     
     private StringProperty name = new SimpleStringProperty();

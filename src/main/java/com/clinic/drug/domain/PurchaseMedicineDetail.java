@@ -1,6 +1,8 @@
 package com.clinic.drug.domain;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -17,6 +19,15 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
 
     public PurchaseMedicineDetail(Integer id) {
         super(id);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "price_per_unit",
+            "qty",
+            "purchase_medicine_header_id"
+        );
     }
 
     private IntegerProperty pricePerUnit = new SimpleIntegerProperty();

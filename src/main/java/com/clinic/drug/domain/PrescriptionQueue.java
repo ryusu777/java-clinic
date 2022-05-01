@@ -1,5 +1,8 @@
 package com.clinic.drug.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -13,6 +16,14 @@ public class PrescriptionQueue extends AbstractEntity implements Copyable<Prescr
 
     public PrescriptionQueue(Integer id) {
         super(id);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "status",
+            "prescription_header_id"
+        );
     }
     
     public static final int WAITING_TO_MAKE = 1,

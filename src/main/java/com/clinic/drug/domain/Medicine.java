@@ -1,5 +1,8 @@
 package com.clinic.drug.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -13,6 +16,15 @@ public class Medicine extends AbstractEntity implements Copyable<Medicine> {
 
     public Medicine() {
         this(null);
+    }
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "brand_name",
+            "generic_name",
+            "medicine_type"
+        );
     }
 
     private StringProperty brandName = new SimpleStringProperty();
