@@ -68,7 +68,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         this.selectedItemProperty = new SimpleBooleanProperty(true);
         this.childControllers = new ArrayList<>();
         this.currentFetchWhereClause = "";
-        entityTable = new TableView<>();
+        this.entityTable = new TableView<>();
         initTableViewSchema();
         entityTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<T>() {
             @Override
@@ -102,9 +102,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
 
     /**
      * Fetch entity data and set it into the table view.
-     * @param whereClause the where clause on the query to perform example WHERE foreign_id=1
+     * @param whereClause the where clause on the query to perform, example: "WHERE foreign_id=1"
+     * @param entityTable the table which data should went to
      */
-    public void fetchEntitiesToTable(String whereClause) {
+    public void fetchEntitiesToTable(TableView<T> entityTable, String whereClause) {
         ObservableList<T> entities;
         Pagination page = new Pagination();
         try {
@@ -117,9 +118,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
 
     /**
      * Fetch entity data and set it into the table view.
+     * @param entityTable the table which data should went to
+     */
+    public void fetchEntitiesToTable(TableView<T> entityTable) {
+        fetchEntitiesToTable(entityTable, "");
+    }
+
+    /**
+     * Fetch entity data and set it into the table view.
      */
     public void fetchEntitiesToTable() {
-        fetchEntitiesToTable(currentFetchWhereClause);
+        fetchEntitiesToTable(entityTable, currentFetchWhereClause);
     }
 
     /**
@@ -131,11 +140,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         pickLayout.setAlignment(Pos.TOP_LEFT);
         pickLayout.setSpacing(10.0);
         pickLayout.setPadding(new Insets(20));
+
         Button pickButton = new Button("Pick");
         pickButton.disableProperty().bind(selectedItemProperty);
+
+        TableView<T> pickTable = new TableView<>();
+
+        initTableViewSchema(pickTable);
+        fetchEntitiesToTable(pickTable);
         pickLayout.getChildren().addAll(
             pickButton,
-            entityTable
+            pickTable
         );
         Scene pickScene = new Scene(pickLayout);
         Stage pickStage = new Stage();
@@ -286,8 +301,9 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
 
     /**
      * Initialize the column that the table should display
+     * @param entityTable the table that will be initialized
      */
-    protected void initTableViewSchema() {
+    protected void initTableViewSchema(TableView<T> entityTable) {
         T entityInstance = getNewEntityInstance(null);
         TableColumn<T, Integer> idColumn = new TableColumn<>("Id");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -306,6 +322,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
                 entityTable.getColumns().add(tableColumn);
             }
         }
+    }
+
+    /**
+     * Init the <code>AbstractCrudController.entityTable</code>
+     */
+    protected void initTableViewSchema() {
+        initTableViewSchema(entityTable);
     }
 
     /**
