@@ -1,37 +1,35 @@
 package com.clinic.abstracts;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import com.clinic.Pagination;
 import com.clinic.factories.EntityRepositoryFactory;
 import com.clinic.interfaces.Copyable;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * A GUI controller to do CRUD operation for an entity.<br>
@@ -41,21 +39,20 @@ import javafx.util.Callback;
  * The entity should have corresponding repository for this controller to do
  * CRUD operation into database
  * 
- * TODO: Child Crud automatic parent field value
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
     public final static int CREATE_ACTION = 1, UPDATE_ACTION = 2, DELETE_ACTION = 3;
-    public TableView<T> entityTable;
-    public Button createButton;
-    public Button updateButton;
-    public Button deleteButton;
+    public MFXPaginatedTableView<T> entityTable;
+    public MFXButton createButton;
+    public MFXButton updateButton;
+    public MFXButton deleteButton;
 
     private Class<T> entityClass;
     private GridPane formGrid;
     private Scene formScene;
     private Scene mainScene;
-    private BooleanProperty selectedItemProperty;
+    private ObjectProperty<T> selectedItemProperty;
     private T pickResult;
     private String currentFetchWhereClause;
 
@@ -65,17 +62,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass) {
         this.entityClass = entityClass;
         this.repo = EntityRepositoryFactory.getRepository(repoClass);
-        this.selectedItemProperty = new SimpleBooleanProperty(true);
+        this.selectedItemProperty = new SimpleObjectProperty<>();
         this.childControllers = new ArrayList<>();
         this.currentFetchWhereClause = "";
-        this.entityTable = new TableView<>();
+        this.entityTable = new MFXPaginatedTableView<>();
         initTableViewSchema();
-        entityTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<T>() {
-            @Override
-            public void changed(ObservableValue<? extends T> o, T oldVal, T newVal) {
-                selectedItemProperty.setValue(newVal == null);
-            }
-        });
+        entityTable.getSelectionModel().setAllowsMultipleSelection(true);
+        entityTable.getSelectionModel()
+            .selectionProperty()
+            .addListener((MapChangeListener<? super Integer, ? super T>) change -> {
+                selectedItemProperty.setValue(change.getValueAdded());
+            });
         initMainScene();
         initFormGrid();
         formScene = new Scene(formGrid);
@@ -105,7 +102,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * @param whereClause the where clause on the query to perform, example: "WHERE foreign_id=1"
      * @param entityTable the table which data should went to
      */
-    public void fetchEntitiesToTable(TableView<T> entityTable, String whereClause) {
+    public void fetchEntitiesToTable(MFXTableView<T> entityTable, String whereClause) {
         ObservableList<T> entities;
         Pagination page = new Pagination();
         try {
@@ -120,7 +117,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * Fetch entity data and set it into the table view.
      * @param entityTable the table which data should went to
      */
-    public void fetchEntitiesToTable(TableView<T> entityTable) {
+    public void fetchEntitiesToTable(MFXTableView<T> entityTable) {
         fetchEntitiesToTable(entityTable, "");
     }
 
@@ -141,21 +138,20 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         pickLayout.setSpacing(10.0);
         pickLayout.setPadding(new Insets(20));
 
-        Button pickButton = new Button("Pick");
-        pickButton.disableProperty().bind(selectedItemProperty);
+        MFXButton pickButton = new MFXButton("Pick");
+        pickButton.disableProperty().bind(selectedItemProperty.isNull());
 
-        TableView<T> pickTable = new TableView<>();
+        MFXTableView<T> pickTable = new MFXTableView<>();
 
         initTableViewSchema(pickTable);
         fetchEntitiesToTable(pickTable);
         pickLayout.getChildren().addAll(
-            pickButton,
-            pickTable
-        );
+                pickButton,
+                pickTable);
         Scene pickScene = new Scene(pickLayout);
         Stage pickStage = new Stage();
         pickButton.setOnAction((event) -> {
-            T selectedItem = entityTable.getSelectionModel().getSelectedItem();
+            T selectedItem = selectedItemProperty.get();
             pickResult = getNewEntityInstance(selectedItem.getId()).copy(selectedItem);
             pickStage.close();
         });
@@ -196,7 +192,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Delete data?");
         confirmation.showAndWait();
         if (confirmation.getResult() == ButtonType.OK) {
-            actEntity(entityTable.getSelectionModel().getSelectedItem(), DELETE_ACTION);
+            actEntity(selectedItemProperty.get(), DELETE_ACTION);
             fetchEntitiesToTable();
         }
     }
@@ -219,7 +215,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
                             AbstractEntityRepository
                                     .normalizeFieldName(entityClass.getSimpleName())
                             + "_id=" + entity.getId());
-                    controller.fetchEntitiesToTable();
+                controller.fetchEntitiesToTable();
             }
         formScene.setRoot(formGrid);
         Stage formStage = new Stage();
@@ -234,10 +230,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * Generates a button that handle form submission
      * @param text text to be displayed on the button
      * @param entity the entity that should be created or updated
-     * @return <code>Button</code> that has handler that handles form submission
+     * @return <code>MFXButton</code> that has handler that handles form submission
      */
-    protected Button generateSubmitButton(String text, T entity) {
-        Button submitButton = new Button();
+    protected MFXButton generateSubmitButton(String text, T entity) {
+        MFXButton submitButton = new MFXButton();
         submitButton.setText(text);
         submitButton.setOnAction((event) -> {
             int action = entity.getId() != 0 ? UPDATE_ACTION : CREATE_ACTION;
@@ -274,15 +270,15 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * table view.
      */
     private void initMainScene() {
-        createButton = new Button("Create");
-        updateButton = new Button("Update");
-        deleteButton = new Button("Delete");
+        createButton = new MFXButton("Create");
+        updateButton = new MFXButton("Update");
+        deleteButton = new MFXButton("Delete");
         createButton.setOnAction(event -> showCreateForm());
         updateButton.setOnAction(event -> showUpdateForm());
         deleteButton.setOnAction(event -> showDeleteForm());
 
-        updateButton.disableProperty().bind(selectedItemProperty);
-        deleteButton.disableProperty().bind(selectedItemProperty);
+        updateButton.disableProperty().bind(selectedItemProperty.isNull());
+        deleteButton.disableProperty().bind(selectedItemProperty.isNull());
 
         HBox buttonLayout = new HBox();
         buttonLayout.setSpacing(5.0);
@@ -293,36 +289,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         sceneLayout.setSpacing(10.0);
         sceneLayout.setPadding(new Insets(20));
         sceneLayout.getChildren().addAll(
-            new Label(entityClass.getSimpleName()),
-            buttonLayout,
-            entityTable);
+                new Label(entityClass.getSimpleName()),
+                buttonLayout,
+                entityTable);
         mainScene = new Scene(sceneLayout);
     }
 
     /**
-     * Initialize the column that the table should display
-     * @param entityTable the table that will be initialized
+     * Initialize a <code>MFXTableView</code> columns
+     * @param entityTable the table to be initialized
      */
-    protected void initTableViewSchema(TableView<T> entityTable) {
-        T entityInstance = getNewEntityInstance(null);
-        TableColumn<T, Integer> idColumn = new TableColumn<>("Id");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        entityTable.getColumns().add(idColumn);
-        for (Method method : repo.getEntityAttributeGetters()) {
-            if (entityInstance.getTableFieldNames() == null
-                    || entityInstance
-                            .getTableFieldNames()
-                            .contains(repo.normalizeFieldName(method.getName().substring(3)))) {
-                TableColumn<T, Serializable> tableColumn = new TableColumn<>(
-                        method.getName().substring(3).replaceAll("([a-z])([A-Z])", "$1 $2"));
-                tableColumn.setPrefWidth(method.getName().length() * 8);
-                tableColumn.setCellValueFactory(new PropertyValueFactory<>(
-                        method.getName().substring(3, 4).toLowerCase() +
-                                method.getName().substring(4)));
-                entityTable.getColumns().add(tableColumn);
-            }
-        }
-    }
+    protected abstract void initTableViewSchema(MFXTableView<T> entityTable);
 
     /**
      * Init the <code>AbstractCrudController.entityTable</code>
@@ -336,42 +313,12 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * @param columnLabel the label to display in the table heading
      * @param tableColumnKey the column key for the <code>PropertyValueFactory</code>
      * @param prefWidth the prefWidth of the table column
-     */    
-    protected void addTableColumn(String columnLabel, String tableColumnKey, Double prefWidth) {
-        TableColumn<T, Serializable> tableColumn = new TableColumn<>(columnLabel);
-        tableColumn.setPrefWidth(prefWidth);
-        tableColumn.setCellValueFactory(new PropertyValueFactory<>(tableColumnKey));
-        entityTable.getColumns().add(tableColumn);
-    }
-
-    /**
-     * Add a column to the current table using property of entity
-     * @param columnLabel the label to display in the table heading
-     * @param tableColumnKey the column key for the <code>PropertyValueFactory</code>
-     */    
-    protected void addTableColumn(String columnLabel, String tableColumnKey) {
-        addTableColumn(columnLabel, tableColumnKey, (double)columnLabel.length() * 8);
-    }
-
-    /**
-     * Add a column to the current table using callback
-     * @param tableColumn the tableColumn object to be added to the table
-     * @param callBack the callback to get the value of <code>T</code> to display in the cell
-     * @param prefWidth the prefWidth of the table column
      */
-    protected <M> void addTableColumn(TableColumn<T, M> tableColumn, Callback<CellDataFeatures<T, M>, ObservableValue<M>> callback, Double prefWidth) {
-        tableColumn.setPrefWidth(prefWidth);
-        tableColumn.setCellValueFactory(callback);
-        entityTable.getColumns().add(tableColumn);
-    }
-
-    /**
-     * Add a column to the current table using callback
-     * @param tableColumn the tableColumn object to be added to the table
-     * @param callBack the callback to get the value of <code>T</code> to display in the cell
-     */
-    protected <M> void addTableColumn(TableColumn<T, M> tableColumn, Callback<CellDataFeatures<T, M>, ObservableValue<M>> callback) {
-        addTableColumn(tableColumn, callback, (double)tableColumn.getText().length() * 8);
+    protected void addTableColumn(String columnLabel, Function<T, Serializable> extractor) {
+        MFXTableColumn<T> tableColumn = new MFXTableColumn<>(columnLabel);
+        tableColumn.setRowCellFactory(entity -> new MFXTableRowCell<>(extractor));
+        tableColumn.setColumnResizable(true);
+        entityTable.getTableColumns().add(tableColumn);
     }
 
     /**
@@ -379,7 +326,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * @return new identical entity object with the selected item.
      */
     private T getCopyOfSelectedItem() {
-        T selectedItem = entityTable.getSelectionModel().getSelectedItem();
+        T selectedItem = selectedItemProperty.get();
         try {
             return entityClass
                     .getConstructor(Integer.class)
