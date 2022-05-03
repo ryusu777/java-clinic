@@ -314,7 +314,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * @param tableColumnKey the column key for the <code>PropertyValueFactory</code>
      * @param prefWidth the prefWidth of the table column
      */
-    protected void addTableColumn(String columnLabel, Function<T, Serializable> extractor) {
+    protected void addTableColumn(MFXTableView<T> entityTable, String columnLabel, Function<T, Serializable> extractor) {
         MFXTableColumn<T> tableColumn = new MFXTableColumn<>(columnLabel);
         tableColumn.setRowCellFactory(entity -> new MFXTableRowCell<>(extractor));
         tableColumn.setColumnResizable(true);
