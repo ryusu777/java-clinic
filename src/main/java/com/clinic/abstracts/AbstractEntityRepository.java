@@ -157,7 +157,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * @param queryResult the result of getting an entity
      * @param alias the alias of the entity int the query
      */
-    protected T mapEntity(ResultSet queryResult, String alias) {
+    public T mapEntity(ResultSet queryResult, String alias) {
         try {
             T resultEntity = entityClass.getConstructor(Integer.class).newInstance(
                     queryResult.getInt("id"));
@@ -192,7 +192,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         return null;
     };
 
-    protected T mapEntity(ResultSet queryResult) {
+    public T mapEntity(ResultSet queryResult) {
         return mapEntity(queryResult, "");
     }
 
