@@ -6,6 +6,7 @@ import com.clinic.drug.domain.SellMedicineHeader;
 import com.clinic.drug.repository.SellMedicineHeaderRepository;
 import com.clinic.factories.CrudControllerFactory;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.layout.GridPane;
 
 public class SellMedicineHeaderController extends AbstractCrudController<SellMedicineHeader, SellMedicineHeaderRepository> {
@@ -24,5 +25,12 @@ public class SellMedicineHeaderController extends AbstractCrudController<SellMed
             )
             .addLocalDateField("Purchase Date", entity.purchaseDateProperty())
             .addButton(generateSubmitButton("Submit", entity));
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<SellMedicineHeader> entityTable) {
+        addTableColumn(entityTable, "Id", SellMedicineHeader::getId);
+        addTableColumn(entityTable, "Purchase Date", SellMedicineHeader::getPurchaseDate);
+        addTableColumn(entityTable, "Prescription Header Id", SellMedicineHeader::getPrescriptionHeaderId);
     }
 }

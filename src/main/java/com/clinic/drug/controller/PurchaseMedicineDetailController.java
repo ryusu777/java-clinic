@@ -5,6 +5,7 @@ import com.clinic.builder.GridFormBuilder;
 import com.clinic.drug.domain.PurchaseMedicineDetail;
 import com.clinic.drug.repository.PurchaseMedicineDetailRepository;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.layout.GridPane;
 
 public class PurchaseMedicineDetailController extends AbstractCrudController<PurchaseMedicineDetail, PurchaseMedicineDetailRepository> {
@@ -24,5 +25,13 @@ public class PurchaseMedicineDetailController extends AbstractCrudController<Pur
                 "getId"
             )
             .addButton(generateSubmitButton("Submit", entity));
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<PurchaseMedicineDetail> entityTable) {
+        addTableColumn(entityTable, "Id", PurchaseMedicineDetail::getId);
+        addTableColumn(entityTable, "Price/unit", PurchaseMedicineDetail::getPricePerUnit);
+        addTableColumn(entityTable, "Qty", PurchaseMedicineDetail::getQty);
+        addTableColumn(entityTable, "Purchase Header Id", PurchaseMedicineDetail::getPurchaseMedicineHeaderId);
     }
 }

@@ -6,6 +6,7 @@ import com.clinic.drug.domain.PrescriptionIngredient;
 import com.clinic.drug.repository.PrescriptionIngredientRepository;
 import com.clinic.factories.CrudControllerFactory;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.layout.GridPane;
 
 public class PrescriptionIngredientController extends AbstractCrudController<PrescriptionIngredient, PrescriptionIngredientRepository> {
@@ -30,5 +31,13 @@ public class PrescriptionIngredientController extends AbstractCrudController<Pre
             )
             .addBigDecimalField("Qty", entity.qtyProperty())
             .addButton(generateSubmitButton("Submit", entity));
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<PrescriptionIngredient> entityTable) {
+        addTableColumn(entityTable, "Id", PrescriptionIngredient::getId);
+        addTableColumn(entityTable, "Qty", PrescriptionIngredient::getQty);
+        addTableColumn(entityTable, "Medicine Stock Id", PrescriptionIngredient::getMedicineStockId);
+        addTableColumn(entityTable, "Prescription Recipe Id", PrescriptionIngredient::getPrescriptionRecipeId);
     }
 }

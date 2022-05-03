@@ -6,6 +6,7 @@ import com.clinic.drug.domain.PrescriptionRecipe;
 import com.clinic.drug.repository.PrescriptionRecipeRepository;
 import com.clinic.factories.CrudControllerFactory;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.layout.GridPane;
 
 public class PrescriptionRecipeController extends AbstractCrudController<PrescriptionRecipe, PrescriptionRecipeRepository> {
@@ -34,5 +35,17 @@ public class PrescriptionRecipeController extends AbstractCrudController<Prescri
             "getId"
         )
         .addButton(generateSubmitButton("submit", entity));
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<PrescriptionRecipe> entityTable) {
+        addTableColumn(entityTable, "Id", PrescriptionRecipe::getId);
+        addTableColumn(entityTable, "Qty", PrescriptionRecipe::getQty);
+        addTableColumn(entityTable, "Exp Date", PrescriptionRecipe::getExpDate);
+        addTableColumn(entityTable, "Usage Instruction", PrescriptionRecipe::getUsageInstruction);
+        addTableColumn(entityTable, "Latin Making Instruction", PrescriptionRecipe::getLatinMakingInstruction);
+        addTableColumn(entityTable, "Latin Usage Instruction", PrescriptionRecipe::getLatinUsageInstruction);
+        addTableColumn(entityTable, "Dosage Form Id", PrescriptionRecipe::getDosageFormId);
+        addTableColumn(entityTable, "Prescription Header Id", PrescriptionRecipe::getPrescriptionHeaderId);
     }
 }

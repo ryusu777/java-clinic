@@ -6,6 +6,7 @@ import com.clinic.drug.domain.MedicineStock;
 import com.clinic.drug.repository.MedicineStockRepository;
 import com.clinic.factories.CrudControllerFactory;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.layout.GridPane;
 
 public class MedicineStockController extends AbstractCrudController<MedicineStock, MedicineStockRepository> {
@@ -39,6 +40,22 @@ public class MedicineStockController extends AbstractCrudController<MedicineStoc
             .addTextField("Batch Number", entity.batchNumberProperty())
             .addBigDecimalField("Qty Available", entity.qtyAvailableProperty())
             .addBigDecimalField("Qty To Dosage Form Multiplier", entity.qtyToDosageFormMultiplierProperty())
+            .addIntegerField("Highest Retail Price", entity.highestRetailPriceProperty())
             .addButton(generateSubmitButton("Submit", entity));
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<MedicineStock> entityTable) {
+        addTableColumn(entityTable, "Id", MedicineStock::getId);
+        addTableColumn(entityTable, "Medicine Id", MedicineStock::getMedicineId);
+        addTableColumn(entityTable, "Qty Available", MedicineStock::getQtyAvailable);
+        addTableColumn(entityTable, "Qty to Dosage Form Multiplier", MedicineStock::getQtyToDosageFormMultiplier);
+        addTableColumn(entityTable, "Qty Unit Id", MedicineStock::getQtyUnitId);
+        addTableColumn(entityTable, "Exp Date", MedicineStock::getExpDate);
+        addTableColumn(entityTable, "Received Date", MedicineStock::getReceivedDate);
+        addTableColumn(entityTable, "Dosage Form Id", MedicineStock::getDosageFormId);
+        addTableColumn(entityTable, "Batch Number", MedicineStock::getBatchNumber);
+        addTableColumn(entityTable, "HRP", MedicineStock::getHighestRetailPrice);
+        addTableColumn(entityTable, "Purchase Detail Id", MedicineStock::getPurchaseMedicineDetailId);
     }
 }

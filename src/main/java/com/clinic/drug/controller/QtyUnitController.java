@@ -5,6 +5,7 @@ import com.clinic.builder.GridFormBuilder;
 import com.clinic.drug.domain.QtyUnit;
 import com.clinic.drug.repository.QtyUnitRepository;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.layout.GridPane;
 
 public class QtyUnitController extends AbstractCrudController<QtyUnit, QtyUnitRepository> {
@@ -18,5 +19,12 @@ public class QtyUnitController extends AbstractCrudController<QtyUnit, QtyUnitRe
             .addTextField("Name", entity.nameProperty())
             .addTextField("Short Name", entity.shortNameProperty())
             .addButton(generateSubmitButton("Submit", entity));
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<QtyUnit> entityTable) {
+        addTableColumn(entityTable, "Id", QtyUnit::getId);
+        addTableColumn(entityTable, "Name", QtyUnit::getName);
+        addTableColumn(entityTable, "Short Name", QtyUnit::getShortName);
     }
 }
