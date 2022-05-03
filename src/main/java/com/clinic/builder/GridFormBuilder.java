@@ -11,6 +11,7 @@ import com.clinic.abstracts.AbstractEntity;
 import com.clinic.extension.DateTimePicker;
 import com.clinic.interfaces.Copyable;
 
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
@@ -19,7 +20,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 
@@ -43,7 +43,7 @@ public class GridFormBuilder {
      * @param property property which the field should bidirect bind
      */
     public GridFormBuilder addTextField(String fieldPrompt, StringProperty property) {
-        TextField field = new TextField();
+        MFXTextField field = new MFXTextField();
         formGrid.addRow(currentRow, new Label(fieldPrompt), field);
         field.textProperty().bindBidirectional(property);
         currentRow++;
@@ -56,7 +56,7 @@ public class GridFormBuilder {
      * @param property property which the field should bidirect bind
      */
     public GridFormBuilder addIntegerField(String fieldPrompt, IntegerProperty property) {
-        TextField field = new TextField();
+        MFXTextField field = new MFXTextField();
         field.textProperty().addListener((observable, oldVal, newVal) -> {
             if (!newVal.matches("\\d{0,9}")) {
                 field.setText(oldVal);
@@ -84,7 +84,7 @@ public class GridFormBuilder {
      * @param property property which the field should bidirect bind
      */
     public GridFormBuilder addBigDecimalField(String fieldPrompt, Property<BigDecimal> property) {
-        TextField field = new TextField();
+        MFXTextField field = new MFXTextField();
         field.textProperty().addListener((observable, oldVal, newVal) -> {
             if (!newVal.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
                 field.setText(oldVal);
@@ -167,7 +167,7 @@ public class GridFormBuilder {
      */
     public <T extends AbstractEntity & Copyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
             AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
-        TextField field = new TextField();
+        MFXTextField field = new MFXTextField();
         field.setDisable(true);
         Button pickButton = new Button("Pick");
         try {

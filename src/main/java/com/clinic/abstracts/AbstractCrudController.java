@@ -68,14 +68,23 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         this.entityTable = new MFXPaginatedTableView<>();
         initTableViewSchema();
         entityTable.getSelectionModel().setAllowsMultipleSelection(true);
-        entityTable.getSelectionModel()
-            .selectionProperty()
-            .addListener((MapChangeListener<? super Integer, ? super T>) change -> {
-                selectedItemProperty.setValue(change.getValueAdded());
-            });
+        bindTableToSingleSelectedItemProperty(entityTable, selectedItemProperty);
         initMainScene();
         initFormGrid();
         formScene = new Scene(formGrid);
+    }
+
+    /**
+     * Binds selection model of a table to an <code>ObjectProperty</code>
+     * @param table the table
+     * @param entity the entity that should have the selected value
+     */
+    private void bindTableToSingleSelectedItemProperty(MFXTableView<T> table, ObjectProperty<T> entity) {
+        table.getSelectionModel()
+                .selectionProperty()
+                .addListener((MapChangeListener<? super Integer, ? super T>) change -> {
+                    entity.setValue(change.getValueAdded());
+                });
     }
 
     /**
@@ -133,6 +142,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * @return the selected entity
      */
     public T pickEntity() {
+        ObjectProperty<T> selectedItemProperty = new SimpleObjectProperty<>();
         VBox pickLayout = new VBox();
         pickLayout.setAlignment(Pos.TOP_LEFT);
         pickLayout.setSpacing(10.0);
@@ -145,6 +155,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
 
         initTableViewSchema(pickTable);
         fetchEntitiesToTable(pickTable);
+        bindTableToSingleSelectedItemProperty(pickTable, selectedItemProperty);
         pickLayout.getChildren().addAll(
                 pickButton,
                 pickTable);
@@ -359,6 +370,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         formGrid.setAlignment(Pos.TOP_LEFT);
         formGrid.setHgap(10);
         formGrid.setVgap(10);
+        formGrid.setPrefWidth(500);
         formGrid.setPadding(new Insets(25));
     }
 
