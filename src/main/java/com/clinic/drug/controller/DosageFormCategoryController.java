@@ -17,13 +17,9 @@ public class DosageFormCategoryController extends AbstractCrudController<DosageF
 
     @Override
     protected void setFormGrid(GridPane formGrid, DosageFormCategory entity) {
-        GridFormBuilder builder = new GridFormBuilder(formGrid)
-            .addTextField("Category Name", entity.nameProperty());
-
-        for (AbstractCrudController<?, ?> controller : childControllers)
-            builder.addEntityGrid(controller);
-
-        builder.addButton(generateSubmitButton("Submit", entity));
+        new GridFormBuilder(formGrid)
+            .addTextField("Category Name", entity.nameProperty())
+            .addButton(generateSubmitButton("Submit", entity));
     }
 
     @Override
