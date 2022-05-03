@@ -155,32 +155,34 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     /**
      * Maps a <code>ResultSet</code> into a single entity
      * @param queryResult the result of getting an entity
+     * @param alias the alias of the entity int the query
      */
-    protected T mapEntity(ResultSet queryResult) {
+    protected T mapEntity(ResultSet queryResult, String alias) {
         try {
             T resultEntity = entityClass.getConstructor(Integer.class).newInstance(
                     queryResult.getInt("id"));
 
             for (Method method : getEntityAttributeSetters()) {
-                int modifiers = method.getModifiers();
                 String fieldName = normalizeFieldName(method.getName().substring(3));
                 if (resultEntity.getTableFieldNames() != null && !resultEntity.getTableFieldNames().contains(fieldName))
                     continue;
 
+                fieldName = (alias.length() != 0 ? alias + "." : "") + normalizeFieldName(fieldName);
+
                 if (method.getParameterTypes()[0] == Integer.class)
-                    method.invoke(resultEntity, queryResult.getInt(normalizeFieldName(fieldName)));
+                    method.invoke(resultEntity, queryResult.getInt(fieldName));
                 else if (method.getParameterTypes()[0] == String.class)
-                    method.invoke(resultEntity, queryResult.getString(normalizeFieldName(fieldName)));
+                    method.invoke(resultEntity, queryResult.getString(fieldName));
                 else if (method.getParameterTypes()[0] == BigDecimal.class)
-                    method.invoke(resultEntity, queryResult.getBigDecimal(normalizeFieldName(fieldName)));
+                    method.invoke(resultEntity, queryResult.getBigDecimal(fieldName));
                 else if (method.getParameterTypes()[0] == Date.class)
-                    method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)));
+                    method.invoke(resultEntity, queryResult.getDate(fieldName));
                 else if (method.getParameterTypes()[0] == Timestamp.class)
-                    method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)));
+                    method.invoke(resultEntity, queryResult.getTimestamp(fieldName));
                 else if (method.getParameterTypes()[0] == LocalDate.class)
-                    method.invoke(resultEntity, queryResult.getDate(normalizeFieldName(fieldName)).toLocalDate());
+                    method.invoke(resultEntity, queryResult.getDate(fieldName));
                 else if (method.getParameterTypes()[0] == LocalDateTime.class)
-                    method.invoke(resultEntity, queryResult.getTimestamp(normalizeFieldName(fieldName)).toLocalDateTime());
+                    method.invoke(resultEntity, queryResult.getTimestamp(fieldName));
             }
             return resultEntity;
         } catch (Exception e) {
@@ -189,6 +191,10 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
 
         return null;
     };
+
+    protected T mapEntity(ResultSet queryResult) {
+        return mapEntity(queryResult, "");
+    }
 
     /**
      * Gets a <code>Map</code> with snake cased database's field names as key 
