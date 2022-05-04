@@ -197,17 +197,6 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         return mapEntity(queryResult, "");
     }
 
-    public <E extends AbstractEntity> T mapEntity(ResultSet joinResult, AbstractEntityRepository<E> otherRepo, Function<T, Void> setter) {
-        try {
-            T resultEntity = mapEntity(joinResult, "a");
-            E joinedEntity = otherRepo.mapEntity(joinResult, "b");
-            return resultEntity;
-        } catch (Exception e) {
-            System.out.println("Exception caught in AbstractEntityRepository.mapEntity(): " + e.toString());
-        }
-        return null;
-    }
-
     /**
      * Gets a <code>Map</code> with snake cased database's field names as key 
      * and the getter method for the entity class as value
