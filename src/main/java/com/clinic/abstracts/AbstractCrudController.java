@@ -61,7 +61,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     protected S repo;
     protected List<AbstractCrudController<?, ?>> childControllers;
 
-    protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass) {
+    protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass, String sceneTitle) {
         this.entityClass = entityClass;
         this.repo = EntityRepositoryFactory.getRepository(repoClass);
         this.selectedItemProperty = new SimpleObjectProperty<>();
@@ -74,9 +74,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         entityTable.getSelectionModel().setAllowsMultipleSelection(true);
         bindTableToSingleSelectedItemProperty(entityTable, selectedItemProperty);
         bindPagination(page, pagination, entityTable);
-        initMainScene();
+        initMainScene(sceneTitle);
         initFormGrid();
         formScene = new Scene(formGrid);
+    }
+
+    protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass) {
+        this(entityClass, repoClass, entityClass.getSimpleName());
     }
 
     /**
@@ -304,8 +308,9 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     /**
      * Initialize main scene which configures button and adds them along with
      * table view.
+     * @param sceneTitle the title that should show in the scene
      */
-    private void initMainScene() {
+    private void initMainScene(String sceneTitle) {
         createButton = new MFXButton("Create");
         updateButton = new MFXButton("Update");
         deleteButton = new MFXButton("Delete");
@@ -328,7 +333,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         entityTable.setPrefWidth(700);
         entityTable.autosize();
         sceneLayout.getChildren().addAll(
-                new Label(entityClass.getSimpleName()),
+                new Label(sceneTitle),
                 buttonLayout,
                 entityTable,
                 pagination);
