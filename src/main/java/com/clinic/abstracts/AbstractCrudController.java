@@ -11,9 +11,9 @@ import com.clinic.factories.EntityRepositoryFactory;
 import com.clinic.interfaces.Copyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXPagination;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,7 +43,9 @@ import javafx.stage.Stage;
  */
 public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
     public final static int CREATE_ACTION = 1, UPDATE_ACTION = 2, DELETE_ACTION = 3;
-    public MFXPaginatedTableView<T> entityTable;
+    public MFXTableView<T> entityTable;
+    public MFXPagination pagination;
+    public Pagination page;
     public MFXButton createButton;
     public MFXButton updateButton;
     public MFXButton deleteButton;
@@ -65,10 +67,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         this.selectedItemProperty = new SimpleObjectProperty<>();
         this.childControllers = new ArrayList<>();
         this.currentFetchWhereClause = "";
-        this.entityTable = new MFXPaginatedTableView<>();
+        this.entityTable = new MFXTableView<>();
+        this.page = new Pagination();
+        this.pagination = new MFXPagination();
         initTableViewSchema();
         entityTable.getSelectionModel().setAllowsMultipleSelection(true);
         bindTableToSingleSelectedItemProperty(entityTable, selectedItemProperty);
+        bindPagination(page, pagination, entityTable);
         initMainScene();
         initFormGrid();
         formScene = new Scene(formGrid);
@@ -85,6 +90,26 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
                 .addListener((MapChangeListener<? super Integer, ? super T>) change -> {
                     entity.setValue(change.getValueAdded());
                 });
+    }
+
+    /**
+     * Binds the clinic's pagination with the MFXPagination and set listener to 
+     * fetch entities
+     * @param page the clinic pagination
+     * @param pagination the MFXPagination component
+     * @param table the table which the pagination applies to
+     */
+    private void bindPagination(Pagination page, MFXPagination pagination, MFXTableView<T> table) {
+        page.pageNumberProperty().bindBidirectional(pagination.currentPageProperty());
+        page.totalRecordsProperty().addListener((obs, oldValue, newValue) -> {
+            int maxPage = (int)newValue % page.getRecordsPerPage() == 0
+                ? (int)newValue / page.getRecordsPerPage()
+                : (int) newValue / page.getRecordsPerPage() + 1;
+            pagination.setMaxPage(maxPage);
+        });
+        page.pageNumberProperty().addListener((change) -> {
+            fetchEntitiesToTable(table);
+        });
     }
 
     /**
@@ -113,10 +138,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      */
     public void fetchEntitiesToTable(MFXTableView<T> entityTable, String whereClause) {
         ObservableList<T> entities;
-        Pagination page = new Pagination();
         try {
             entities = FXCollections.observableArrayList(repo.get(page, whereClause));
             entityTable.setItems(entities);
+            entityTable.autosize();
         } catch (SQLException e) {
             System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
         }
@@ -296,13 +321,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         buttonLayout.getChildren().addAll(createButton, updateButton, deleteButton);
 
         VBox sceneLayout = new VBox();
-        sceneLayout.setAlignment(Pos.CENTER);
+        sceneLayout.setAlignment(Pos.BASELINE_LEFT);
         sceneLayout.setSpacing(10.0);
         sceneLayout.setPadding(new Insets(20));
+        entityTable.setPrefHeight(425);
+        entityTable.setPrefWidth(700);
+        entityTable.autosize();
         sceneLayout.getChildren().addAll(
                 new Label(entityClass.getSimpleName()),
                 buttonLayout,
-                entityTable);
+                entityTable,
+                pagination);
         mainScene = new Scene(sceneLayout);
     }
 
