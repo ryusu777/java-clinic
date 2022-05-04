@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.clinic.ClinicConnection;
 import com.clinic.Pagination;
@@ -60,22 +61,22 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         ResultSet countResult = query("SELECT count(id) as number FROM "
             + tableName() + ";");
         countResult.next();
-        pagination.totalRecords = countResult.getInt(1);
+        pagination.setTotalRecords(countResult.getInt(1));
 
         String fetchQuery = "SELECT * FROM " + tableName();
         fetchQuery += " " + whereClause + " ";
-        if (pagination.sortBy != null
-                && pagination.sortOrder != null) {
-            fetchQuery += " ORDER BY " + normalizeFieldName(pagination.sortBy)
-                    + " " + pagination.sortOrder;
+        if (pagination.getSortBy() != null
+                && pagination.getSortOrder() != null) {
+            fetchQuery += " ORDER BY " + normalizeFieldName(pagination.getSortBy())
+                    + " " + pagination.getSortOrder();
         }
 
 
-        int recordsPerPage = pagination.recordsPerPage != null 
-            ? pagination.recordsPerPage 
+        int recordsPerPage = pagination.getRecordsPerPage() != 0
+            ? pagination.getRecordsPerPage() 
             : 10;
 
-        int skip = (pagination.pageNumber != null ? pagination.pageNumber - 1 : 0) 
+        int skip = (pagination.getPageNumber() != 0 ? pagination.getPageNumber() - 1 : 0) 
             * recordsPerPage;
         fetchQuery += " LIMIT " + skip + "," + recordsPerPage + ";";
 
@@ -194,6 +195,17 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
 
     public T mapEntity(ResultSet queryResult) {
         return mapEntity(queryResult, "");
+    }
+
+    public <E extends AbstractEntity> T mapEntity(ResultSet joinResult, AbstractEntityRepository<E> otherRepo, Function<T, Void> setter) {
+        try {
+            T resultEntity = mapEntity(joinResult, "a");
+            E joinedEntity = otherRepo.mapEntity(joinResult, "b");
+            return resultEntity;
+        } catch (Exception e) {
+            System.out.println("Exception caught in AbstractEntityRepository.mapEntity(): " + e.toString());
+        }
+        return null;
     }
 
     /**
