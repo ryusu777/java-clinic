@@ -21,6 +21,8 @@ public class ClinicConnection {
             conn = DriverManager.getConnection("jdbc:mariadb://localhost/clinic", "root", null);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            System.out.println("Failed to connect to database, exiting...");
+            System.exit(1);
         }
     }
 
