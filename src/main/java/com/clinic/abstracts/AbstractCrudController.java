@@ -11,9 +11,9 @@ import com.clinic.factories.EntityRepositoryFactory;
 import com.clinic.interfaces.Copyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXPagination;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,7 +43,9 @@ import javafx.stage.Stage;
  */
 public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
     public final static int CREATE_ACTION = 1, UPDATE_ACTION = 2, DELETE_ACTION = 3;
-    public MFXPaginatedTableView<T> entityTable;
+    public MFXTableView<T> entityTable;
+    public MFXPagination pagination;
+    public Pagination page;
     public MFXButton createButton;
     public MFXButton updateButton;
     public MFXButton deleteButton;
@@ -59,23 +61,59 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     protected S repo;
     protected List<AbstractCrudController<?, ?>> childControllers;
 
-    protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass) {
+    protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass, String sceneTitle) {
         this.entityClass = entityClass;
         this.repo = EntityRepositoryFactory.getRepository(repoClass);
         this.selectedItemProperty = new SimpleObjectProperty<>();
         this.childControllers = new ArrayList<>();
         this.currentFetchWhereClause = "";
-        this.entityTable = new MFXPaginatedTableView<>();
+        this.entityTable = new MFXTableView<>();
+        this.page = new Pagination();
+        this.pagination = new MFXPagination();
         initTableViewSchema();
         entityTable.getSelectionModel().setAllowsMultipleSelection(true);
-        entityTable.getSelectionModel()
-            .selectionProperty()
-            .addListener((MapChangeListener<? super Integer, ? super T>) change -> {
-                selectedItemProperty.setValue(change.getValueAdded());
-            });
-        initMainScene();
+        bindTableToSingleSelectedItemProperty(entityTable, selectedItemProperty);
+        bindPagination(page, pagination, entityTable);
+        initMainScene(sceneTitle);
         initFormGrid();
         formScene = new Scene(formGrid);
+    }
+
+    protected AbstractCrudController(Class<T> entityClass, Class<S> repoClass) {
+        this(entityClass, repoClass, entityClass.getSimpleName());
+    }
+
+    /**
+     * Binds selection model of a table to an <code>ObjectProperty</code>
+     * @param table the table
+     * @param entity the entity that should have the selected value
+     */
+    private void bindTableToSingleSelectedItemProperty(MFXTableView<T> table, ObjectProperty<T> entity) {
+        table.getSelectionModel()
+                .selectionProperty()
+                .addListener((MapChangeListener<? super Integer, ? super T>) change -> {
+                    entity.setValue(change.getValueAdded());
+                });
+    }
+
+    /**
+     * Binds the clinic's pagination with the MFXPagination and set listener to 
+     * fetch entities
+     * @param page the clinic pagination
+     * @param pagination the MFXPagination component
+     * @param table the table which the pagination applies to
+     */
+    private void bindPagination(Pagination page, MFXPagination pagination, MFXTableView<T> table) {
+        page.pageNumberProperty().bindBidirectional(pagination.currentPageProperty());
+        page.totalRecordsProperty().addListener((obs, oldValue, newValue) -> {
+            int maxPage = (int)newValue % page.getRecordsPerPage() == 0
+                ? (int)newValue / page.getRecordsPerPage()
+                : (int) newValue / page.getRecordsPerPage() + 1;
+            pagination.setMaxPage(maxPage);
+        });
+        page.pageNumberProperty().addListener((change) -> {
+            fetchEntitiesToTable(table);
+        });
     }
 
     /**
@@ -104,10 +142,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      */
     public void fetchEntitiesToTable(MFXTableView<T> entityTable, String whereClause) {
         ObservableList<T> entities;
-        Pagination page = new Pagination();
         try {
             entities = FXCollections.observableArrayList(repo.get(page, whereClause));
             entityTable.setItems(entities);
+            entityTable.autosize();
         } catch (SQLException e) {
             System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
         }
@@ -133,6 +171,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      * @return the selected entity
      */
     public T pickEntity() {
+        ObjectProperty<T> selectedItemProperty = new SimpleObjectProperty<>();
         VBox pickLayout = new VBox();
         pickLayout.setAlignment(Pos.TOP_LEFT);
         pickLayout.setSpacing(10.0);
@@ -145,6 +184,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
 
         initTableViewSchema(pickTable);
         fetchEntitiesToTable(pickTable);
+        bindTableToSingleSelectedItemProperty(pickTable, selectedItemProperty);
         pickLayout.getChildren().addAll(
                 pickButton,
                 pickTable);
@@ -268,8 +308,9 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     /**
      * Initialize main scene which configures button and adds them along with
      * table view.
+     * @param sceneTitle the title that should show in the scene
      */
-    private void initMainScene() {
+    private void initMainScene(String sceneTitle) {
         createButton = new MFXButton("Create");
         updateButton = new MFXButton("Update");
         deleteButton = new MFXButton("Delete");
@@ -285,13 +326,17 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         buttonLayout.getChildren().addAll(createButton, updateButton, deleteButton);
 
         VBox sceneLayout = new VBox();
-        sceneLayout.setAlignment(Pos.CENTER);
+        sceneLayout.setAlignment(Pos.BASELINE_LEFT);
         sceneLayout.setSpacing(10.0);
         sceneLayout.setPadding(new Insets(20));
+        entityTable.setPrefHeight(425);
+        entityTable.setPrefWidth(700);
+        entityTable.autosize();
         sceneLayout.getChildren().addAll(
-                new Label(entityClass.getSimpleName()),
+                new Label(sceneTitle),
                 buttonLayout,
-                entityTable);
+                entityTable,
+                pagination);
         mainScene = new Scene(sceneLayout);
     }
 
@@ -359,6 +404,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         formGrid.setAlignment(Pos.TOP_LEFT);
         formGrid.setHgap(10);
         formGrid.setVgap(10);
+        formGrid.setPrefWidth(500);
         formGrid.setPadding(new Insets(25));
     }
 
