@@ -2,6 +2,9 @@ package com.clinic.doctor.domain;
 
 import java.time.LocalDate;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -18,17 +21,27 @@ public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRe
 
     public MedicalRecord(Integer id) {
         super(id);
-        patientId = new SimpleIntegerProperty();
-        doctorId = new SimpleIntegerProperty();
-        prescriptionHeaderId = new SimpleIntegerProperty();
-        symptom = new SimpleStringProperty();
-        treatment = new SimpleStringProperty();
-        checkUpDate = new SimpleObjectProperty<>();
     }
-    
-    private IntegerProperty patientId, doctorId, prescriptionHeaderId;
-    private StringProperty symptom, treatment;
-    private ObjectProperty<LocalDate> checkUpDate;
+
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "patient_id",
+            "doctor_id",
+            "medicine_type",
+            "prescription_header_id",
+            "symptom",
+            "treatment",
+            "check_up_date"
+        );
+    }
+
+    private IntegerProperty patientId = new SimpleIntegerProperty();
+    private IntegerProperty doctorId = new SimpleIntegerProperty();
+    private IntegerProperty prescriptionHeaderId = new SimpleIntegerProperty();
+    private StringProperty symptom = new SimpleStringProperty();
+    private StringProperty treatment = new SimpleStringProperty();
+    private ObjectProperty<LocalDate> checkUpDate = new SimpleObjectProperty<>();
 
     public IntegerProperty patientIdProperty() {
         return this.patientId;
@@ -52,9 +65,6 @@ public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRe
     public ObjectProperty<LocalDate> checkUpDateProperty() {
         return this.checkUpDate;
     }
-
-
-
 
     public MedicalRecord setPatientId(Integer patientId) {
         this.patientId.setValue(patientId);

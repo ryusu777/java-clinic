@@ -1,6 +1,8 @@
 package com.clinic.doctor.domain;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -20,13 +22,20 @@ public class CheckUpDetail extends AbstractEntity implements Copyable <CheckUpDe
 
     public CheckUpDetail(Integer id) {
         super(id);
-        checkUpCategoryId = new SimpleIntegerProperty();
-        medicalRecordId = new SimpleIntegerProperty();
-        checkUpResult = new SimpleStringProperty();
     }
 
-    private IntegerProperty checkUpCategoryId, medicalRecordId;
-    private StringProperty checkUpResult;
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "check_up_category_id",
+            "medical_record_id",
+            "check_up_result"
+        );
+    }
+
+    private IntegerProperty checkUpCategoryId = new SimpleIntegerProperty();
+    private IntegerProperty medicalRecordId = new SimpleIntegerProperty();
+    private StringProperty checkUpResult = new SimpleStringProperty();
 
     public IntegerProperty checkUpCategoryIdProperty() {
         return this.checkUpCategoryId;

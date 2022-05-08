@@ -2,6 +2,9 @@ package com.clinic.doctor.domain;
 
 import java.time.LocalDate;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
 
@@ -14,11 +17,16 @@ public class CheckUpCategory extends AbstractEntity implements Copyable <CheckUp
 
     public CheckUpCategory(Integer id) {
         super(id);
-        categoryName = new SimpleStringProperty();
     }
-    
-    private StringProperty categoryName;
 
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "category_name"
+        );
+    }
+
+    private StringProperty categoryName = new SimpleStringProperty();
 
     public StringProperty categoryNameProperty() {
         return this.categoryName;
