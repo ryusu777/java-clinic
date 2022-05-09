@@ -1,6 +1,8 @@
 package com.clinic.receptionist.domain;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -14,29 +16,25 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
 
     public DoctorSchedule(Integer id) {
         super(id);
-        doctorId = new SimpleIntegerProperty();
-        worksStart = new SimpleObjectProperty<>();
-        worksEnd = new SimpleObjectProperty<>();
     }
 
     public DoctorSchedule(){
-        super(null);
+        this(null);
     }
     
-    private IntegerProperty doctorId;
-    private ObjectProperty<LocalDateTime> worksStart, worksEnd;
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "doctor_id",
+            "works_end",
+            "works_start"
+        );
+    }
 
-    
+    private IntegerProperty doctorId = new SimpleIntegerProperty();
+
     public IntegerProperty doctorIdProperty(){
         return doctorId;
-    }
-
-    public ObjectProperty<LocalDateTime> worksStartProperty(){
-        return worksStart;
-    }
-
-    public ObjectProperty<LocalDateTime> worksEndProperty(){
-        return worksEnd;
     }
 
     public Integer getDoctorId(){
@@ -48,6 +46,13 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
         return this;
     }
 
+
+    private ObjectProperty<LocalDateTime> worksStart = new SimpleObjectProperty<>();
+
+    public ObjectProperty<LocalDateTime> worksStartProperty(){
+        return worksStart;
+    }
+
     public LocalDateTime getWorksStart(){
         return worksStart.get();
     }
@@ -55,6 +60,13 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
     public DoctorSchedule setWorksStart(LocalDateTime worksStart){
         this.worksStart.setValue(worksStart);
         return this;
+    }
+
+
+    private ObjectProperty<LocalDateTime> worksEnd = new SimpleObjectProperty<>();
+
+    public ObjectProperty<LocalDateTime> worksEndProperty(){
+        return worksEnd;
     }
 
     public LocalDateTime getWorksEnd(){
@@ -66,6 +78,18 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
         return this;
     }
 
+
+    private Doctor doctor = new Doctor();
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public DoctorSchedule setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        return this;
+    }
+
     @Override
     public DoctorSchedule copy(DoctorSchedule entity) {
         return this
@@ -73,5 +97,4 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
         .setWorksStart(entity.getWorksStart())
         .setWorksEnd(entity.getWorksEnd());
     }
-
 }

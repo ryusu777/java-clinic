@@ -1,6 +1,8 @@
 package com.clinic.receptionist.domain;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.Copyable;
@@ -14,21 +16,29 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
 
     public Appointment(Integer id) {
         super(id);
-        doctorId = new SimpleIntegerProperty();
-        patientId =new  SimpleIntegerProperty();
-        appointmentDateTime = new SimpleObjectProperty<>();
-        category = new SimpleIntegerProperty();
-        status = new SimpleIntegerProperty();
     }
 
     public Appointment(){
         super(null);
     }
     
-    private IntegerProperty doctorId, patientId, category, status;
-    private ObjectProperty<LocalDateTime>appointmentDateTime;
-
+    @Override
+    public List<String> getTableFieldNames() {
+        return Arrays.asList(
+            "doctor_id",
+            "patient_id",
+            "appointment_date_time",
+            "category",
+            "status"
+        );
+    }
     
+    private IntegerProperty doctorId = new SimpleIntegerProperty();
+    private IntegerProperty patientId = new SimpleIntegerProperty();
+    private IntegerProperty category = new SimpleIntegerProperty();
+    private IntegerProperty status = new SimpleIntegerProperty();
+    private ObjectProperty<LocalDateTime>appointmentDateTime = new SimpleObjectProperty<>();
+
     public IntegerProperty doctorIdProperty(){
         return doctorId;
     }
@@ -58,7 +68,7 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return this;
     }
 
-    public Integer getpatientId(){
+    public Integer getPatientId(){
         return patientId.get();
     }
 
@@ -67,7 +77,7 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return this;
     }
 
-    public LocalDateTime getappointmentDateTime(){
+    public LocalDateTime getAppointmentDateTime(){
         return appointmentDateTime.get();
     }
 
@@ -98,10 +108,9 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
     public Appointment copy(Appointment entity) {
         return this
         .setDoctorId(entity.getDoctorId())
-        .setPatientId(entity.getpatientId())
-        .setAppointmentDateTime(entity.getappointmentDateTime())
+        .setPatientId(entity.getPatientId())
+        .setAppointmentDateTime(entity.getAppointmentDateTime())
         .setCategory(entity.getCategory())
         .setStatus(entity.getStatus());
     }
-
 }

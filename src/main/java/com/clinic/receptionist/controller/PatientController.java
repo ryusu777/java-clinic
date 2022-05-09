@@ -4,6 +4,7 @@ import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.receptionist.domain.Patient;
 import com.clinic.receptionist.repository.PatientRepository;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
@@ -50,6 +51,19 @@ public class PatientController extends AbstractCrudController<Patient, PatientRe
         guardianTelpField.textProperty().bindBidirectional(entity.guardianTelpProperty());
         
         formGrid.add(generateSubmitButton("Submit", entity), 0, 9);
+    }
+
+    @Override
+    protected void initTableViewSchema(MFXTableView<Patient> entityTable) {
+        addTableColumn(entityTable, "Id", Patient::getId);
+        addTableColumn(entityTable, "Name", Patient::getName);
+        addTableColumn(entityTable, "No KTP", Patient::getNoKtp);
+        addTableColumn(entityTable, "DoB", Patient::getDob);
+        addTableColumn(entityTable, "Gender", Patient::getGender);
+        addTableColumn(entityTable, "Address", Patient::getAddress);
+        addTableColumn(entityTable, "Telp", Patient::getTelp);
+        addTableColumn(entityTable, "Guardian Name", Patient::getGuardianName);
+        addTableColumn(entityTable, "Guardian Telp", Patient::getGuardianTelp);
     }
     
 }
