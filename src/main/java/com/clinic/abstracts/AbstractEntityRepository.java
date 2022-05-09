@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.clinic.ClinicConnection;
 import com.clinic.Pagination;
@@ -25,7 +24,7 @@ import com.clinic.Pagination;
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
 public abstract class AbstractEntityRepository<T extends AbstractEntity> extends ClinicConnection {
-    private Class<T> entityClass;
+    public Class<T> entityClass;
 
     protected AbstractEntityRepository(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -59,7 +58,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      */
     public List<T> get(Pagination pagination, String whereClause) throws SQLException {
         ResultSet countResult = query("SELECT count(id) as number FROM "
-            + tableName() + ";");
+                + tableName() + ";");
         countResult.next();
         pagination.setTotalRecords(countResult.getInt(1));
 
@@ -71,13 +70,12 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
                     + " " + pagination.getSortOrder();
         }
 
-
         int recordsPerPage = pagination.getRecordsPerPage() != 0
-            ? pagination.getRecordsPerPage() 
-            : 10;
+                ? pagination.getRecordsPerPage()
+                : 10;
 
-        int skip = (pagination.getPageNumber() != 0 ? pagination.getPageNumber() - 1 : 0) 
-            * recordsPerPage;
+        int skip = (pagination.getPageNumber() != 0 ? pagination.getPageNumber() - 1 : 0)
+                * recordsPerPage;
         fetchQuery += " LIMIT " + skip + "," + recordsPerPage + ";";
 
         ResultSet queryResult = query(fetchQuery);
@@ -86,6 +84,35 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
             entities.add(mapEntity(queryResult));
         }
 
+        return entities;
+    }
+
+    /**
+     * Join entity with another entity using repository
+     * the fields to join the two entities. Example: a.field_id = b.id
+     * @param childRepo
+     * @param foreignKeyInParent as field_id
+     * @param primaryKeyInChild as id
+     * @param childSetterName a setter of second entity in first entity
+     * @param childClass class of the setter
+     * @return
+     * @throws SQLException
+     */
+    public List<T> join(AbstractEntityRepository<?> childRepo, String foreignKeyInParent, String primaryKeyInChild, String childSetterName, Class<?> childClass) throws SQLException {
+        ResultSet queryResult = query("SELECT * FROM " + tableName() + " a JOIN " + childRepo.tableName() + 
+                                " b ON a." + foreignKeyInParent + " = b." + primaryKeyInChild + ";");
+        List<T> entities = new ArrayList<>();
+        Method method;
+        while(queryResult.next()){
+            try {
+                T resultEntity = mapEntity(queryResult, "a");
+                method = resultEntity.getClass().getMethod(childSetterName, childClass);
+                method.invoke(resultEntity, childRepo.mapEntity(queryResult, "b"));
+                entities.add(resultEntity);
+            } catch (Exception e) {
+                System.out.println("Exception found in AbstractEntityRepository.join(): " + e.toString());
+            }
+        }
         return entities;
     }
 
