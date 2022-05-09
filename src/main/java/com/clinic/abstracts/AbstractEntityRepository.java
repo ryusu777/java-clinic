@@ -181,9 +181,9 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
                 else if (method.getParameterTypes()[0] == Timestamp.class)
                     method.invoke(resultEntity, queryResult.getTimestamp(fieldName));
                 else if (method.getParameterTypes()[0] == LocalDate.class)
-                    method.invoke(resultEntity, queryResult.getDate(fieldName));
+                    method.invoke(resultEntity, queryResult.getDate(fieldName).toLocalDate());
                 else if (method.getParameterTypes()[0] == LocalDateTime.class)
-                    method.invoke(resultEntity, queryResult.getTimestamp(fieldName));
+                    method.invoke(resultEntity, queryResult.getTimestamp(fieldName).toLocalDateTime());
             }
             return resultEntity;
         } catch (Exception e) {
