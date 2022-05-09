@@ -366,6 +366,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         entityTable.getTableColumns().add(tableColumn);
     }
 
+    protected <C> void addTableColumn(MFXTableView<T> entityTable, String columnLabel, Function<T, C> childExtractor, Function<C, Serializable> extractor) {
+        MFXTableColumn<T> tableColumn = new MFXTableColumn<>(columnLabel);
+        tableColumn.setRowCellFactory(entity -> new MFXTableRowCell<>(childExtractor.andThen((t) -> extractor.apply(t))));
+        tableColumn.setColumnResizable(true);
+        entityTable.getTableColumns().add(tableColumn);
+    }
+
     /**
      * Get copy of selected item in the table.
      * @return new identical entity object with the selected item.
