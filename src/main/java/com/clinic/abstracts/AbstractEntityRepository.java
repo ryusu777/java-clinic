@@ -91,29 +91,62 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
      * Join entity with another entity using repository
      * the fields to join the two entities. Example: a.field_id = b.id
      * @param childRepo
-     * @param foreignKeyInParent as field_id
-     * @param primaryKeyInChild as id
-     * @param childSetterName a setter of second entity in first entity
-     * @param childClass class of the setter
+     * @param foreignKeyInParent
+     * @param primaryKeyInChild
      * @return
      * @throws SQLException
+     * @author Veronica Yose Ardilla
      */
-    public List<T> join(AbstractEntityRepository<?> childRepo, String foreignKeyInParent, String primaryKeyInChild, String childSetterName, Class<?> childClass) throws SQLException {
-        ResultSet queryResult = query("SELECT * FROM " + tableName() + " a JOIN " + childRepo.tableName() + 
+    public List<T> join(AbstractEntityRepository<?> childRepo, String foreignKeyInParent, String primaryKeyInChild) {
+        try {
+            ResultSet queryResult = query("SELECT * FROM " + tableName() + " a JOIN " + childRepo.tableName() + 
                                 " b ON a." + foreignKeyInParent + " = b." + primaryKeyInChild + ";");
-        List<T> entities = new ArrayList<>();
-        Method method;
-        while(queryResult.next()){
-            try {
+            List<T> entities = new ArrayList<>();
+            Method method;
+            while(queryResult.next()){
                 T resultEntity = mapEntity(queryResult, "a");
-                method = resultEntity.getClass().getMethod(childSetterName, childClass);
+                String childSetterName = "set" + childRepo.entityClass.getSimpleName();
+                method = resultEntity.getClass().getMethod(childSetterName, childRepo.entityClass);
                 method.invoke(resultEntity, childRepo.mapEntity(queryResult, "b"));
                 entities.add(resultEntity);
-            } catch (Exception e) {
-                System.out.println("Exception found in AbstractEntityRepository.join(): " + e.toString());
             }
+            return entities;
+        } catch (Exception e) {
+            System.out.println("Exception found in AbstractEntityRepository.join(): " + e.toString());
         }
-        return entities;
+
+        return null;
+    }
+
+    public List<T> join(AbstractEntityRepository<?> childRepo, String foreignKeyInParent) throws SQLException {
+        return join(childRepo, foreignKeyInParent, "id");
+    }
+
+    /**
+     * Search with input as "word"
+     * @param pagination
+     * @param word
+     * @return
+     * @throws SQLException
+     * @author Sabrina Yose Amelia
+     */
+    public List<T> search(Pagination pagination, String word) throws SQLException {
+        String query = " WHERE ";
+        try {
+            T entity = entityClass.getConstructor().newInstance();
+
+            for (String field : entity.getTableFieldNames()) {
+                query += field + " LIKE " + " '%" + word + "%' OR ";
+            }
+            query = query.substring(0, query.length()-3);
+
+            return get(pagination, query);
+        } catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            System.out.println("Exception found in AbstractEntityRepository.search(): " + e.toString());
+        }
+        return null;
     }
 
     /**
