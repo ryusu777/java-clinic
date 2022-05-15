@@ -11,7 +11,9 @@ import com.clinic.abstracts.AbstractEntity;
 import com.clinic.extension.DateTimePicker;
 import com.clinic.interfaces.Copyable;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
@@ -20,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 
@@ -43,8 +46,9 @@ public class GridFormBuilder {
      * @param property property which the field should bidirect bind
      */
     public GridFormBuilder addTextField(String fieldPrompt, StringProperty property) {
-        MFXTextField field = new MFXTextField();
-        formGrid.addRow(currentRow, new Label(fieldPrompt), field);
+        MFXTextField field = generateStyledTextField();
+        field.setFloatingText(fieldPrompt);
+        formGrid.addRow(currentRow, field);
         field.textProperty().bindBidirectional(property);
         currentRow++;
         return this;
@@ -56,13 +60,14 @@ public class GridFormBuilder {
      * @param property property which the field should bidirect bind
      */
     public GridFormBuilder addIntegerField(String fieldPrompt, IntegerProperty property) {
-        MFXTextField field = new MFXTextField();
+        MFXTextField field = generateStyledTextField();
+        field.setFloatingText(fieldPrompt);
         field.textProperty().addListener((observable, oldVal, newVal) -> {
             if (!newVal.matches("\\d{0,9}")) {
                 field.setText(oldVal);
             }
         });
-        formGrid.addRow(currentRow, new Label(fieldPrompt), field);
+        formGrid.addRow(currentRow, field);
         field.textProperty().bindBidirectional(property, new StringConverter<Number>() {
             @Override
             public Number fromString(String value) {
@@ -84,13 +89,14 @@ public class GridFormBuilder {
      * @param property property which the field should bidirect bind
      */
     public GridFormBuilder addBigDecimalField(String fieldPrompt, Property<BigDecimal> property) {
-        MFXTextField field = new MFXTextField();
+        MFXTextField field = generateStyledTextField();
+        field.setFloatingText(fieldPrompt);
         field.textProperty().addListener((observable, oldVal, newVal) -> {
             if (!newVal.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
                 field.setText(oldVal);
             }
         });
-        formGrid.addRow(currentRow, new Label(fieldPrompt), field);
+        formGrid.addRow(currentRow, field);
         field.textProperty().bindBidirectional(property, new StringConverter<BigDecimal>() {
             @Override
             public String toString(BigDecimal value) {
@@ -167,9 +173,10 @@ public class GridFormBuilder {
      */
     public <T extends AbstractEntity & Copyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
             AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
-        MFXTextField field = new MFXTextField();
+        MFXTextField field = generateStyledTextField();
+        field.setFloatingText(fieldPrompt);
         field.setDisable(true);
-        Button pickButton = new Button("Pick");
+        MFXButton pickButton = new MFXButton("Pick");
         try {
             Method propertyGetterMethod = controller.getEntityClass().getMethod(propertyGetterMethodName,
                     (Class[]) null);
@@ -204,7 +211,7 @@ public class GridFormBuilder {
         } catch (Exception e) {
             System.out.println("Exception caught in GridFormBuilder.addPickField(): " + e.toString());
         }
-        formGrid.addRow(currentRow, new Label(fieldPrompt), field, pickButton);
+        formGrid.addRow(currentRow, field, pickButton);
         currentRow++;
         return this;
     }
@@ -226,5 +233,14 @@ public class GridFormBuilder {
         formGrid.addRow(currentRow, button);
         currentRow++;
         return this;
+    }
+
+    /**
+     * Generate an MFXTextField that has been styled.
+     */
+    private MFXTextField generateStyledTextField() {
+        MFXTextField field = new MFXTextField();
+        field.setPrefWidth(200);
+        return field;
     }
 }
