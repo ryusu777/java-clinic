@@ -104,6 +104,30 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return this;
     }
 
+    private Doctor doctor = new Doctor();
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public Appointment setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        return this;
+    }
+
+    
+    private Patient patient = new Patient();
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public Appointment setPatient(Patient patient) {
+        this.patient = patient;
+        return this;
+    }
+
+
     @Override
     public Appointment copy(Appointment entity) {
         return this

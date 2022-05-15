@@ -11,7 +11,7 @@ public class AppointmentRepository extends AbstractEntityRepository<Appointment>
     }
 
     @Override
-    protected String tableName() {
+    public String tableName() {
         return "appointment";
     }
     
