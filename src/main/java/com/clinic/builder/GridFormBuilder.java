@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.abstracts.AbstractEntity;
@@ -12,11 +14,13 @@ import com.clinic.extension.DateTimePicker;
 import com.clinic.interfaces.Copyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -218,6 +222,17 @@ public class GridFormBuilder {
 
     public GridFormBuilder addEntityGrid(AbstractCrudController<?, ?> controller) {
         formGrid.add(controller.getMainScene().getRoot(), 0, currentRow, 3, 1);
+        currentRow++;
+        return this;
+    }
+
+    public <T> GridFormBuilder addComboBox(String fieldPrompt, Property<T> property, Map<String, T> items) {
+        MFXComboBox<String> comboBox = new MFXComboBox<>(FXCollections.observableArrayList(items.keySet()));
+        comboBox.setFloatingText(fieldPrompt);
+        comboBox.selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            property.setValue(items.get(newValue));
+        });
+        formGrid.addRow(currentRow, comboBox);
         currentRow++;
         return this;
     }
