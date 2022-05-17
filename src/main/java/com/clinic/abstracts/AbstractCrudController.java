@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -49,6 +50,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     public MFXButton createButton;
     public MFXButton updateButton;
     public MFXButton deleteButton;
+    public MFXButton refreshButton;
 
     private Class<T> entityClass;
     private GridPane formGrid;
@@ -314,16 +316,18 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         createButton = new MFXButton("Create");
         updateButton = new MFXButton("Update");
         deleteButton = new MFXButton("Delete");
+        refreshButton = new MFXButton("Refresh");
         createButton.setOnAction(event -> showCreateForm());
         updateButton.setOnAction(event -> showUpdateForm());
         deleteButton.setOnAction(event -> showDeleteForm());
+        refreshButton.setOnAction(event -> fetchEntitiesToTable());
 
         updateButton.disableProperty().bind(selectedItemProperty.isNull());
         deleteButton.disableProperty().bind(selectedItemProperty.isNull());
 
         HBox buttonLayout = new HBox();
         buttonLayout.setSpacing(5.0);
-        buttonLayout.getChildren().addAll(createButton, updateButton, deleteButton);
+        buttonLayout.getChildren().addAll(createButton, updateButton, deleteButton, refreshButton);
 
         VBox sceneLayout = new VBox();
         sceneLayout.setAlignment(Pos.BASELINE_LEFT);
@@ -332,8 +336,14 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         entityTable.setPrefHeight(425);
         entityTable.setPrefWidth(700);
         entityTable.autosize();
+        Label label = new Label(sceneTitle);
+        label.setMaxWidth(Double.MAX_VALUE);
+        AnchorPane.setLeftAnchor(label, 0.0);
+        AnchorPane.setRightAnchor(label, 0.0);
+        label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-font-weight: bold");
         sceneLayout.getChildren().addAll(
-                new Label(sceneTitle),
+                label,
                 buttonLayout,
                 entityTable,
                 pagination);
