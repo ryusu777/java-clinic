@@ -50,6 +50,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
     public MFXButton createButton;
     public MFXButton updateButton;
     public MFXButton deleteButton;
+    public MFXButton refreshButton;
 
     private Class<T> entityClass;
     private GridPane formGrid;
@@ -315,16 +316,18 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         createButton = new MFXButton("Create");
         updateButton = new MFXButton("Update");
         deleteButton = new MFXButton("Delete");
+        refreshButton = new MFXButton("Refresh");
         createButton.setOnAction(event -> showCreateForm());
         updateButton.setOnAction(event -> showUpdateForm());
         deleteButton.setOnAction(event -> showDeleteForm());
+        refreshButton.setOnAction(event -> fetchEntitiesToTable());
 
         updateButton.disableProperty().bind(selectedItemProperty.isNull());
         deleteButton.disableProperty().bind(selectedItemProperty.isNull());
 
         HBox buttonLayout = new HBox();
         buttonLayout.setSpacing(5.0);
-        buttonLayout.getChildren().addAll(createButton, updateButton, deleteButton);
+        buttonLayout.getChildren().addAll(createButton, updateButton, deleteButton, refreshButton);
 
         VBox sceneLayout = new VBox();
         sceneLayout.setAlignment(Pos.BASELINE_LEFT);
