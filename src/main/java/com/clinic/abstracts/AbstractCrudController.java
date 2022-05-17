@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -332,8 +333,14 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         entityTable.setPrefHeight(425);
         entityTable.setPrefWidth(700);
         entityTable.autosize();
+        Label label = new Label(sceneTitle);
+        label.setMaxWidth(Double.MAX_VALUE);
+        AnchorPane.setLeftAnchor(label, 0.0);
+        AnchorPane.setRightAnchor(label, 0.0);
+        label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-font-weight: bold");
         sceneLayout.getChildren().addAll(
-                new Label(sceneTitle),
+                label,
                 buttonLayout,
                 entityTable,
                 pagination);
