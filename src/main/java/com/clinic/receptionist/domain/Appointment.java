@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class Appointment extends AbstractEntity implements Copyable<Appointment>{
+public class Appointment extends AbstractEntity implements ICopyable<Appointment>{
 
     public Appointment(Integer id) {
         super(id);
@@ -21,6 +21,10 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
     public Appointment(){
         super(null);
     }
+
+    public final static int NOT_PRESENT = 1, WAITING = 2, CONSULTING = 3, DONE = 4,
+    APPOINTMENT = 1, QUEUE = 2, CONTROL = 3;
+    
     
     @Override
     public List<String> getTableFieldNames() {
@@ -90,6 +94,18 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
         return category.get();
     }
 
+    public String getCategoryDetail(){
+        switch(getCategory()){
+            case 1 : 
+                return "Appointment";
+            case 2 :
+                return "Queue";
+            case 3:
+                return "Control";
+        }
+        return null;
+    }
+
     public Appointment setCategory(Integer category){
         this.category.setValue(category);
         return this;
@@ -97,6 +113,29 @@ public class Appointment extends AbstractEntity implements Copyable<Appointment>
 
     public Integer getStatus(){
         return status.get();
+    }
+
+    public String getStatusDetail(){
+        switch(getStatus()){
+            case 1 : 
+                return "Not Present";
+            case 2 :
+                return "Waiting";
+            case 3:
+                return "Consulting";
+            case 4 :
+                return "Done";
+        }
+        return null;
+    }
+
+    public String getAppointmentDate(){
+        return getAppointmentDateTime().getDayOfMonth() + "-" + getAppointmentDateTime().getMonth().toString() + "-" + 
+                getAppointmentDateTime().getYear();
+    }
+
+    public String getAppointmentTime(){
+        return getAppointmentDateTime().getHour() + ":" + getAppointmentDateTime().getMinute();
     }
 
     public Appointment setStatus(Integer status){

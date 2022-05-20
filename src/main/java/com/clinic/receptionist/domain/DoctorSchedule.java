@@ -1,18 +1,20 @@
 package com.clinic.receptionist.domain;
 
-import java.time.LocalDateTime;
+
 import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 
-public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSchedule>{
+
+
+public class DoctorSchedule extends AbstractEntity implements ICopyable<DoctorSchedule>{
 
     public DoctorSchedule(Integer id) {
         super(id);
@@ -26,6 +28,7 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
     public List<String> getTableFieldNames() {
         return Arrays.asList(
             "doctor_id",
+            "days",
             "works_end",
             "works_start"
         );
@@ -46,38 +49,70 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
         return this;
     }
 
+    public final static String MONDAY = "1", TUESDAY = "2", WEDNESDAY = "3", THURSDAY = "4", FRIDAY = "5";
 
-    private ObjectProperty<LocalDateTime> worksStart = new SimpleObjectProperty<>();
+    private StringProperty worksStart = new SimpleStringProperty();
 
-    public ObjectProperty<LocalDateTime> worksStartProperty(){
+    public StringProperty worksStartProperty(){
         return worksStart;
     }
 
-    public LocalDateTime getWorksStart(){
+    public String getWorksStart(){
         return worksStart.get();
     }
 
-    public DoctorSchedule setWorksStart(LocalDateTime worksStart){
+    public DoctorSchedule setWorksStart(String worksStart){
         this.worksStart.setValue(worksStart);
         return this;
     }
 
 
-    private ObjectProperty<LocalDateTime> worksEnd = new SimpleObjectProperty<>();
+    private StringProperty worksEnd = new SimpleStringProperty();
 
-    public ObjectProperty<LocalDateTime> worksEndProperty(){
+    public StringProperty worksEndProperty(){
         return worksEnd;
     }
 
-    public LocalDateTime getWorksEnd(){
+    public String getWorksEnd(){
         return worksEnd.get();
     }
 
-    public DoctorSchedule setWorksEnd(LocalDateTime worksEnd){
+    public DoctorSchedule setWorksEnd(String worksEnd){
         this.worksEnd.setValue(worksEnd);
         return this;
     }
 
+    
+    private StringProperty days = new SimpleStringProperty();
+
+    public StringProperty daysProperty(){
+        return days;
+    }
+
+    public String getDays(){
+        return days.get();
+    }
+
+    public String getDayNames(){
+        switch(getDays()){
+            case "1" : 
+                return "Monday";
+            case "2" :
+                return "Tuesday";
+            case "3":
+                return "Wednesday";
+            case "4" :
+                return "Thursday";
+            case "5":
+                return "Friday";
+        }
+        return null;
+    }
+
+    public DoctorSchedule setDays(String days){
+        this.days.setValue(days);
+        return this;
+    }
 
     private Doctor doctor = new Doctor();
 
@@ -94,6 +129,7 @@ public class DoctorSchedule extends AbstractEntity implements Copyable<DoctorSch
     public DoctorSchedule copy(DoctorSchedule entity) {
         return this
         .setDoctorId(entity.getDoctorId())
+        .setDays(entity.getDays())
         .setWorksStart(entity.getWorksStart())
         .setWorksEnd(entity.getWorksEnd());
     }
