@@ -37,8 +37,6 @@ public class DoctorScheduleController extends AbstractCrudController<DoctorSched
             .addTextField("Works Start", entity.worksStartProperty())
             .addTextField("Works End", entity.worksEndProperty())
             .addComboBox("Day", entity.daysProperty(), items)
-            // .addTextField("Start", entity.startProperty())
-            // .addTextField("End", entity.endProperty())
             .addButton(generateSubmitButton("Submit", entity));
     }
     @Override
