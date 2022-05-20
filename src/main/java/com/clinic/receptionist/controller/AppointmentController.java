@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.clinic.Pagination;
 import com.clinic.abstracts.AbstractCrudController;
@@ -30,13 +32,20 @@ public class AppointmentController extends AbstractCrudController<Appointment, A
     }
     @Override
     protected void setFormGrid(GridPane formGrid, Appointment entity) {
+        Map<String, Integer> items = new LinkedHashMap<>();
+        items.put("Not Present", Appointment.NOT_PRESENT);
+        items.put("Waiting", Appointment.WAITING);
+        items.put("Consulting", Appointment.CONSULTING);
+        items.put("Done", Appointment.DONE);
+        
         entity.setCategory(1);
         new GridFormBuilder(formGrid)
             .addPickField("Doctor", entity.doctorIdProperty(), CrudControllerFactory.getController(DoctorController.class), "getName")
             .addPickField("Patient", entity.patientIdProperty(), CrudControllerFactory.getController(PatientController.class), "getName")
             .addLocalDateTimeField("Date&Time", entity.appointmentDateTimeProperty())
-            .addIntegerField("Status", entity.statusProperty());
-        formGrid.add(generateSubmitButton("Submit", entity), 0, 6);
+            .addIntegerField("Status", entity.statusProperty())
+            .addComboBox("Status", entity.statusProperty().asObject(), items)
+            .addButton(generateSubmitButton("Submit", entity));
     }
     
     @Override
@@ -44,7 +53,7 @@ public class AppointmentController extends AbstractCrudController<Appointment, A
         try{
             ObservableList<Appointment> entities;
             entities = FXCollections.observableArrayList(repo.join(EntityRepositoryFactory.getRepository(DoctorRepository.class), 
-            EntityRepositoryFactory.getRepository(PatientRepository.class),"doctor_id", "patient_id", " WHERE category = " + 1));
+            EntityRepositoryFactory.getRepository(PatientRepository.class),"doctor_id", "patient_id", " WHERE category = " + 1 + " ORDER BY appointment_date_time"));
             entityTable.setItems(entities);
         } catch (SQLException e){
             System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
@@ -54,9 +63,10 @@ public class AppointmentController extends AbstractCrudController<Appointment, A
     @Override
     protected void initTableViewSchema(MFXTableView<Appointment> entityTable) {
         addTableColumn(entityTable, "Id", Appointment::getId);
-        addTableColumn(entityTable, "Doctor Id", Appointment::getDoctor, Doctor::getName);
-        addTableColumn(entityTable, "Patient Id", Appointment::getPatient, Patient::getName);
-        addTableColumn(entityTable, "Date & Time", Appointment::getAppointmentDateTime);
-        addTableColumn(entityTable, "Status", Appointment::getStatus);
+        addTableColumn(entityTable, "Doctor", Appointment::getDoctor, Doctor::getName);
+        addTableColumn(entityTable, "Patient", Appointment::getPatient, Patient::getName);
+        addTableColumn(entityTable, "Date", Appointment::getAppointmentDate);
+        addTableColumn(entityTable, "Time", Appointment::getAppointmentTime);
+        addTableColumn(entityTable, "Status", Appointment::getStatusDetail);
     }
 }

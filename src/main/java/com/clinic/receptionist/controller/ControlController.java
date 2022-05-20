@@ -39,7 +39,7 @@ public class ControlController extends AbstractCrudController<Appointment, Appoi
         try{
             ObservableList<Appointment> entities;
             entities = FXCollections.observableArrayList(repo.join(EntityRepositoryFactory.getRepository(DoctorRepository.class), 
-            EntityRepositoryFactory.getRepository(PatientRepository.class),"doctor_id", "patient_id", " WHERE category = " + 3));
+            EntityRepositoryFactory.getRepository(PatientRepository.class),"doctor_id", "patient_id", " WHERE category = " + 3 + " ORDER BY appointment_date_time "));
             entityTable.setItems(entities);
         } catch (SQLException e){
             System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
@@ -49,9 +49,10 @@ public class ControlController extends AbstractCrudController<Appointment, Appoi
     @Override
     protected void initTableViewSchema(MFXTableView<Appointment> entityTable) {
         addTableColumn(entityTable, "Id", Appointment::getId);
-        addTableColumn(entityTable, "Doctor Id", Appointment::getDoctor, Doctor::getName);
-        addTableColumn(entityTable, "Patient Id", Appointment::getPatient, Patient::getName);
-        addTableColumn(entityTable, "Date & Time", Appointment::getAppointmentDateTime);
-        addTableColumn(entityTable, "Status", Appointment::getStatus);
+        addTableColumn(entityTable, "Doctor", Appointment::getDoctor, Doctor::getName);
+        addTableColumn(entityTable, "Patient", Appointment::getPatient, Patient::getName);
+        addTableColumn(entityTable, "Date", Appointment::getAppointmentDate);
+        addTableColumn(entityTable, "Time", Appointment::getAppointmentTime);
+        addTableColumn(entityTable, "Status", Appointment::getStatusDetail);
     }
 }
