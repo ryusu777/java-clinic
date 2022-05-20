@@ -27,6 +27,8 @@ public class AbstractPerson extends AbstractEntity{
     private ObjectProperty<LocalDate> dob;
     private StringProperty name, noKtp, gender, address, telp;
 
+    public final static String FEMALE = "F", MALE = "M";
+
     public StringProperty nameProperty(){
         return name;
     }
@@ -80,6 +82,16 @@ public class AbstractPerson extends AbstractEntity{
 
     public String getGender(){
         return gender.get();
+    }
+
+    public String getGenderDetails(){
+        switch(getGender()){
+            case "F" : 
+                return "Female";
+            case "M" :
+                return "Male";
+        }
+        return null;
     }
 
     public AbstractPerson setGender(String gender){
