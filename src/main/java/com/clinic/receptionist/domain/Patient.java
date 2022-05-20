@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractPerson;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Patient extends AbstractPerson implements Copyable<Patient>{
+public class Patient extends AbstractPerson implements ICopyable<Patient>{
     public Patient(Integer id){
         super(id);
     }

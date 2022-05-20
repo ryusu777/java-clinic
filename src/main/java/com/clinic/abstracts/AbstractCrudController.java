@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 import com.clinic.Pagination;
 import com.clinic.factories.EntityRepositoryFactory;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPagination;
@@ -42,7 +42,7 @@ import javafx.stage.Stage;
  * 
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
-public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
+public abstract class AbstractCrudController<T extends AbstractEntity & ICopyable<T>, S extends AbstractEntityRepository<T>> {
     public final static int CREATE_ACTION = 1, UPDATE_ACTION = 2, DELETE_ACTION = 3;
     public MFXTableView<T> entityTable;
     public MFXPagination pagination;

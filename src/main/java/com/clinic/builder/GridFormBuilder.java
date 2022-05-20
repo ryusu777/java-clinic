@@ -11,7 +11,7 @@ import java.util.Map;
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.extension.DateTimePicker;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -175,7 +175,7 @@ public class GridFormBuilder {
      * @param propertyGetterMethodName the name of getter method of the picked 
      * entity to display in textfield
      */
-    public <T extends AbstractEntity & Copyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
+    public <T extends AbstractEntity & ICopyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
             AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
         MFXTextField field = generateStyledTextField();
         field.setFloatingText(fieldPrompt);
