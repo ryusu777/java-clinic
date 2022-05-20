@@ -1,13 +1,9 @@
 package com.clinic.receptionist.controller;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.clinic.Pagination;
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.builder.GridFormBuilder;
 import com.clinic.factories.CrudControllerFactory;
