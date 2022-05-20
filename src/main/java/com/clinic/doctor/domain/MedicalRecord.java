@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,7 +14,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRecord> {
+public class MedicalRecord extends AbstractEntity implements ICopyable <MedicalRecord> {
     public MedicalRecord() {
         this(null);
     }
@@ -28,7 +28,6 @@ public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRe
         return Arrays.asList(
             "patient_id",
             "doctor_id",
-            "medicine_type",
             "prescription_header_id",
             "symptom",
             "treatment",
@@ -54,6 +53,7 @@ public class MedicalRecord extends AbstractEntity implements Copyable <MedicalRe
     public IntegerProperty prescriptionHeaderIdProperty() {
         return this.prescriptionHeaderId;
     }
+
     public StringProperty symptomProperty() {
         return this.symptom;
     }

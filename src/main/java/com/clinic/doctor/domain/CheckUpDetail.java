@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,7 +14,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class CheckUpDetail extends AbstractEntity implements Copyable <CheckUpDetail> {
+public class CheckUpDetail extends AbstractEntity implements ICopyable <CheckUpDetail> {
 
     public CheckUpDetail(){
         this(null);
@@ -74,6 +74,28 @@ public class CheckUpDetail extends AbstractEntity implements Copyable <CheckUpDe
 
     public String getCheckUpResult() {
         return checkUpResult.get();
+    }
+
+    private MedicalRecord medicalRecord = new MedicalRecord();
+
+    public MedicalRecord getMedicalRecord() {
+        return medicalRecord;
+    }
+
+    public CheckUpDetail setMedicalRecord(MedicalRecord medicalRecord) {
+        this.medicalRecord = medicalRecord;
+        return this;
+    }
+
+    private CheckUpCategory checkUpCategory = new CheckUpCategory();
+
+    public CheckUpCategory getCheckUpCategory() {
+        return checkUpCategory;
+    }
+
+    public CheckUpDetail setCheckUpCategory(CheckUpCategory checkUpCategory) {
+        this.checkUpCategory = checkUpCategory;
+        return this;
     }
 
 

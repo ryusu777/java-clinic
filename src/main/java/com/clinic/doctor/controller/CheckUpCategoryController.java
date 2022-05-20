@@ -10,7 +10,7 @@ import javafx.scene.layout.GridPane;
 
 public class CheckUpCategoryController extends AbstractCrudController<CheckUpCategory, CheckUpCategoryRepository>{
     public CheckUpCategoryController() {
-        super(CheckUpCategory.class, CheckUpCategoryRepository.class);
+        super(CheckUpCategory.class, CheckUpCategoryRepository.class, "CHECK UP CATEGORY");
     }
 
     @Override

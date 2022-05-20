@@ -1,12 +1,18 @@
 package com.clinic.doctor.controller;
 
+import java.sql.SQLException;
+
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.builder.GridFormBuilder;
 import com.clinic.doctor.domain.MedicalRecord;
+import com.clinic.doctor.repository.CheckUpDetailRepository;
 import com.clinic.doctor.repository.MedicalRecordRepository;
 import com.clinic.factories.CrudControllerFactory;
-import io.github.palexdev.materialfx.controls.MFXTableView;
+import com.clinic.factories.EntityRepositoryFactory;
 
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,7 +20,7 @@ import javafx.scene.layout.GridPane;
 
 public class MedicalRecordController extends AbstractCrudController<MedicalRecord, MedicalRecordRepository>{
     public MedicalRecordController() {
-        super(MedicalRecord.class, MedicalRecordRepository.class);
+        super(MedicalRecord.class, MedicalRecordRepository.class, "MEDICAL RECORD");
     }
 
     @Override
@@ -36,6 +42,7 @@ public class MedicalRecordController extends AbstractCrudController<MedicalRecor
         addTableColumn(entityTable, "Doctor Id", MedicalRecord::getDoctorId);
         addTableColumn(entityTable, "Prescription Id", MedicalRecord::getPrescriptionHeaderId);
         addTableColumn(entityTable, "Symptom", MedicalRecord::getSymptom);
-        addTableColumn(entityTable, "Treatment", MedicalRecord::getTreatment);   
+        addTableColumn(entityTable, "Treatment", MedicalRecord::getTreatment); 
+        addTableColumn(entityTable, "Check Up Date", MedicalRecord::getCheckUpDate);
     }
 }
