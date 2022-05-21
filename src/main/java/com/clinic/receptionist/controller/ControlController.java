@@ -1,6 +1,8 @@
 package com.clinic.receptionist.controller;
 
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.builder.GridFormBuilder;
@@ -25,13 +27,20 @@ public class ControlController extends AbstractCrudController<Appointment, Appoi
     }
     @Override
     protected void setFormGrid(GridPane formGrid, Appointment entity) {
+        Map<String, Integer> items=new LinkedHashMap<>();
+        items.put("Not Present", Appointment.NOT_PRESENT);
+        items.put("Waiting", Appointment.WAITING);
+        items.put("Consulting", Appointment.CONSULTING);
+        items.put("Done", Appointment.DONE);
+
         entity.setCategory(3);
         new GridFormBuilder(formGrid)
             .addPickField("Doctor", entity.doctorIdProperty(), CrudControllerFactory.getController(DoctorController.class), "getName")
             .addPickField("Patient", entity.patientIdProperty(), CrudControllerFactory.getController(PatientController.class), "getName")
             .addLocalDateTimeField("Date&Time", entity.appointmentDateTimeProperty())
-            .addIntegerField("Status", entity.statusProperty());
-        formGrid.add(generateSubmitButton("Submit", entity), 0, 6);
+            .addIntegerField("Status", entity.statusProperty())
+            .addComboBox("Status", entity.statusProperty().asObject(),items);
+
     }
     
     @Override
