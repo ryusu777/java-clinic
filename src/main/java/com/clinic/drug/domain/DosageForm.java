@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
+public class DosageForm extends AbstractEntity implements ICopyable<DosageForm> {
     public DosageForm() {
         this(null);
     }
@@ -56,14 +56,7 @@ public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
         return this;
     }
 
-    @Override
-    public DosageForm copy(DosageForm entity) {
-        return this
-                .setName(entity.getName())
-                .setDosageFormCategoryId(entity.getDosageFormCategoryId());
-    }
-
-    private DosageFormCategory dosageFormCategory = new DosageFormCategory();
+    private DosageFormCategory dosageFormCategory;
     public DosageFormCategory getDosageFormCategory() {
         return dosageFormCategory;
     }
@@ -71,5 +64,13 @@ public class DosageForm extends AbstractEntity implements Copyable<DosageForm> {
     public DosageForm setDosageFormCategory(DosageFormCategory dosageFormCategory) {
         this.dosageFormCategory = dosageFormCategory;
         return this;
+    }
+
+    @Override
+    public DosageForm copy(DosageForm entity) {
+        return this
+                .setName(entity.getName())
+                .setDosageFormCategoryId(entity.getDosageFormCategoryId())
+                .setDosageFormCategory(entity.getDosageFormCategory());
     }
 }

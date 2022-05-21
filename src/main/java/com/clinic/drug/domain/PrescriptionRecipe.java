@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class PrescriptionRecipe extends AbstractEntity implements Copyable<PrescriptionRecipe> {
+public class PrescriptionRecipe extends AbstractEntity implements ICopyable<PrescriptionRecipe> {
     public PrescriptionRecipe() {
         this(null);
     }

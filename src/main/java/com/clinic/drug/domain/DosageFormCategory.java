@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class DosageFormCategory extends AbstractEntity implements Copyable<DosageFormCategory> {
+public class DosageFormCategory extends AbstractEntity implements ICopyable<DosageFormCategory> {
     public DosageFormCategory() {
         this(null);
     }

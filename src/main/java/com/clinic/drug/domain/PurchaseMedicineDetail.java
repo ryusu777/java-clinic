@@ -1,18 +1,14 @@
 package com.clinic.drug.domain;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
-public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<PurchaseMedicineDetail> {
+public class PurchaseMedicineDetail extends BaseTransactionDetail implements ICopyable<PurchaseMedicineDetail> {
     public PurchaseMedicineDetail() {
         this(null);
     }
@@ -23,39 +19,9 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
 
     @Override
     public List<String> getTableFieldNames() {
-        return Arrays.asList(
-            "price_per_unit",
-            "qty",
-            "purchase_medicine_header_id"
-        );
-    }
-
-    private IntegerProperty pricePerUnit = new SimpleIntegerProperty();
-    public IntegerProperty pricePerUnitProperty() {
-        return this.pricePerUnit;
-    }
-
-    public Integer getPricePerUnit() {
-        return pricePerUnit.get();
-    }
-
-    public PurchaseMedicineDetail setPricePerUnit(Integer pricePerUnit) {
-        this.pricePerUnit.setValue(pricePerUnit);
-        return this;
-    }
-
-    private ObjectProperty<BigDecimal> qty = new SimpleObjectProperty<>();
-    public ObjectProperty<BigDecimal> qtyProperty() {
-        return this.qty;
-    }
-
-    public BigDecimal getQty() {
-        return qty.get();
-    }
-
-    public PurchaseMedicineDetail setQty(BigDecimal qty) {
-        this.qty.setValue(qty);
-        return this;
+        List<String> result = super.getTableFieldNames();
+        result.addAll(Arrays.asList("purchase_medicine_header_id"));
+        return result;
     }
 
     private IntegerProperty purchaseMedicineHeaderId = new SimpleIntegerProperty();
@@ -74,9 +40,9 @@ public class PurchaseMedicineDetail extends AbstractEntity implements Copyable<P
 
     @Override
     public PurchaseMedicineDetail copy(PurchaseMedicineDetail entity) {
-        return this
-            .setPricePerUnit(entity.getPricePerUnit())
+        return (PurchaseMedicineDetail) this
             .setPurchaseMedicineHeaderId(entity.getPurchaseMedicineHeaderId())
+            .setPricePerUnit(entity.getPricePerUnit())
             .setQty(entity.getQty());
     }
 }

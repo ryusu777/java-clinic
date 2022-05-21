@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class QtyUnit extends AbstractEntity implements Copyable<QtyUnit> {
+public class QtyUnit extends AbstractEntity implements ICopyable<QtyUnit> {
     public QtyUnit() {
         this(null);
     }

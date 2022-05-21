@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Medicine extends AbstractEntity implements Copyable<Medicine> {
+public class Medicine extends AbstractEntity implements ICopyable<Medicine> {
     public Medicine(Integer id) {
         super(id);
     }

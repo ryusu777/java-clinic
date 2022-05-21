@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class PrescriptionHeader extends AbstractEntity implements Copyable<PrescriptionHeader> {
+public class PrescriptionHeader extends AbstractEntity implements ICopyable<PrescriptionHeader> {
     public PrescriptionHeader() {
         this(null);
     }

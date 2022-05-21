@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +16,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class MedicineStock extends AbstractEntity implements Copyable<MedicineStock> {
+public class MedicineStock extends AbstractEntity implements ICopyable<MedicineStock> {
     public MedicineStock() {
         this(null);
     }
@@ -181,6 +181,46 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
         return this;
     }
 
+    private Medicine medicine;
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+    public MedicineStock setMedicine(Medicine medicine) {
+        this.medicine = medicine;
+        return this;
+    }
+
+    private DosageForm dosageForm;
+    public DosageForm getDosageForm() {
+        return dosageForm;
+    }
+
+    public MedicineStock setDosageForm(DosageForm dosageForm) {
+        this.dosageForm = dosageForm;
+        return this;
+    }
+
+    private QtyUnit qtyUnit;
+    public QtyUnit getQtyUnit() {
+        return qtyUnit;
+    }
+
+    public MedicineStock setQtyUnit(QtyUnit qtyUnit) {
+        this.qtyUnit = qtyUnit;
+        return this;
+    }
+
+    private PurchaseMedicineDetail purchaseMedicineDetail;
+    public PurchaseMedicineDetail getPurchaseMedicineDetail() {
+        return purchaseMedicineDetail;
+    }
+
+    public MedicineStock setPurchaseMedicineDetail(PurchaseMedicineDetail purchaseMedicineDetail) {
+        this.purchaseMedicineDetail = purchaseMedicineDetail;
+        return this;
+    }
+
     @Override
     public MedicineStock copy(MedicineStock entity) {
         return this
@@ -193,6 +233,10 @@ public class MedicineStock extends AbstractEntity implements Copyable<MedicineSt
             .setBatchNumber(entity.getBatchNumber())
             .setQtyToDosageFormMultiplier(entity.getQtyToDosageFormMultiplier())
             .setHighestRetailPrice(entity.getHighestRetailPrice())
-            .setPurchaseMedicineDetailId(entity.getPurchaseMedicineDetailId());
+            .setPurchaseMedicineDetailId(entity.getPurchaseMedicineDetailId())
+            .setMedicine(new Medicine(entity.getMedicineId()).copy(entity.getMedicine()))
+            .setDosageForm(new DosageForm(entity.getDosageFormId()).copy(entity.getDosageForm()))
+            .setQtyUnit(new QtyUnit(entity.getQtyUnitId()).copy(entity.getQtyUnit()))
+            .setPurchaseMedicineDetail(new PurchaseMedicineDetail(entity.getPurchaseMedicineDetailId()).copy(entity.getPurchaseMedicineDetail()));
     }
 }

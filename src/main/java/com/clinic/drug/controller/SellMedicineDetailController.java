@@ -17,7 +17,7 @@ public class SellMedicineDetailController extends AbstractCrudController<SellMed
     @Override
     protected void setFormGrid(GridPane formGrid, SellMedicineDetail entity) {
         new GridFormBuilder(formGrid)
-            .addIntegerField("Price per unit", entity.pricePropery())
+            .addIntegerField("Price per unit", entity.pricePerUnitProperty())
             .addPickField(
                 "Header Id", 
                 entity.sellMedicineHeaderIdPropery(), 
@@ -36,7 +36,7 @@ public class SellMedicineDetailController extends AbstractCrudController<SellMed
     @Override
     protected void initTableViewSchema(MFXTableView<SellMedicineDetail> entityTable) {
         addTableColumn(entityTable, "Id", SellMedicineDetail::getId);
-        addTableColumn(entityTable, "Price/unit", SellMedicineDetail::getPrice);
+        addTableColumn(entityTable, "Price/unit", SellMedicineDetail::getPricePerUnit);
         addTableColumn(entityTable, "Header Id", SellMedicineDetail::getSellMedicineHeaderId);
         addTableColumn(entityTable, "Prescription Id", SellMedicineDetail::getPrescriptionRecipeId);
     }

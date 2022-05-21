@@ -3,13 +3,12 @@ package com.clinic.drug.domain;
 import java.util.Arrays;
 import java.util.List;
 
-import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class SellMedicineDetail extends AbstractEntity implements Copyable<SellMedicineDetail> {
+public class SellMedicineDetail extends BaseTransactionDetail implements ICopyable<SellMedicineDetail> {
     public SellMedicineDetail() {
         this(null);
     }
@@ -20,28 +19,15 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
 
     @Override
     public List<String> getTableFieldNames() {
-        return Arrays.asList(
-            "price",
+        List<String> result = super.getTableFieldNames();
+        result.addAll(Arrays.asList(
             "sell_medicine_header_id",
             "prescription_recipe_id",
             "medicine_stock_id"
-        );
+        ));
+        return result;
     }
     
-    private IntegerProperty price = new SimpleIntegerProperty();
-    public IntegerProperty pricePropery() {
-        return price;
-    }
-
-    public Integer getPrice() {
-        return price.get();
-    }
-
-    public SellMedicineDetail setPrice(Integer price) {
-        this.price.setValue(price);
-        return this;
-    }
-
     private IntegerProperty sellMedicineHeaderId = new SimpleIntegerProperty();
     public IntegerProperty sellMedicineHeaderIdPropery() {
         return sellMedicineHeaderId;
@@ -86,10 +72,11 @@ public class SellMedicineDetail extends AbstractEntity implements Copyable<SellM
 
     @Override
     public SellMedicineDetail copy(SellMedicineDetail entity) {
-        return this
+        return (SellMedicineDetail) this
             .setPrescriptionRecipeId(entity.getPrescriptionRecipeId())
-            .setPrice(entity.getPrice())
             .setSellMedicineHeaderId(entity.getSellMedicineHeaderId())
-            .setMedicineStockId(entity.getMedicineStockId());
+            .setMedicineStockId(entity.getMedicineStockId())
+            .setQty(entity.getQty())
+            .setPricePerUnit(entity.getPricePerUnit());
     }
 }

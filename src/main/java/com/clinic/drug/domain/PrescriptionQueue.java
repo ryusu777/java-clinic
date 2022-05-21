@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class PrescriptionQueue extends AbstractEntity implements Copyable<PrescriptionQueue> {
+public class PrescriptionQueue extends AbstractEntity implements ICopyable<PrescriptionQueue> {
     public PrescriptionQueue() {
         this(null);
     }

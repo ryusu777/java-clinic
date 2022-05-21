@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class MedicineRequest extends AbstractEntity implements Copyable<MedicineRequest> {
+public class MedicineRequest extends AbstractEntity implements ICopyable<MedicineRequest> {
     public final static int NOT_AVAILABLE = 0, AVAILABLE = 1;
     public MedicineRequest() {
         this(null);
