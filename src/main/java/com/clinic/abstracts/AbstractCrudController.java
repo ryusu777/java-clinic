@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 import com.clinic.Pagination;
 import com.clinic.factories.EntityRepositoryFactory;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPagination;
@@ -42,7 +42,7 @@ import javafx.stage.Stage;
  * 
  * @author Jose Ryu Leonesta <jose.leonesta@student.matanauniversity.ac.id>
  */
-public abstract class AbstractCrudController<T extends AbstractEntity & Copyable<T>, S extends AbstractEntityRepository<T>> {
+public abstract class AbstractCrudController<T extends AbstractEntity & ICopyable<T>, S extends AbstractEntityRepository<T>> {
     public final static int CREATE_ACTION = 1, UPDATE_ACTION = 2, DELETE_ACTION = 3;
     public MFXTableView<T> entityTable;
     public MFXPagination pagination;
@@ -170,9 +170,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
 
     /**
      * Show a table and a pick button to pick an entity from the table
+     * @param whereClause the where clause to apply to the query
      * @return the selected entity
      */
-    public T pickEntity() {
+    public T pickEntity(String whereClause) {
         ObjectProperty<T> selectedItemProperty = new SimpleObjectProperty<>();
         VBox pickLayout = new VBox();
         pickLayout.setAlignment(Pos.TOP_LEFT);
@@ -185,7 +186,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         MFXTableView<T> pickTable = new MFXTableView<>();
 
         initTableViewSchema(pickTable);
-        fetchEntitiesToTable(pickTable);
+        fetchEntitiesToTable(pickTable, whereClause);
         bindTableToSingleSelectedItemProperty(pickTable, selectedItemProperty);
         pickLayout.getChildren().addAll(
                 pickButton,
@@ -201,6 +202,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
         pickStage.setScene(pickScene);
         pickStage.showAndWait();
         return pickResult;
+    }
+
+    /**
+     * Show a table and a pick button to pick an entity from the table
+     */
+    public T pickEntity() {
+        return pickEntity("");
     }
 
     /**
@@ -418,11 +426,6 @@ public abstract class AbstractCrudController<T extends AbstractEntity & Copyable
      */
     private void initFormGrid() {
         formGrid = new GridPane();
-        formGrid.setAlignment(Pos.TOP_LEFT);
-        formGrid.setHgap(10);
-        formGrid.setVgap(10);
-        formGrid.setPrefWidth(500);
-        formGrid.setPadding(new Insets(25));
     }
 
     /**
