@@ -5,28 +5,27 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.extension.DateTimePicker;
-import com.clinic.interfaces.Copyable;
+import com.clinic.interfaces.ICopyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 
@@ -42,6 +41,11 @@ public class GridFormBuilder {
 
     public GridFormBuilder(GridPane formGrid) {
         this.formGrid = formGrid;
+        formGrid.setAlignment(Pos.TOP_LEFT);
+        formGrid.setHgap(10);
+        formGrid.setVgap(10);
+        formGrid.setPrefWidth(500);
+        formGrid.setPadding(new Insets(25));
     }
 
     /**
@@ -175,7 +179,7 @@ public class GridFormBuilder {
      * @param propertyGetterMethodName the name of getter method of the picked 
      * entity to display in textfield
      */
-    public <T extends AbstractEntity & Copyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
+    public <T extends AbstractEntity & ICopyable<T>> GridFormBuilder addPickField(String fieldPrompt, IntegerProperty property,
             AbstractCrudController<T, ?> controller, String propertyGetterMethodName) {
         MFXTextField field = generateStyledTextField();
         field.setFloatingText(fieldPrompt);
