@@ -12,6 +12,7 @@ import com.clinic.interfaces.ICopyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPagination;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -170,9 +171,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
 
     /**
      * Show a table and a pick button to pick an entity from the table
+     * @param whereClause the where clause to apply to the query
      * @return the selected entity
      */
-    public T pickEntity() {
+    public T pickEntity(String whereClause) {
         ObjectProperty<T> selectedItemProperty = new SimpleObjectProperty<>();
         VBox pickLayout = new VBox();
         pickLayout.setAlignment(Pos.TOP_LEFT);
@@ -185,7 +187,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         MFXTableView<T> pickTable = new MFXTableView<>();
 
         initTableViewSchema(pickTable);
-        fetchEntitiesToTable(pickTable);
+        fetchEntitiesToTable(pickTable, whereClause);
         bindTableToSingleSelectedItemProperty(pickTable, selectedItemProperty);
         pickLayout.getChildren().addAll(
                 pickButton,
@@ -194,13 +196,20 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         Stage pickStage = new Stage();
         pickButton.setOnAction((event) -> {
             T selectedItem = selectedItemProperty.get();
-            pickResult = getNewEntityInstance(selectedItem.getId()).copy(selectedItem);
+            pickResult = selectedItem;
             pickStage.close();
         });
         pickStage.setTitle("Pick " + entityClass.getSimpleName());
         pickStage.setScene(pickScene);
         pickStage.showAndWait();
         return pickResult;
+    }
+
+    /**
+     * Show a table and a pick button to pick an entity from the table
+     */
+    public T pickEntity() {
+        return pickEntity("");
     }
 
     /**
@@ -259,8 +268,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
                             + "_id=" + entity.getId());
                 controller.fetchEntitiesToTable();
             }
-        formScene.setRoot(formGrid);
+        MFXScrollPane scrollPane = new MFXScrollPane(formGrid); // Veronica
+        scrollPane.setPrefHeight(500);
         Stage formStage = new Stage();
+        formScene.setRoot(scrollPane);
         formStage.setScene(formScene);
         formStage.setTitle(action == CREATE_ACTION ? "Create "
                 : "Update " +
@@ -320,7 +331,9 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         createButton.setOnAction(event -> showCreateForm());
         updateButton.setOnAction(event -> showUpdateForm());
         deleteButton.setOnAction(event -> showDeleteForm());
-        refreshButton.setOnAction(event -> fetchEntitiesToTable());
+        refreshButton.setOnAction(event -> {
+            fetchEntitiesToTable();
+        });
 
         updateButton.disableProperty().bind(selectedItemProperty.isNull());
         deleteButton.disableProperty().bind(selectedItemProperty.isNull());
@@ -342,10 +355,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         AnchorPane.setRightAnchor(label, 0.0);
         label.setAlignment(Pos.CENTER);
         label.setStyle("-fx-font-weight: bold");
+
+        MFXScrollPane entityTablePane = new MFXScrollPane(entityTable);
+        entityTablePane.setPrefHeight(427);
         sceneLayout.getChildren().addAll(
                 label,
                 buttonLayout,
-                entityTable,
+                entityTablePane,
                 pagination);
         mainScene = new Scene(sceneLayout);
     }
@@ -418,11 +434,6 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
      */
     private void initFormGrid() {
         formGrid = new GridPane();
-        formGrid.setAlignment(Pos.TOP_LEFT);
-        formGrid.setHgap(10);
-        formGrid.setVgap(10);
-        formGrid.setPrefWidth(500);
-        formGrid.setPadding(new Insets(25));
     }
 
     /**
