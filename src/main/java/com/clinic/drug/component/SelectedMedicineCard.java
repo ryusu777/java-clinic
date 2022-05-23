@@ -25,8 +25,8 @@ public class SelectedMedicineCard extends VBox {
     private MedicineStock entity;
     private BaseTransactionDetail transactionDetail;
     private String cardId;
-    private int showDetailInWhat;
     private Label genericNameValueLabel = new Label(),
+        batchNumberValueLabel = new Label(),
         brandNameValueLabel = new Label(),
         dosageFormValueLabel = new Label(),
         qtyValueLabel = new Label(),
@@ -58,12 +58,12 @@ public class SelectedMedicineCard extends VBox {
 
     private SelectedMedicineCard(MedicineStock entity, int showDetailInWhat) {
         this.entity = entity;
-        this.showDetailInWhat = showDetailInWhat;
         qty.addListener((obs, oldValue, newValue) -> subTotal.setValue(newValue.multiply(BigDecimal.valueOf(pricePerUnit.get()))));
         pricePerUnit.addListener((obs, oldValue, newValue) -> subTotal.setValue(qty.get().multiply(BigDecimal.valueOf(newValue.longValue()))));
         brandNameValueLabel.textProperty().bind(this.entity.getMedicine().brandNameProperty());
         genericNameValueLabel.textProperty().bind(this.entity.getMedicine().genericNameProperty());
         dosageFormValueLabel.textProperty().bind(this.entity.getDosageForm().nameProperty());
+        batchNumberValueLabel.textProperty().bind(this.entity.batchNumberProperty());
         pricePerUnitValueLabel.textProperty().bind(pricePerUnit.asString());
         subTotalValueLabel.textProperty().bind(subTotal.asString());
         initComponent();
@@ -75,6 +75,7 @@ public class SelectedMedicineCard extends VBox {
         detailContainer.addRow(1, new Label("Qty"), new Label(":"), qtyValueLabel);
         detailContainer.addRow(2, new Label("Price/unit"), new Label(":"), pricePerUnitValueLabel);
         detailContainer.addRow(3, new Label("Subtotal"), new Label(":"), subTotalValueLabel);
+        detailContainer.addRow(4, new Label("Batch Number"), new Label(":"), batchNumberValueLabel);
         detailContainer.setPrefWidth(Double.MAX_VALUE);
 
         Button deleteButton = new MFXButton("Delete");

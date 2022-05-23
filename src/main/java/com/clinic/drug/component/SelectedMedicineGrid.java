@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.clinic.drug.domain.BaseTransactionDetail;
 import com.clinic.drug.domain.MedicineStock;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.scene.layout.GridPane;
 
 public class SelectedMedicineGrid extends GridPane {

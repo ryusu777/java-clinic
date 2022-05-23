@@ -16,6 +16,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class PrescriptionRecipe extends AbstractEntity implements ICopyable<PrescriptionRecipe> {
+    public static final int COMPUND_TYPE = 0, GENERIC_TYPE = 1;
+
     public PrescriptionRecipe() {
         this(null);
     }
@@ -28,6 +30,8 @@ public class PrescriptionRecipe extends AbstractEntity implements ICopyable<Pres
     public List<String> getTableFieldNames() {
         return Arrays.asList(
             "usage_instruction",
+            "recipe_type",
+            "qty_unit_id",
             "latin_usage_instruction",
             "latin_making_instruction",
             "exp_date",
@@ -107,6 +111,20 @@ public class PrescriptionRecipe extends AbstractEntity implements ICopyable<Pres
         return this;
     }
 
+    private IntegerProperty recipeType = new SimpleIntegerProperty();
+    public IntegerProperty recipeTypeProperty() {
+        return this.recipeType;
+    }
+
+    public Integer getRecipeType() {
+        return recipeType.get();
+    }
+
+    public PrescriptionRecipe setRecipeType(Integer recipeType) {
+        this.recipeType.setValue(recipeType);
+        return this;
+    }
+
     private IntegerProperty dosageFormId = new SimpleIntegerProperty();
     public IntegerProperty dosageFormIdProperty() {
         return this.dosageFormId;
@@ -118,6 +136,20 @@ public class PrescriptionRecipe extends AbstractEntity implements ICopyable<Pres
 
     public PrescriptionRecipe setDosageFormId(Integer dosageFormId) {
         this.dosageFormId.setValue(dosageFormId);
+        return this;
+    }
+
+    private IntegerProperty qtyUnitId = new SimpleIntegerProperty();
+    public IntegerProperty qtyUnitIdProperty() {
+        return this.qtyUnitId;
+    }
+
+    public Integer getQtyUnitId() {
+        return qtyUnitId.get();
+    }
+
+    public PrescriptionRecipe setQtyUnitId(Integer qtyUnitId) {
+        this.dosageFormId.setValue(qtyUnitId);
         return this;
     }
 

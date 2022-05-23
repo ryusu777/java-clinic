@@ -1,12 +1,21 @@
 package com.clinic.drug.controller;
 
+import java.sql.SQLException;
+
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.builder.GridFormBuilder;
+import com.clinic.drug.domain.DosageForm;
+import com.clinic.drug.domain.Medicine;
 import com.clinic.drug.domain.MedicineStock;
+import com.clinic.drug.repository.DosageFormRepository;
+import com.clinic.drug.repository.MedicineRepository;
 import com.clinic.drug.repository.MedicineStockRepository;
 import com.clinic.factories.CrudControllerFactory;
+import com.clinic.factories.EntityRepositoryFactory;
 
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.GridPane;
 
 public class MedicineStockController extends AbstractCrudController<MedicineStock, MedicineStockRepository> {
@@ -45,17 +54,35 @@ public class MedicineStockController extends AbstractCrudController<MedicineStoc
     }
 
     @Override
+    public void fetchEntitiesToTable(MFXTableView<MedicineStock> entityTable, String whereClause) {
+        ObservableList<MedicineStock> entities;
+        try {
+            entities = FXCollections
+                .observableArrayList(repo
+                    .join(
+                        EntityRepositoryFactory.getRepository(MedicineRepository.class),
+                        EntityRepositoryFactory.getRepository(DosageFormRepository.class),
+                        "medicine_id", 
+                        "dosage_form_id", 
+                        whereClause)
+                );
+            entityTable.setItems(entities);
+            entityTable.autosize();
+        } catch (SQLException e) {
+            System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
+        }
+    }
+
+    @Override
     protected void initTableViewSchema(MFXTableView<MedicineStock> entityTable) {
         addTableColumn(entityTable, "Id", MedicineStock::getId);
-        addTableColumn(entityTable, "Medicine Id", MedicineStock::getMedicineId);
+        addTableColumn(entityTable, "Brand Name", MedicineStock::getMedicine, Medicine::getBrandName);
+        addTableColumn(entityTable, "Generic Name", MedicineStock::getMedicine, Medicine::getGenericName);
+        addTableColumn(entityTable, "Dosage Form", MedicineStock::getDosageForm, DosageForm::getName);
         addTableColumn(entityTable, "Qty Available", MedicineStock::getQtyAvailable);
-        addTableColumn(entityTable, "Qty to Dosage Form Multiplier", MedicineStock::getQtyToDosageFormMultiplier);
-        addTableColumn(entityTable, "Qty Unit Id", MedicineStock::getQtyUnitId);
         addTableColumn(entityTable, "Exp Date", MedicineStock::getExpDate);
         addTableColumn(entityTable, "Received Date", MedicineStock::getReceivedDate);
-        addTableColumn(entityTable, "Dosage Form Id", MedicineStock::getDosageFormId);
         addTableColumn(entityTable, "Batch Number", MedicineStock::getBatchNumber);
         addTableColumn(entityTable, "HRP", MedicineStock::getHighestRetailPrice);
-        addTableColumn(entityTable, "Purchase Detail Id", MedicineStock::getPurchaseMedicineDetailId);
     }
 }

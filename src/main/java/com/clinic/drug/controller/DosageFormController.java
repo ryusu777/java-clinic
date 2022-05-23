@@ -48,6 +48,6 @@ public class DosageFormController extends AbstractCrudController<DosageForm, Dos
     protected void initTableViewSchema(MFXTableView<DosageForm> entityTable) {
         addTableColumn(entityTable, "Id", DosageForm::getId);
         addTableColumn(entityTable, "Name", DosageForm::getName);
-        addTableColumn(entityTable, "Category", DosageForm::getDosageFormCategory, DosageFormCategory::getId);
+        addTableColumn(entityTable, "Category", DosageForm::getDosageFormCategory, DosageFormCategory::getName);
     }
 }
