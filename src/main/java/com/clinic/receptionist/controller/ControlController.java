@@ -38,8 +38,8 @@ public class ControlController extends AbstractCrudController<Appointment, Appoi
             .addPickField("Doctor", entity.doctorIdProperty(), CrudControllerFactory.getController(DoctorController.class), "getName")
             .addPickField("Patient", entity.patientIdProperty(), CrudControllerFactory.getController(PatientController.class), "getName")
             .addLocalDateTimeField("Date&Time", entity.appointmentDateTimeProperty())
-            .addComboBox("Status", entity.statusProperty().asObject(),items);
-
+            .addComboBox("Status", entity.statusProperty().asObject(),items)
+            .addButton(generateSubmitButton("Submit", entity));
     }
     
     @Override
