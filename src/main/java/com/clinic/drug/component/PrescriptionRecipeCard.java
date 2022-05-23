@@ -51,6 +51,18 @@ public class PrescriptionRecipeCard extends VBox {
         PrescriptionRecipeCard.deleteCallback = deleteCallback;
     }
 
+    public PrescriptionRecipe getRecipe() {
+        return theRecipe;
+    }
+
+    public List<PrescriptionIngredient> getIngredients() {
+        List<PrescriptionIngredient> result = new ArrayList<>();
+        for (PrescriptionIngredientCard theCard : ingredientCards) {
+            result.add(theCard.getPrescriptionIngredient());
+        }
+        return result;
+    }
+
     private final String buttonStyle = "-fx-font-size: 16;" +
             "-fx-background-color: -mfx-purple;" +
             "-fx-text-fill: white;";
@@ -92,7 +104,8 @@ public class PrescriptionRecipeCard extends VBox {
             .addComboBox("Qty in what", qtyInWhat.asObject(), qtyInWhatChoice)
             .addTextField("Latin Usage Instruction", theRecipe.latinUsageInstructionProperty())
             .addTextField("Latin Making Instruction", theRecipe.latinMakingInstructionProperty())
-            .addTextField("Usage Instruction", theRecipe.usageInstructionProperty());
+            .addTextField("Usage Instruction", theRecipe.usageInstructionProperty())
+            .addLocalDateField("Exp Date", theRecipe.expDateProperty());
         Label ingredientLabel = new Label("Ingredient");
         ingredientLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
         
@@ -178,6 +191,7 @@ public class PrescriptionRecipeCard extends VBox {
                 );
                 ingredientCards.add(ingredientCard);
                 ingredientContainer.getChildren().add(ingredientCard);
+                ingredientStage.close();
             });
 
             new GridFormBuilder(ingredientForm)

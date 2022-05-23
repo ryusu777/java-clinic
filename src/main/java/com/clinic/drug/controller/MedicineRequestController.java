@@ -19,7 +19,6 @@ public class MedicineRequestController extends AbstractCrudController<MedicineRe
         new GridFormBuilder(formGrid)
             .addTextField("Generic Name", entity.genericNameProperty())
             .addTextField("Brand Name", entity.brandNameProperty())
-            // TODO: Combobox for status
             .addButton(generateSubmitButton("Submit", entity));
     }
 
