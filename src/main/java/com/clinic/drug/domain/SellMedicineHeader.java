@@ -1,5 +1,6 @@
 package com.clinic.drug.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class SellMedicineHeader extends BaseTransactionHeader implements ICopyab
 
     @Override
     public List<String> getTableFieldNames() {
-        List<String> result = super.getTableFieldNames();
+        List<String> result = new ArrayList<>();
+        result.addAll(super.getTableFieldNames());
         result.addAll(Arrays.asList(
             "prescription_header_id"
         ));

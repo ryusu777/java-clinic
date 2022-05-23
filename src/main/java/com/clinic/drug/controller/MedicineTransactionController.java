@@ -2,7 +2,10 @@ package com.clinic.drug.controller;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.clinic.builder.GridFormBuilder;
@@ -19,6 +22,9 @@ import com.clinic.drug.domain.QtyUnit;
 import com.clinic.drug.domain.SellMedicineDetail;
 import com.clinic.drug.domain.SellMedicineHeader;
 import com.clinic.drug.repository.DosageFormRepository;
+import com.clinic.drug.repository.MedicineStockRepository;
+import com.clinic.drug.repository.PurchaseMedicineDetailRepository;
+import com.clinic.drug.repository.PurchaseMedicineHeaderRepository;
 import com.clinic.drug.repository.QtyUnitRepository;
 import com.clinic.factories.CrudControllerFactory;
 import com.clinic.factories.EntityRepositoryFactory;
@@ -33,7 +39,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -56,6 +64,7 @@ public class MedicineTransactionController implements IBaseController {
             this.transactionHeader = new PurchaseMedicineHeader();
         else
             this.transactionHeader = new SellMedicineHeader();
+        this.transactionHeader.setPurchaseDate(LocalDate.now());
 
         detailGrid = new SelectedMedicineGrid();
         mainContainer.getChildren().addAll(addMedicineButton, detailGrid, completeTransactionButton);
@@ -72,13 +81,7 @@ public class MedicineTransactionController implements IBaseController {
             }
         });
         completeTransactionButton.setStyle(buttonStyle);
-        completeTransactionButton.setOnAction((event) -> completeTransaction());
-    }
-
-    public void completeTransaction() {
-        if (transactionType == BaseTransactionDetail.PURCHASE) {
-            PurchaseMedicineHeader transactionHeader = (PurchaseMedicineHeader)this.transactionHeader;
-        }
+        completeTransactionButton.setOnAction((event) -> saveChanges());
     }
 
     public void addTransactionDetail() throws SQLException {
@@ -95,25 +98,27 @@ public class MedicineTransactionController implements IBaseController {
             PurchaseMedicineDetail purchaseDetail = new PurchaseMedicineDetail();
             transactionDetail = purchaseDetail;
             medicineStock = new MedicineStock();
+            medicineStock.setReceivedDate(LocalDateTime.now());
+            medicineStock.setMedicineId(selectedMedicine.getId());
             Button submitMedicineStockForm = new MFXButton("Submit");
             submitMedicineStockForm.setStyle(buttonStyle);
             GridPane medicineStockForm = new GridPane();
             new GridFormBuilder(medicineStockForm)
-                .addPickField(
-                    "Dosage Form", 
-                    medicineStock.dosageFormIdProperty(), 
-                    CrudControllerFactory.getController(DosageFormController.class), 
-                    "getName")
-                .addPickField(
-                    "Qty unit",
-                    medicineStock.qtyUnitIdProperty(), 
-                    CrudControllerFactory.getController(QtyUnitController.class), 
-                    "getName")
-                .addBigDecimalField(
-                    "Qty to dosage form multiplier",
-                    medicineStock.qtyToDosageFormMultiplierProperty())
-                .addLocalDateField("Exp date", medicineStock.expDateProperty())
-                .addButton(submitMedicineStockForm);
+                    .addPickField(
+                            "Dosage Form",
+                            medicineStock.dosageFormIdProperty(),
+                            CrudControllerFactory.getController(DosageFormController.class),
+                            "getName")
+                    .addPickField(
+                            "Qty unit",
+                            medicineStock.qtyUnitIdProperty(),
+                            CrudControllerFactory.getController(QtyUnitController.class),
+                            "getName")
+                    .addBigDecimalField(
+                            "Qty to dosage form multiplier",
+                            medicineStock.qtyToDosageFormMultiplierProperty())
+                    .addLocalDateField("Exp date", medicineStock.expDateProperty())
+                    .addButton(submitMedicineStockForm);
 
             Stage purchaseStage = new Stage();
             purchaseStage.setScene(new Scene(medicineStockForm));
@@ -126,22 +131,23 @@ public class MedicineTransactionController implements IBaseController {
             submitMedicineStockForm.setOnAction((event) -> {
                 try {
                     QtyUnit qtyUnit = EntityRepositoryFactory
-                        .getRepository(QtyUnitRepository.class)
-                        .get(medicineStock.getQtyUnitId());
+                            .getRepository(QtyUnitRepository.class)
+                            .get(medicineStock.getQtyUnitId());
                     DosageForm dosageForm = EntityRepositoryFactory
-                        .getRepository(DosageFormRepository.class)
-                        .get(medicineStock.getDosageFormId());
+                            .getRepository(DosageFormRepository.class)
+                            .get(medicineStock.getDosageFormId());
                     medicineStock.setQtyUnit(qtyUnit);
                     medicineStock.setDosageForm(dosageForm);
                     Map<String, Integer> items = new LinkedHashMap<>();
                     items.put(qtyUnit.getName(), SelectedMedicineCard.IN_QTY_UNIT);
                     items.put(dosageForm.getName(), SelectedMedicineCard.IN_DOSAGE_FORM);
                     new GridFormBuilder(purchaseDetailForm)
-                        .addBigDecimalField("Qty", qtyInForm)
-                        .addComboBox("Qty in ...", showDetailInWhat.asObject(), items)
-                        .addIntegerField("Price/unit", pricePerUnitInForm)
-                        .addTextField("Batch no.", medicineStock.batchNumberProperty())
-                        .addButton(submitPurchaseDetailButton);
+                            .addBigDecimalField("Qty", qtyInForm)
+                            .addComboBox("Qty in ...", showDetailInWhat.asObject(), items)
+                            .addIntegerField("Price/unit", pricePerUnitInForm)
+                            .addIntegerField("HRP/unit", medicineStock.highestRetailPriceProperty())
+                            .addTextField("Batch no.", medicineStock.batchNumberProperty())
+                            .addButton(submitPurchaseDetailButton);
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
@@ -150,14 +156,15 @@ public class MedicineTransactionController implements IBaseController {
             submitPurchaseDetailButton.setOnAction((event) -> {
                 if (showDetailInWhat.get() == SelectedMedicineCard.IN_DOSAGE_FORM) {
                     purchaseDetail
-                        .setQty(qtyInForm.get().multiply(medicineStock.getQtyToDosageFormMultiplier()));
+                            .setQty(qtyInForm.get().multiply(medicineStock.getQtyToDosageFormMultiplier()));
                     purchaseDetail
-                        .setPricePerUnit(pricePerUnitInForm.get() / medicineStock.getQtyToDosageFormMultiplier().intValue());
-                }
-                else {
+                            .setPricePerUnit(
+                                    pricePerUnitInForm.get() / medicineStock.getQtyToDosageFormMultiplier().intValue());
+                } else {
                     purchaseDetail.setQty(qtyInForm.get());
                     purchaseDetail.setPricePerUnit(pricePerUnitInForm.get());
                 }
+                medicineStock.setQtyAvailable(purchaseDetail.getQty());
                 purchaseStage.close();
             });
             purchaseStage.showAndWait();
@@ -169,6 +176,57 @@ public class MedicineTransactionController implements IBaseController {
         medicineStock.setMedicine(selectedMedicine);
         if (medicineStock != null && transactionDetail != null)
             detailGrid.addTransactionDetail(medicineStock, transactionDetail, showDetailInWhat.get());
+    }
+
+    public void saveChanges() {
+        if (transactionType == BaseTransactionDetail.PURCHASE) {
+            savePurchaseTransaction(detailGrid.getTransactionDetailAndStockMap());
+        }
+    }
+
+    public void savePurchaseTransaction(Map<BaseTransactionDetail, MedicineStock> transactionAndStockMap) {
+        PurchaseMedicineHeader purchaseHeader = (PurchaseMedicineHeader) transactionHeader;
+        PurchaseMedicineHeaderRepository purchaseHeaderRepo = EntityRepositoryFactory
+            .getRepository(PurchaseMedicineHeaderRepository.class);
+        PurchaseMedicineDetailRepository purchaseDetailRepo = EntityRepositoryFactory
+            .getRepository(PurchaseMedicineDetailRepository.class);
+        MedicineStockRepository medicineStockRepo = EntityRepositoryFactory.getRepository(MedicineStockRepository.class);
+        int purchaseHeaderId = -1;
+        try {
+            purchaseHeaderId = purchaseHeaderRepo.create(purchaseHeader);
+        } catch (SQLException e) {
+            System.out.println(e);
+            Alert errorAlert = new Alert(AlertType.ERROR);
+            errorAlert.setContentText("Failed to save purchase header");
+            errorAlert.showAndWait();
+            return;
+        }
+
+        for (BaseTransactionDetail baseDetail : transactionAndStockMap.keySet()) {
+            PurchaseMedicineDetail purchaseDetail = (PurchaseMedicineDetail) baseDetail;
+            MedicineStock medicineStock = transactionAndStockMap.get(purchaseDetail);
+            purchaseDetail.setPurchaseMedicineHeaderId(purchaseHeaderId);
+            try {
+                int purchaseDetailId = purchaseDetailRepo.create(purchaseDetail);
+                medicineStock.setPurchaseMedicineDetailId(purchaseDetailId);
+            } catch (SQLException e) {
+                System.out.println(e);
+                Alert errorAlert = new Alert(AlertType.ERROR);
+                errorAlert.setContentText("Failed to save purchase header");
+                errorAlert.showAndWait();
+                return;
+            }
+
+            try {
+                medicineStockRepo.create(medicineStock);
+            } catch (SQLException e) {
+                System.out.println(e);
+                Alert errorAlert = new Alert(AlertType.ERROR);
+                errorAlert.setContentText("Failed to save medicine stock");
+                errorAlert.showAndWait();
+                return;
+            }
+        }
     }
 
     @Override

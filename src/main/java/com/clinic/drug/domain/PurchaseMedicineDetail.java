@@ -1,5 +1,6 @@
 package com.clinic.drug.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class PurchaseMedicineDetail extends BaseTransactionDetail implements ICo
 
     @Override
     public List<String> getTableFieldNames() {
-        List<String> result = super.getTableFieldNames();
+        List<String> result = new ArrayList<>();
+        result.addAll(super.getTableFieldNames());
         result.addAll(Arrays.asList("purchase_medicine_header_id"));
         return result;
     }

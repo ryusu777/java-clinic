@@ -44,12 +44,16 @@ public class SelectedMedicineCard extends VBox {
         this.cardId = cardId;
         this.transactionDetail = transactionDetail;
         if (showDetailInWhat == SelectedMedicineCard.IN_DOSAGE_FORM) {
-            qty.setValue(transactionDetail.getQty().multiply(entity.getQtyToDosageFormMultiplier()));
-            pricePerUnit.setValue(transactionDetail.getPricePerUnit() / entity.getQtyToDosageFormMultiplier().intValue());
+            qty.setValue(transactionDetail.getQty().divide(entity.getQtyToDosageFormMultiplier()));
+            pricePerUnit.setValue(transactionDetail.getPricePerUnit() * entity.getQtyToDosageFormMultiplier().intValue());
         } else {
             qty.bind(this.transactionDetail.qtyProperty());
             pricePerUnit.bind(this.transactionDetail.pricePerUnitProperty());
         }
+        qtyValueLabel.textProperty().set(qty.get().toString()
+            .concat(showDetailInWhat == SelectedMedicineCard.IN_DOSAGE_FORM 
+                ? " " + entity.getDosageForm().getName()
+                : " " + entity.getQtyUnit().getShortName()));
     }
 
     private SelectedMedicineCard(MedicineStock entity, int showDetailInWhat) {
@@ -60,10 +64,6 @@ public class SelectedMedicineCard extends VBox {
         brandNameValueLabel.textProperty().bind(this.entity.getMedicine().brandNameProperty());
         genericNameValueLabel.textProperty().bind(this.entity.getMedicine().genericNameProperty());
         dosageFormValueLabel.textProperty().bind(this.entity.getDosageForm().nameProperty());
-        qtyValueLabel.textProperty().bind(qty.asString()
-            .concat(showDetailInWhat == SelectedMedicineCard.IN_DOSAGE_FORM 
-                ? " " + entity.getDosageForm().getName()
-                : " " + entity.getQtyUnit().getShortName()));
         pricePerUnitValueLabel.textProperty().bind(pricePerUnit.asString());
         subTotalValueLabel.textProperty().bind(subTotal.asString());
         initComponent();
