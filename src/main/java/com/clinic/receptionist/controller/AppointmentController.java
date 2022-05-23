@@ -39,7 +39,6 @@ public class AppointmentController extends AbstractCrudController<Appointment, A
             .addPickField("Doctor", entity.doctorIdProperty(), CrudControllerFactory.getController(DoctorController.class), "getName")
             .addPickField("Patient", entity.patientIdProperty(), CrudControllerFactory.getController(PatientController.class), "getName")
             .addLocalDateTimeField("Date&Time", entity.appointmentDateTimeProperty())
-            .addIntegerField("Status", entity.statusProperty())
             .addComboBox("Status", entity.statusProperty().asObject(), items)
             .addButton(generateSubmitButton("Submit", entity));
     }
