@@ -1,8 +1,6 @@
 package com.clinic;
 
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Tab;
@@ -33,50 +31,13 @@ import com.clinic.factories.EntityRepositoryFactory;
  */
 public class App extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-        MedicalRecordController medicalRecord = new MedicalRecordController();
-        CheckUpCategoryController checkUpCategory = new CheckUpCategoryController();
-        CheckUpDetailController checkUpDetail = new CheckUpDetailController();
-
-        medicalRecord.fetchEntitiesToTable();
-        checkUpCategory.fetchEntitiesToTable();
-        checkUpDetail.fetchEntitiesToTable();
-
-        TabPane tabPane = new TabPane();
-        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-
-        Tab tab1 = new Tab("Medical Record");
-        stage.setTitle("Medical Record");
-        tab1.setContent(medicalRecord.getMainScene().getRoot());
+    public void start(Stage stage) throws IOException{        
         
-        Tab tab2 = new Tab("Check Up Category");
-        stage.setTitle("Check Up Category");
-        tab2.setContent(checkUpCategory.getMainScene().getRoot());
-
-        Tab tab3 = new Tab("Check Up Detail");
-        stage.setTitle("Check Up Detail");
-        tab3.setContent(checkUpDetail.getMainScene().getRoot());
-        
-        tabPane.getTabs().addAll(tab1, tab2, tab3);
-
-        // MedicalRecordController controller = new MedicalRecordController();
-        // CheckUpCategoryController controller = new CheckUpCategoryController();
-        // CheckUpDetailController controller = new CheckUpDetailController();
-        // stage.setTitle("Medical Record");
-        // stage.setTitle("Check Up Category");
-        // stage.setTitle("Check Up Detail");
-        stage.setScene(new Scene(tabPane));
-        // controller.fetchEntitiesToTable();
-        stage.show();
     }
 
     public static void main(String[] args) throws SQLException {
         ClinicConnection.connect();
         launch();
-        // MedicalRecordRepository repo = EntityRepositoryFactory.getRepository(MedicalRecordRepository.class);
-        // repo.search(new Pagination(), "radiologi");
-        // for (MedicalRecord field : repo.search(new Pagination(), "Fever")) {
-        //     System.out.println(field.symptomProperty());
-        // }
     }
+
 }
