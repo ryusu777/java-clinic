@@ -11,4 +11,6 @@ module com.clinic {
     exports com.clinic.factories;
     exports com.clinic.receptionist.domain;
     exports com.clinic.receptionist.controller;
+    exports com.clinic.doctor.domain;
+    exports com.clinic.doctor.controller;
 }
