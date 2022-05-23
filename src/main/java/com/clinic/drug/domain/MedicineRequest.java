@@ -6,16 +6,19 @@ import java.util.List;
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.ICopyable;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Medicine extends AbstractEntity implements ICopyable<Medicine> {
-    public Medicine(Integer id) {
-        super(id);
+public class MedicineRequest extends AbstractEntity implements ICopyable<MedicineRequest> {
+    public final static int NOT_AVAILABLE = 0, AVAILABLE = 1;
+    public MedicineRequest() {
+        this(null);
     }
 
-    public Medicine() {
-        this(null);
+    public MedicineRequest(Integer id) {
+        super(id);
     }
 
     @Override
@@ -23,12 +26,11 @@ public class Medicine extends AbstractEntity implements ICopyable<Medicine> {
         return Arrays.asList(
             "brand_name",
             "generic_name",
-            "medicine_type"
+            "status"
         );
     }
-
-    private StringProperty brandName = new SimpleStringProperty();
     
+    private StringProperty brandName = new SimpleStringProperty();
     public StringProperty brandNameProperty() {
         return brandName;
     }
@@ -37,7 +39,7 @@ public class Medicine extends AbstractEntity implements ICopyable<Medicine> {
         return brandName.get();
     }
 
-    public Medicine setBrandName(String brandName) {
+    public MedicineRequest setBrandName(String brandName) {
         this.brandName.setValue(brandName);
         return this;
     }
@@ -51,31 +53,30 @@ public class Medicine extends AbstractEntity implements ICopyable<Medicine> {
         return genericName.get();
     }
 
-    public Medicine setGenericName(String genericName) {
+    public MedicineRequest setGenericName(String genericName) {
         this.genericName.setValue(genericName);
         return this;
     }
 
-    private StringProperty medicineType = new SimpleStringProperty();
-
-    public StringProperty medicineTypeProperty() {
-        return this.medicineType;
+    private IntegerProperty status = new SimpleIntegerProperty();
+    public IntegerProperty statusProperty() {
+        return status;
     }
 
-    public String getMedicineType() {
-        return medicineType.get();
+    public Integer getStatus() {
+        return status.get();
     }
 
-    public Medicine setMedicineType(String medicineType) {
-        this.medicineType.setValue(medicineType);
+    public MedicineRequest setStatus(Integer status) {
+        this.status.setValue(status);
         return this;
     }
 
     @Override
-    public Medicine copy(Medicine entity) {
+    public MedicineRequest copy(MedicineRequest entity) {
         return this
-            .setBrandName(entity.getBrandName())
             .setGenericName(entity.getGenericName())
-            .setMedicineType(entity.getMedicineType());
+            .setBrandName(entity.getBrandName())
+            .setStatus(entity.getStatus());
     }
 }
