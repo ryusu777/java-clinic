@@ -170,9 +170,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
 
     /**
      * Show a table and a pick button to pick an entity from the table
+     * @param whereClause the where clause to apply to the query
      * @return the selected entity
      */
-    public T pickEntity() {
+    public T pickEntity(String whereClause) {
         ObjectProperty<T> selectedItemProperty = new SimpleObjectProperty<>();
         VBox pickLayout = new VBox();
         pickLayout.setAlignment(Pos.TOP_LEFT);
@@ -185,7 +186,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         MFXTableView<T> pickTable = new MFXTableView<>();
 
         initTableViewSchema(pickTable);
-        fetchEntitiesToTable(pickTable);
+        fetchEntitiesToTable(pickTable, whereClause);
         bindTableToSingleSelectedItemProperty(pickTable, selectedItemProperty);
         pickLayout.getChildren().addAll(
                 pickButton,
@@ -201,6 +202,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         pickStage.setScene(pickScene);
         pickStage.showAndWait();
         return pickResult;
+    }
+
+    /**
+     * Show a table and a pick button to pick an entity from the table
+     */
+    public T pickEntity() {
+        return pickEntity("");
     }
 
     /**
@@ -418,11 +426,6 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
      */
     private void initFormGrid() {
         formGrid = new GridPane();
-        formGrid.setAlignment(Pos.TOP_LEFT);
-        formGrid.setHgap(10);
-        formGrid.setVgap(10);
-        formGrid.setPrefWidth(500);
-        formGrid.setPadding(new Insets(25));
     }
 
     /**
