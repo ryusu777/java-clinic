@@ -18,7 +18,7 @@ public class ClinicConnection {
 
     public static void connect() {
         try {
-            conn = DriverManager.getConnection("jdbc:mariadb://localhost/clinic", "root", null);
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/clinic", "root", "RoseCat21*");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to connect to database, exiting...");

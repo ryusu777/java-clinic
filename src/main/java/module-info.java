@@ -3,7 +3,8 @@ module com.clinic {
     requires javafx.fxml;
     requires transitive javafx.graphics;
     requires transitive java.sql;
-    requires MaterialFX;
+    requires transitive reflections;
+    requires transitive MaterialFX;
 
     opens com.clinic to javafx.fxml;
     exports com.clinic;
@@ -13,4 +14,6 @@ module com.clinic {
     exports com.clinic.receptionist.controller;
     exports com.clinic.doctor.domain;
     exports com.clinic.doctor.controller;
+    exports com.clinic.drug.domain;
+    exports com.clinic.drug.controller;
 }
