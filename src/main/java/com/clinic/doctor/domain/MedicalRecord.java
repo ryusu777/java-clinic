@@ -120,6 +120,40 @@ public class MedicalRecord extends AbstractEntity implements ICopyable <MedicalR
         return doctorId.get();
     }
 
+
+    // private Doctor doctor = new Doctor();
+
+    // public Doctor getDoctor() {
+    //     return doctor;
+    // }
+
+    // public Doctor setDoctor(Doctor doctor) {
+    //     this.doctor = doctor;
+    //     return this;
+    // }
+
+    // private Patient patient = new Patient();
+
+    // public Patient getPatient() {
+    //     return patient;
+    // }
+
+    // public Patient setPatient(Patient patient) {
+    //     this.patient = patient;
+    //     return this;
+    // }
+
+    // private PrescriptionHeader prescriptionHeader= new PrescriptionHeader();
+
+    // public PrescriptionHeader getPrescriptionHeader() {
+    //     return prescriptionHeader;
+    // }
+
+    // public PrescriptionHeader setPrescriptionHeader(PrescriptionHeader prescriptionHeader) {
+    //     this.prescriptionHeader = prescriptionHeader;
+    //     return this;
+    // }
+
     @Override
     public MedicalRecord copy(MedicalRecord entity) {
         return this
