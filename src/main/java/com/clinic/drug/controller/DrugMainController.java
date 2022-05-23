@@ -42,8 +42,8 @@ public class DrugMainController {
         layout.setStyle("-fx-background-color: #ffffff");
 		this.toggleGroup = new ToggleGroup();
 		ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
-        // setCrudMenuButton("com.clinic.drug.controller");
-        setMenuButtons();
+        setCrudMenuButton("com.clinic.drug.controller");
+        // setMenuButtons();
         layout.setCenter(new MedicineTransactionController(BaseTransactionDetail.PURCHASE).getNode());
         stage.setScene(new Scene(layout));
         stage.show();

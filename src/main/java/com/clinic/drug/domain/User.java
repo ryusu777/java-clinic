@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class User extends AbstractEntity implements ICopyable<User> {
+    public static final int ADMIN = 0, DOCTOR = 1, RECEPTIONIST = 2, PHARMACIST = 3;
     public User(Integer id) {
         super(id);
     }

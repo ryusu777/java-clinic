@@ -4,7 +4,7 @@ import com.clinic.abstracts.AbstractEntityRepository;
 import com.clinic.drug.domain.User;
 
 public class UserRepository extends AbstractEntityRepository<User> {
-    protected UserRepository() {
+    public UserRepository() {
         super(User.class);
     }
 
