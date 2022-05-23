@@ -4,11 +4,16 @@ import java.sql.SQLException;
 
 import com.clinic.abstracts.AbstractCrudController;
 import com.clinic.builder.GridFormBuilder;
+import com.clinic.doctor.domain.CheckUpDetail;
 import com.clinic.doctor.domain.MedicalRecord;
 import com.clinic.doctor.repository.CheckUpDetailRepository;
 import com.clinic.doctor.repository.MedicalRecordRepository;
 import com.clinic.factories.CrudControllerFactory;
 import com.clinic.factories.EntityRepositoryFactory;
+import com.clinic.receptionist.controller.DoctorController;
+import com.clinic.receptionist.controller.PatientController;
+import com.clinic.receptionist.repository.DoctorRepository;
+import com.clinic.receptionist.repository.PatientRepository;
 
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import javafx.collections.FXCollections;
@@ -26,13 +31,25 @@ public class MedicalRecordController extends AbstractCrudController<MedicalRecor
     @Override
     protected void setFormGrid(GridPane formGrid, MedicalRecord entity) {
         new GridFormBuilder(formGrid)
-            // .addPickField("Patient ID: ", entity.patientIdProperty(),CrudControllerFactory.getController(PatientController.class), "getName")
+            .addPickField("Patient ID: ", entity.patientIdProperty(),CrudControllerFactory.getController(PatientController.class), "getName")
             .addLocalDateField("Check Up Date: ", entity.checkUpDateProperty())
             .addTextField("Symptom: ", entity.symptomProperty())
             .addTextField("Treatment: ", entity.treatmentProperty())
-            // .addPickField("Doctor ID: ", entity.doctorIdProperty(),CrudControllerFactory.getController(DoctorController.class), "getName")
+            .addPickField("Doctor ID: ", entity.doctorIdProperty(),CrudControllerFactory.getController(DoctorController.class), "getName")
             // .addPickField("Prescription Header ID: ", entity.prescriptionHeaderIdProperty(),CrudControllerFactory.getController(PrescriptionHeaderController.class), "getName")
             .addButton(generateSubmitButton("Submit", entity));
+    }
+
+    @Override
+    public void fetchEntitiesToTable(MFXTableView<MedicalRecord> entityTable, String whereClause) {
+        ObservableList<MedicalRecord> entities;
+        try {
+            entities = FXCollections.observableArrayList(repo.join(EntityRepositoryFactory.getRepository(DoctorRepository.class), EntityRepositoryFactory.getRepository(PatientRepository.class), "doctor_id", "patient_id"));
+            entityTable.setItems(entities);
+            entityTable.autosize();
+        } catch (SQLException e) {
+            System.out.println("Exception caught in AbstractController.fetchEntitiesToTable(): " + e.toString());
+        }
     }
 
     @Override 

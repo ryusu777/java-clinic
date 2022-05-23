@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.clinic.abstracts.AbstractEntity;
 import com.clinic.interfaces.ICopyable;
+import com.clinic.receptionist.domain.Doctor;
+import com.clinic.receptionist.domain.Patient;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -120,28 +122,27 @@ public class MedicalRecord extends AbstractEntity implements ICopyable <MedicalR
         return doctorId.get();
     }
 
+    private Doctor doctor = new Doctor();
 
-    // private Doctor doctor = new Doctor();
+    public Doctor getDoctor() {
+        return doctor;
+    }
 
-    // public Doctor getDoctor() {
-    //     return doctor;
-    // }
+    public MedicalRecord setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        return this;
+    }
 
-    // public Doctor setDoctor(Doctor doctor) {
-    //     this.doctor = doctor;
-    //     return this;
-    // }
+    private Patient patient = new Patient();
 
-    // private Patient patient = new Patient();
+    public Patient getPatient() {
+        return patient;
+    }
 
-    // public Patient getPatient() {
-    //     return patient;
-    // }
-
-    // public Patient setPatient(Patient patient) {
-    //     this.patient = patient;
-    //     return this;
-    // }
+    public MedicalRecord setPatient(Patient patient) {
+        this.patient = patient;
+        return this;
+    }
 
     // private PrescriptionHeader prescriptionHeader= new PrescriptionHeader();
 
@@ -149,7 +150,7 @@ public class MedicalRecord extends AbstractEntity implements ICopyable <MedicalR
     //     return prescriptionHeader;
     // }
 
-    // public PrescriptionHeader setPrescriptionHeader(PrescriptionHeader prescriptionHeader) {
+    // public MedicalRecord setPrescriptionHeader(PrescriptionHeader prescriptionHeader) {
     //     this.prescriptionHeader = prescriptionHeader;
     //     return this;
     // }
