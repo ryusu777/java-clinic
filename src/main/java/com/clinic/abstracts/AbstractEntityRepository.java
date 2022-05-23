@@ -123,6 +123,52 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
     }
 
     /**
+     * Join 3 entity using repository
+     * @param childRepo1
+     * @param childRepo2
+     * @param foreignKeyInParent1
+     * @param foreignKeyInParent2
+     * @param whereClause
+     * @param primaryKeyInChild
+     * @return
+     * @throws SQLException
+     * @author Veronica Yose Ardilla
+     */
+    public List<T> join(AbstractEntityRepository<?> childRepo1, AbstractEntityRepository<?> childRepo2, String foreignKeyInParent1, String foreignKeyInParent2, String whereClause, String primaryKeyInChild) {
+        try {
+            ResultSet queryResult = query("SELECT * FROM " + tableName() + " a JOIN " + childRepo1.tableName() + 
+                                " b ON a." + foreignKeyInParent1 + " = b." + primaryKeyInChild + " JOIN " + childRepo2.tableName() + 
+                                " c ON a." + foreignKeyInParent2 + " = c." + primaryKeyInChild + " " + whereClause +";");
+            List<T> entities = new ArrayList<>();
+            Method method;
+            while(queryResult.next()){
+                T resultEntity = mapEntity(queryResult, "a");
+                String childSetterName = "set" + childRepo1.entityClass.getSimpleName();
+                method = resultEntity.getClass().getMethod(childSetterName, childRepo1.entityClass);
+                method.invoke(resultEntity, childRepo1.mapEntity(queryResult, "b"));
+                
+                childSetterName = "set" + childRepo2.entityClass.getSimpleName();
+                method = resultEntity.getClass().getMethod(childSetterName, childRepo2.entityClass);
+                method.invoke(resultEntity, childRepo2.mapEntity(queryResult, "c"));
+                entities.add(resultEntity);
+            }
+            return entities;
+        } catch (Exception e) {
+            System.out.println("Exception found in AbstractEntityRepository.join(): " + e.toString());
+        }
+
+        return null;
+    }
+
+    public List<T> join(AbstractEntityRepository<?> childRepo1, AbstractEntityRepository<?> childRepo2, String foreignKeyInParent1, String foreignKeyInParent2, String whereClause) throws SQLException {
+        return join(childRepo1, childRepo2, foreignKeyInParent1, foreignKeyInParent2, whereClause, "id");
+    }
+
+    public List<T> join(AbstractEntityRepository<?> childRepo1, AbstractEntityRepository<?> childRepo2, String foreignKeyInParent1, String foreignKeyInParent2) throws SQLException {
+        return join(childRepo1, childRepo2, foreignKeyInParent1, foreignKeyInParent2, "", "id");
+    }
+
+    /**
      * Search with input as "word"
      * @param pagination
      * @param word
@@ -208,7 +254,7 @@ public abstract class AbstractEntityRepository<T extends AbstractEntity> extends
         } catch (SQLException e) {
             throw e;
         } catch (Exception e) {
-            System.out.println("Exception found in AbstractEntityRepository.edit(): " + e.toString());
+            System.out.println("Exception found in AbstractEntityRepository.create(): " + e.getMessage());
         }
         return 0;
     }
