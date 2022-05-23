@@ -1,5 +1,7 @@
 package com.clinic;
 
+import java.sql.SQLException;
+
 import com.clinic.drug.controller.DrugMainController;
 
 import javafx.application.Application;
@@ -15,8 +17,9 @@ public class App extends Application {
         app.start(stage);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         ClinicConnection.connect();
         launch();
     }
+
 }
