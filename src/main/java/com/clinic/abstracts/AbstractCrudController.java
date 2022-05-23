@@ -12,6 +12,7 @@ import com.clinic.interfaces.ICopyable;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPagination;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -195,7 +196,7 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         Stage pickStage = new Stage();
         pickButton.setOnAction((event) -> {
             T selectedItem = selectedItemProperty.get();
-            pickResult = getNewEntityInstance(selectedItem.getId()).copy(selectedItem);
+            pickResult = selectedItem;
             pickStage.close();
         });
         pickStage.setTitle("Pick " + entityClass.getSimpleName());
@@ -267,8 +268,10 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
                             + "_id=" + entity.getId());
                 controller.fetchEntitiesToTable();
             }
-        formScene.setRoot(formGrid);
+        MFXScrollPane scrollPane = new MFXScrollPane(formGrid); // Veronica
+        scrollPane.setPrefHeight(500);
         Stage formStage = new Stage();
+        formScene.setRoot(scrollPane);
         formStage.setScene(formScene);
         formStage.setTitle(action == CREATE_ACTION ? "Create "
                 : "Update " +
@@ -328,7 +331,9 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         createButton.setOnAction(event -> showCreateForm());
         updateButton.setOnAction(event -> showUpdateForm());
         deleteButton.setOnAction(event -> showDeleteForm());
-        refreshButton.setOnAction(event -> fetchEntitiesToTable());
+        refreshButton.setOnAction(event -> {
+            fetchEntitiesToTable();
+        });
 
         updateButton.disableProperty().bind(selectedItemProperty.isNull());
         deleteButton.disableProperty().bind(selectedItemProperty.isNull());
@@ -350,10 +355,13 @@ public abstract class AbstractCrudController<T extends AbstractEntity & ICopyabl
         AnchorPane.setRightAnchor(label, 0.0);
         label.setAlignment(Pos.CENTER);
         label.setStyle("-fx-font-weight: bold");
+
+        MFXScrollPane entityTablePane = new MFXScrollPane(entityTable);
+        entityTablePane.setPrefHeight(427);
         sceneLayout.getChildren().addAll(
                 label,
                 buttonLayout,
-                entityTable,
+                entityTablePane,
                 pagination);
         mainScene = new Scene(sceneLayout);
     }
